@@ -1,0 +1,60 @@
+#ifndef ACM_UTIL_H
+#define ACM_UTIL_H
+
+#include <sstream>
+#include <memory>
+
+#include <epicsGuard.h>
+#include <epicsMutex.h>
+
+#if __cplusplus<201103L
+#  define override
+#  define final
+#endif
+
+namespace util {
+/** A semi-hack to help with migration from std::auto_ptr to std::unique_ptr,
+ * and avoid copious deprecation warning spam
+ * which may be hiding legitimate issues.
+ *
+ * Provides util::auto_ptr<T> and util::swap()
+ *
+ * util::auto_ptr<T> is std::auto_ptr<T> for c++98
+ * and std::unique_ptr<T> for >= c++11.
+ *
+ * util::swap() is the only supported operation.
+ * copy/assignment/return are not supported
+ * (use auto_ptr or unique_ptr explicitly).
+ */
+#if __cplusplus>=201103L
+template<typename T>
+using auto_ptr = std::unique_ptr<T>;
+template<typename T>
+static inline void swap(auto_ptr<T>& lhs, auto_ptr<T>& rhs) {
+    lhs.swap(rhs);
+}
+#else
+using std::auto_ptr;
+template<typename T>
+static inline void swap(auto_ptr<T>& lhs, auto_ptr<T>& rhs) {
+    auto_ptr<T> temp(lhs);
+    lhs = rhs;
+    rhs = temp;
+}
+#endif
+} // namespace util
+
+typedef epicsGuard<epicsMutex> Guard;
+typedef epicsGuardRelease<epicsMutex> UnGuard;
+
+//! in-line string builder (eg. for exception messages)
+//! eg. @code throw std::runtime_error(SB()<<"Some message"<<42); @endcode
+struct SB {
+    std::ostringstream strm;
+    SB() {}
+    operator std::string() const { return strm.str(); }
+    template<typename T>
+    SB& operator<<(T i) { strm<<i; return *this; }
+};
+
+#endif // ACM_UTIL_H

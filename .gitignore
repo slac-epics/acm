@@ -1,0 +1,10 @@
+/cfg/
+/bin/
+/lib/
+/db/
+/dbd/
+/include/
+/configure/*.local
+O.*/
+/iocBoot/ioc*/envPaths
+*.pyc

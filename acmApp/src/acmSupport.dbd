@@ -1,0 +1,10 @@
+registrar(acmRegistrar)
+driver(acmDrv)
+variable(acmRxTimeoutMS, int)
+variable(acmReconstructTimeoutMS,int)
+
+# Driver instance counters
+device(longin, INST_IO, devACMLiCounter, "ACM Counter")
+
+# Value of most recent sequence
+device(longin, INST_IO, devACMLiRegVal, "ACM Reg Value")

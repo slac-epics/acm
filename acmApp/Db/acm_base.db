@@ -1,0 +1,29 @@
+
+
+record(longin, "$(P)Cnt:RX-I") {
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) offset=0")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)Cnt:TMO-I")
+}
+
+record(longin, "$(P)Cnt:TMO-I") {
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) offset=1")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)Cnt:ERR-I")
+}
+
+record(longin, "$(P)Cnt:ERR-I") {
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) offset=2")
+    field(SCAN, "1 second")
+    field(FLNK, "$(P)Cnt:IGN-I")
+}
+
+record(longin, "$(P)Cnt:IGN-I") {
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) offset=3")
+    field(SCAN, "1 second")
+    field(FLNK, "")
+}
