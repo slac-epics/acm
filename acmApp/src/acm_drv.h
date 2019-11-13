@@ -10,6 +10,7 @@
 #include <osiSock.h>
 #include <epicsThread.h>
 #include <epicsTypes.h>
+#include <epicsAtomic.h>
 #include <epicsTime.h>
 #include <errlog.h>
 #include <dbScan.h>
@@ -38,8 +39,20 @@ struct PacketData {
     std::vector<epicsUInt32> values;
 };
 
+/* A new PartialSequnce is added to CompleteSequence::partials
+ * each time a new Timebase value is encountered, and stamped
+ * with the arrival time of this first packet (may not be Seq# 0).
+ * Expiration and global ordering is established from this arrival time.
+ */
 struct PartialSequence {
-    epicsTimeStamp timeoutAt;
+    // reception time of first packet with this cmd+timebase pair.
+    // May not be seq# 0
+    epicsTimeStamp firstRx;
+    // -1 or the seq# of the packet with Flags[0] set (last).
+    int lastSeq;
+    // whether this complete/timedout sequence has been moved
+    // into the timeline
+    bool pushed;
 
     typedef std::map<uint16_t, PacketData> packets_t;
     packets_t packets;
@@ -56,6 +69,7 @@ struct CompleteSequence {
     typedef std::map<uint32_t, PartialSequence> partials_t;
     partials_t partials;
 
+    // most recent complete for this packet type
     PartialSequence::packets_t complete;
 
     IOSCANPVT scanUpdate;
@@ -96,8 +110,9 @@ struct DriverSock : public epicsThreadRunable {
     DriverSock(Driver* driver, osiSockAddr& bind_addr);
     virtual ~DriverSock();
     virtual void run() override final;
-    virtual void show(unsigned lvl) const override final;
 };
+
+#define LOGDRV(mask, pdriver, FMT, ...) do{ if(::epics::atomic::get((pdriver)->log_mask)&(mask)) errlogPrintf("%s " FMT, (pdriver)->name.c_str(), ##__VA_ARGS__); }while(0)
 
 struct Driver {
     typedef std::map<std::string, Driver*> drivers_t;
@@ -106,6 +121,15 @@ struct Driver {
     const std::string name;
     const osiSockAddr peer;
 
+    /** atomic
+     *
+     * 0x0001 - Error messages
+     * 0x0002 - Worker thread activity
+     * 0x0004 - timestamp capture
+     * 0x0008 - Sequence reconstruction
+     */
+    int log_mask;
+
     // const after acmSetup()
     std::string peerName;
 
@@ -113,8 +137,9 @@ struct Driver {
     sockets_t sockets; // only vector is const.  individual DriverSock are guarded by our lock
 
     // (atomic) stat counters
-    int nRX, nTimeout, nError, nIgnore;
+    int nRX, nTimeout, nError, nIgnore, nComplete;
 
+    // by packet type
     typedef  std::map<uint8_t, CompleteSequence> sequences_t;
     sequences_t sequences;
 

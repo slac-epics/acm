@@ -1,5 +1,17 @@
 
 
+record(mbboDirect, "$(P)Log-SP") {
+    field(DTYP, "ACM Log Mask")
+    field(OUT , "@$(DEV)")
+    field(PINI, "YES")
+    field(PHAS, "-1")
+    field(NOBT, "16")
+    field(RVAL, "$(DEBUG=1)") # enable only error messages by default
+    info(autosaveFields_pass0, "RVAL")
+}
+
+# Stat counters
+
 record(longin, "$(P)Cnt:RX-I") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=0")

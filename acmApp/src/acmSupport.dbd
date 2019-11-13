@@ -1,10 +1,13 @@
 registrar(acmRegistrar)
-driver(acmDrv)
+driver(ACM)
 variable(acmRxTimeoutMS, int)
 variable(acmReconstructTimeoutMS,int)
 
+#Driver instance
 # Driver instance counters
-device(longin, INST_IO, devACMLiCounter, "ACM Counter")
+device(longin , INST_IO, devACMLiCounter, "ACM Counter")
+# Debug log control mask
+device(mbboDirect, INST_IO, devACMMbboDirectLogMask, "ACM Log Mask")
 
 # Value of most recent sequence
 device(longin, INST_IO, devACMLiRegVal, "ACM Reg Value")

@@ -111,6 +111,19 @@ void acmHook(initHookState hook)
 
 long acmReport(int lvl)
 {
+    for(Driver::drivers_t::iterator it = Driver::drivers.begin(), end = Driver::drivers.end();
+        it!=end; ++it)
+    {
+        Driver* drv = it->second;
+        printf("ACM: \"%s\" peer: %s RX=%u TMO=%u ERR=%u IGN=%u\n",
+               drv->name.c_str(), drv->peerName.c_str(),
+               ::epics::atomic::get(drv->nRX),
+               ::epics::atomic::get(drv->nTimeout),
+               ::epics::atomic::get(drv->nError),
+               ::epics::atomic::get(drv->nIgnore));
+        if(lvl<=0)
+            continue;
+    }
     return 0;
 }
 
@@ -140,7 +153,7 @@ void acmRegistrar()
     initHookRegister(&acmHook);
 }
 
-drvet acmDrv = {2, NULL, (DRVSUPFUN)&acmReport};
+drvet ACM = {2, NULL, (DRVSUPFUN)&acmReport};
 
 } // namespace
 
@@ -148,5 +161,5 @@ drvet acmDrv = {2, NULL, (DRVSUPFUN)&acmReport};
 
 extern "C" {
 epicsExportRegistrar(acmRegistrar);
-epicsExportAddress(drvet, acmDrv);
+epicsExportAddress(drvet, ACM);
 }
