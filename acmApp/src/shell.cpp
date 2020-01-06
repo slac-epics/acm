@@ -131,7 +131,7 @@ const iocshArg acmSetupArg1 = { "peerip:port",iocshArgString};
 const iocshArg acmSetupArg2 = { "iface:port ...",iocshArgString};
 const iocshArg * const acmSetupArgs[3] = {&acmSetupArg0, &acmSetupArg1, &acmSetupArg2};
 const iocshFuncDef acmSetupFuncDef = {
-    "acmSetup",1,acmSetupArgs};
+    "acmSetup",3,acmSetupArgs};
 void acmSetupCall(const iocshArgBuf *args)
 {
     try {

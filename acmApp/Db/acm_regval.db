@@ -1,6 +1,6 @@
 record(longin, "$(P)$(REG)") {
     field(DTYP, "ACM Reg Value")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=$(OFF)")
-    field(SCAN, "$(SCAN=)")
+    field(INP , "@$(DEV) cmd=0x51 offset=$(OFF)")
+    field(SCAN, "$(SCAN=I/O Intr)")
     field(FLNK, "$(FLNK=)")
 }
