@@ -13,6 +13,9 @@ USR_LDFLAGS += -Wl,--no-undefined -Wl,--no-allow-shlib-undefined
 #=============================
 # Build the IOC application
 
+GENVERSION = acmVCS.h
+GENVERSIONMACRO = ACM_VCS
+
 LIBRARY_IOC = acm
 
 DBD += acmSupport.dbd
@@ -31,3 +34,4 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
+dset$(DEP): $(COMMON_DIR)/$(GENVERSION)

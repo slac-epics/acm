@@ -6,6 +6,8 @@ variable(acmReconstructTimeoutMS,int)
 #Driver instance
 # Driver instance counters
 device(longin , INST_IO, devACMLiCounter, "ACM Counter")
+# Driver static info
+device(stringin, INST_IO, devACMSiInfo, "ACM Info")
 # Debug log control mask
 device(mbboDirect, INST_IO, devACMMbboDirectLogMask, "ACM Log Mask")
 

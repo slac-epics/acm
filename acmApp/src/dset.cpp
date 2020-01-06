@@ -1,10 +1,13 @@
 
+#include <string.h>
+
 #include <sstream>
 
 #include <longoutRecord.h>
 #include <mbboDirectRecord.h>
 #include <longinRecord.h>
 #include <aaiRecord.h>
+#include <stringinRecord.h>
 
 #include <epicsAtomic.h>
 #include <epicsStdlib.h>
@@ -16,6 +19,7 @@
 #include <alarm.h>
 
 #include "acm_drv.h"
+#include "acmVCS.h"
 
 namespace {
 
@@ -138,6 +142,27 @@ long init_record(dbCommon *prec)
     return 0;
 }
 
+long read_info(dbCommon *pcommon)
+{
+    TRY(stringin) {
+        const char* val;
+
+        switch(info->offset) {
+        case 0: val = drv->name.c_str(); break;
+        case 1: val = drv->peerName.c_str(); break;
+        case 2: val = ACM_VCS; break;
+        default:val = "\?\?\?"; recGblSetSevr(prec, READ_ALARM, INVALID_ALARM); break;
+        }
+
+        strncpy(prec->val, val, sizeof(prec->val));
+        prec->val[sizeof(prec->val)-1] = '\0';
+
+    }CATCH()
+    return -2;
+}
+
+dset6 devACMSiInfo = {6, 0, 0, &init_record, 0, &read_info};
+
 long read_counter(dbCommon *pcommon)
 {
     TRY(longin) {
@@ -193,6 +218,7 @@ dset6 devACMMbboDirectLogMask = {6, 0, 0, &init_record, 0, &write_log_mask};
 #include <epicsExport.h>
 
 extern "C" {
+epicsExportAddress(dset, devACMSiInfo);
 epicsExportAddress(dset, devACMLiCounter);
 epicsExportAddress(dset, devACMLiRegVal);
 epicsExportAddress(dset, devACMMbboDirectLogMask);

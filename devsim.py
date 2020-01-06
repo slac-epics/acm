@@ -28,7 +28,7 @@ LastFlag = 0x01
 
 TBFreq = 9.43e6 # Hz
 
-RegFreq = 1.0 # Hz (actual 100Hz)
+RegFreq = 2.0 # Hz (actual 100Hz)
 
 class ACMSim:
     def __init__(self, loop, dests):
