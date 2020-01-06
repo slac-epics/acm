@@ -133,215 +133,232 @@ void DriverSock::run()
     epicsTimeGetCurrent(&now);
 
     while(running) {
+        try {
 
-        // check for time'd out, or obsolete, sequences.
-        for(Driver::sequences_t::iterator it_seq=driver->sequences.begin();
-            it_seq!=driver->sequences.end(); ++it_seq)
-        {
-            for(CompleteSequence::partials_t::iterator it_partial=it_seq->second.partials.begin();
-                it_partial!=it_seq->second.partials.end();)
+            // check for time'd out, or obsolete, sequences.
+            for(Driver::sequences_t::iterator it_seq=driver->sequences.begin();
+                it_seq!=driver->sequences.end(); ++it_seq)
             {
-                CompleteSequence::partials_t::iterator cur = it_partial++;
-                bool expired = epicsTimeDiffInSeconds(&now, &it_partial->second.firstRx) > acmReconstructTimeoutMS*1000.0;
+                for(CompleteSequence::partials_t::iterator it_partial=it_seq->second.partials.begin();
+                    it_partial!=it_seq->second.partials.end();)
+                {
+                    CompleteSequence::partials_t::iterator cur = it_partial++;
+                    bool expired = epicsTimeDiffInSeconds(&now, &it_partial->second.firstRx) > acmReconstructTimeoutMS*1000.0;
 
-                if(expired) {
-                    LOGDRV(8, driver, "Timeout %02x:%08x\n", it_seq->first, cur->first);
-                    ::epics::atomic::increment(driver->nTimeout);
-                    it_seq->second.partials.erase(cur);
-                }
-            }
-        }
-
-        struct {
-            uint8_t cmd, flags;
-            uint16_t seqNum;
-            uint32_t timebase;
-        } header;
-        STATIC_ASSERT(sizeof(header)==8);
-
-        osiSockAddr peer;
-        epicsTimeStamp rxTime;
-        unsigned rxTimeSrc=0;
-        {
-            UnGuard U(G); // unlock for I/O
-
-            rxBuf.resize(0x10000/4u); // theoretical max for UDP
-
-            // all sorts of fun to prepare for recvmsg()
-            union {
-                char buf[64]; // not sure how to choose this size.  This works...
-                cmsghdr align;
-            } control;
-
-            iovec vec[2];
-            vec[0].iov_base = &header;
-            vec[0].iov_len = sizeof(header);
-            vec[1].iov_base = &rxBuf[0];
-            vec[1].iov_len = 4*rxBuf.size(); // uint32_t to bytes
-
-            msghdr msg;
-            memset(&msg, 0 , sizeof(msg));
-            msg.msg_name = &peer.sa;
-            msg.msg_namelen = sizeof(peer);
-            msg.msg_iov = vec;
-            msg.msg_iovlen = NELEMENTS(vec);
-            msg.msg_control = &control;
-            msg.msg_controllen = sizeof(control);
-
-            driver->testCycle.signal();
-
-            // actually I/O
-            ssize_t ret = recvmsg(sock.sock, &msg, 0);
-            int err = SOCKERRNO;
-            epicsTimeGetCurrent(&now);
-            if(!running) {
-                break;
-
-            } else if(ret<0) {
-                ::epics::atomic::increment(driver->nTimeout);
-                LOGDRV(1, driver, "Error Rx on %s : (%d, %d) %s\n", bindName.c_str(), unsigned(ret), err, strerror(err));
-                // TODO sleep for other errors, not actual timeout
-                epicsThreadSleep(1.0); // slow down error spam
-                continue; // will test sequence timeout above
-            }
-            LOGDRV(2, driver, "Worker recvmsg() -> %d\n", int(ret));
-
-
-            if(peer.sa.sa_family!=AF_INET ||
-                    peer.ia.sin_addr.s_addr!=driver->peer.ia.sin_addr.s_addr)
-            {
-                // ignore traffic from unknown peer
-                ::epics::atomic::increment(driver->nIgnore);
-                continue;
-            }
-            ::epics::atomic::increment(driver->nRX);
-
-            if(msg.msg_flags&MSG_TRUNC) {
-                ::epics::atomic::increment(driver->nError);
-                LOGDRV(1, driver, "Error: truncated msg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
-                continue;
-            } else if(ret<8) {
-                ::epics::atomic::increment(driver->nError);
-                LOGDRV(1, driver, "Error: runt msg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
-                continue;
-            }
-
-            rxBuf.resize((size_t(ret)-sizeof(header))/4u);
-            for(size_t i=0; i<rxBuf.size(); i++)
-                rxBuf[i] = ntohl(rxBuf[i]);
-
-            if(msg.msg_flags&MSG_CTRUNC) {
-                LOGDRV(1, driver, "Warning: truncated cmsg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
-            }
-
-            for(cmsghdr *cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg))
-            {
-                if(cmsg->cmsg_level==SOL_SOCKET && cmsg->cmsg_type==SO_TIMESTAMPING) {
-                    // stamp[0] - SW stamp
-                    // stamp[1] - deprecated
-                    // stamp[2] - HW stamp (maybe)
-                    timespec *stamp = (timespec *)CMSG_DATA(cmsg);
-
-                    if(stamp[2].tv_sec!=0 && stamp[2].tv_nsec!=0) {
-                        rxTime.secPastEpoch = stamp->tv_sec - POSIX_TIME_AT_EPICS_EPOCH;
-                        rxTime.nsec = stamp->tv_nsec;
-                        rxTimeSrc = 2;
-
-                    } else if(stamp[0].tv_sec!=0 && stamp[0].tv_nsec!=0) {
-                        rxTime.secPastEpoch = stamp->tv_sec - POSIX_TIME_AT_EPICS_EPOCH;
-                        rxTime.nsec = stamp->tv_nsec;
-                        rxTimeSrc = 1;
-
+                    if(expired) {
+                        if(!cur->second.pushed) {
+                            LOGDRV(8, driver, "Timeout %02x:%08x\n", it_seq->first, cur->first);
+                            ::epics::atomic::increment(driver->nTimeout);
+                        }
+                        it_seq->second.partials.erase(cur);
                     }
                 }
             }
 
-            if(rxTimeSrc==0) {
-                rxTime = now;
-            }
-            LOGDRV(4, driver, "RX timestamp%u %08x:%08x\n", rxTimeSrc, unsigned(rxTime.secPastEpoch), unsigned(rxTime.nsec));
+            struct {
+                uint8_t cmd, flags;
+                uint16_t seqNum;
+                uint32_t timebase;
+            } header;
+            STATIC_ASSERT(sizeof(header)==8);
 
-            // finally time to process RX buffer
+            osiSockAddr peer;
+            epicsTimeStamp rxTime;
+            unsigned rxTimeSrc=0;
+            {
+                UnGuard U(G); // unlock for I/O
 
-            header.seqNum = ntohs(header.seqNum);
-            header.timebase = ntohl(header.timebase);
-            LOGDRV(8, driver, "RX %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
-        }
-        // locked again
+                rxBuf.resize(0x10000/4u); // theoretical max for UDP
 
-        if(rxTimeSrc!=0) {
-            // TODO revise time mapping with rxTime and header.timebase
-        }
+                // all sorts of fun to prepare for recvmsg()
+                union {
+                    char buf[64]; // not sure how to choose this size.  This works...
+                    cmsghdr align;
+                } control;
 
-        // insert this packet into a sequence
-        CompleteSequence& seq = driver->sequences[header.cmd];
+                iovec vec[2];
+                vec[0].iov_base = &header;
+                vec[0].iov_len = sizeof(header);
+                vec[1].iov_base = &rxBuf[0];
+                vec[1].iov_len = 4*rxBuf.size(); // uint32_t to bytes
 
-        // late arrival from completed/expired sequence?
+                msghdr msg;
+                memset(&msg, 0 , sizeof(msg));
+                msg.msg_name = &peer.sa;
+                msg.msg_namelen = sizeof(peer);
+                msg.msg_iov = vec;
+                msg.msg_iovlen = NELEMENTS(vec);
+                msg.msg_control = &control;
+                msg.msg_controllen = sizeof(control);
 
-        PartialSequence& partial = seq.partials[header.timebase];
-        if(partial.firstRx.secPastEpoch==0 && partial.firstRx.nsec==0) {
-            // added new partial
-            partial.firstRx = rxTime;
-        }
-        if(partial.pushed) {
-            // sequence already pushed.
-            // late, duplicate, or otherwise invalid
-            epics::atomic::increment(driver->nIgnore);
-            LOGDRV(8, driver, "Ignore dup/late/invalid %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                driver->testCycle.signal();
 
-        } else if(partial.lastSeq<0 || int(header.seqNum)<partial.lastSeq) {
-            // this packet may be new
-            PacketData& pkt = partial.packets[header.seqNum];
+                // actually I/O
+                ssize_t ret = recvmsg(sock.sock, &msg, 0);
+                int err = SOCKERRNO;
+                epicsTimeGetCurrent(&now);
+                if(!running) {
+                    break;
 
-            if(pkt.values.empty()) {
-                pkt.last = header.flags&0x01;
-                pkt.sender = peer;
-                pkt.timeReceived = rxTime;
-                pkt.values.swap(rxBuf);
-
-                if(pkt.last && partial.lastSeq<0) {
-                    partial.lastSeq = header.seqNum;
-                }
-
-                // are we done yet?
-                if(partial.lastSeq>=0 && partial.packets.size()-1u==size_t(partial.lastSeq)) {
-                    // should be...
-                    uint16_t expect = 0u;
-                    bool match = true;
-
-                    for(PartialSequence::packets_t::const_iterator it=partial.packets.begin(), end=partial.packets.end();
-                        match && it!=end; ++it)
-                    {
-                        match &= it->first==expect;
-                    }
-
-                    if(match) {
-                        // yup.
-                        seq.complete.swap(partial.packets);
-                        seq.timeReceived = rxTime;
-                        seq.timeBase = header.timebase;
-
-                        epics::atomic::increment(driver->nComplete);
-                        scanIoRequest(seq.scanUpdate);
-                        LOGDRV(8, driver, "Sequence completion %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                } else if(ret<0) {
+                    driver->onTimeout();
+                    if(err==EAGAIN) {
+                        // timeout
+                        ::epics::atomic::increment(driver->nTimeout);
+                        LOGDRV(1, driver, "RX Timeout %s\n", bindName.c_str());
 
                     } else {
-                        // not sure if this can actually happen, but it wouldn't be good.
-                        epics::atomic::increment(driver->nError);
-                        LOGDRV(1, driver, "Sequence completion logic error? %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                        ::epics::atomic::increment(driver->nError);
+                        LOGDRV(1, driver, "Error Rx on %s : (%d, %d) %s\n", bindName.c_str(), unsigned(ret), err, strerror(err));
+                        epicsThreadSleep(5.0); // slow down error spam
                     }
-                    partial.pushed = true;
+                    continue; // will test sequence timeout above
+                }
+                LOGDRV(2, driver, "Worker recvmsg() -> %d\n", int(ret));
+
+
+                if(peer.sa.sa_family!=AF_INET ||
+                        peer.ia.sin_addr.s_addr!=driver->peer.ia.sin_addr.s_addr)
+                {
+                    // ignore traffic from unknown peer
+                    ::epics::atomic::increment(driver->nIgnore);
+                    continue;
+                }
+                ::epics::atomic::increment(driver->nRX);
+
+                if(msg.msg_flags&MSG_TRUNC) {
+                    ::epics::atomic::increment(driver->nError);
+                    LOGDRV(1, driver, "Error: truncated msg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
+                    continue;
+                } else if(ret<8) {
+                    ::epics::atomic::increment(driver->nError);
+                    LOGDRV(1, driver, "Error: runt msg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
+                    continue;
+                }
+
+                rxBuf.resize((size_t(ret)-sizeof(header))/4u);
+                for(size_t i=0; i<rxBuf.size(); i++)
+                    rxBuf[i] = ntohl(rxBuf[i]);
+
+                if(msg.msg_flags&MSG_CTRUNC) {
+                    LOGDRV(1, driver, "Warning: truncated cmsg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
+                }
+
+                for(cmsghdr *cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg))
+                {
+                    if(cmsg->cmsg_level==SOL_SOCKET && cmsg->cmsg_type==SO_TIMESTAMPING) {
+                        // stamp[0] - SW stamp
+                        // stamp[1] - deprecated
+                        // stamp[2] - HW stamp (maybe)
+                        timespec *stamp = (timespec *)CMSG_DATA(cmsg);
+
+                        if(stamp[2].tv_sec!=0 && stamp[2].tv_nsec!=0) {
+                            rxTime.secPastEpoch = stamp->tv_sec - POSIX_TIME_AT_EPICS_EPOCH;
+                            rxTime.nsec = stamp->tv_nsec;
+                            rxTimeSrc = 2;
+
+                        } else if(stamp[0].tv_sec!=0 && stamp[0].tv_nsec!=0) {
+                            rxTime.secPastEpoch = stamp->tv_sec - POSIX_TIME_AT_EPICS_EPOCH;
+                            rxTime.nsec = stamp->tv_nsec;
+                            rxTimeSrc = 1;
+
+                        }
+                    }
+                }
+
+                if(rxTimeSrc==0) {
+                    rxTime = now;
+                }
+                LOGDRV(4, driver, "RX timestamp%u %08x:%08x\n", rxTimeSrc, unsigned(rxTime.secPastEpoch), unsigned(rxTime.nsec));
+
+                // finally time to process RX buffer
+
+                header.seqNum = ntohs(header.seqNum);
+                header.timebase = ntohl(header.timebase);
+                LOGDRV(8, driver, "RX %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+            }
+            // locked again
+
+            if(rxTimeSrc!=0) {
+                // TODO revise time mapping with rxTime and header.timebase
+            }
+
+            // insert this packet into a sequence
+            CompleteSequence& seq = driver->sequences[header.cmd];
+
+            // late arrival from completed/expired sequence?
+
+            PartialSequence& partial = seq.partials[header.timebase];
+            if(partial.firstRx.secPastEpoch==0 && partial.firstRx.nsec==0) {
+                // added new partial
+                partial.firstRx = rxTime;
+            }
+            if(partial.pushed) {
+                // sequence already pushed.
+                // late, duplicate, or otherwise invalid
+                epics::atomic::increment(driver->nIgnore);
+                LOGDRV(8, driver, "Ignore dup/late/invalid %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+
+            } else if(partial.lastSeq<0 || int(header.seqNum)<partial.lastSeq) {
+                // this packet may be new
+                PacketData& pkt = partial.packets[header.seqNum];
+
+                if(pkt.values.empty()) {
+                    pkt.last = header.flags&0x01;
+                    pkt.sender = peer;
+                    pkt.timeReceived = rxTime;
+                    pkt.values.swap(rxBuf);
+
+                    if(pkt.last && partial.lastSeq<0) {
+                        partial.lastSeq = header.seqNum;
+                    }
+
+                    // are we done yet?
+                    if(partial.lastSeq>=0 && partial.packets.size()-1u==size_t(partial.lastSeq)) {
+                        // should be...
+                        uint16_t expect = 0u;
+                        bool match = true;
+
+                        for(PartialSequence::packets_t::const_iterator it=partial.packets.begin(), end=partial.packets.end();
+                            match && it!=end; ++it)
+                        {
+                            match &= it->first==expect;
+                        }
+
+                        if(match) {
+                            // yup.
+                            seq.complete.swap(partial.packets);
+                            seq.timeReceived = rxTime;
+                            seq.timeBase = header.timebase;
+
+                            epics::atomic::increment(driver->nComplete);
+                            scanIoRequest(seq.scanUpdate);
+                            LOGDRV(8, driver, "Sequence completion %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+
+                        } else {
+                            // not sure if this can actually happen, but it wouldn't be good.
+                            epics::atomic::increment(driver->nError);
+                            LOGDRV(1, driver, "Sequence completion logic error? %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                        }
+                        partial.pushed = true;
+                    }
+
+                } else {
+                    // duplicate packet?
+                    epics::atomic::increment(driver->nIgnore);
+                    LOGDRV(8, driver, "Ignore dup %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
                 }
 
             } else {
-                // duplicate packet?
                 epics::atomic::increment(driver->nIgnore);
-                LOGDRV(8, driver, "Ignore dup %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                LOGDRV(8, driver, "Warning seq data after last %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
             }
 
-        } else {
-            epics::atomic::increment(driver->nIgnore);
-            LOGDRV(8, driver, "Warning seq data after last %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+        }catch(std::exception& e){
+            epics::atomic::increment(driver->nError);
+            LOGDRV(1, driver, "Unexpected error in run() : %s\n", e.what());
+            driver->onTimeout();
+            epicsThreadSleep(5.0); // slow down error spam
         }
     }
 }
@@ -363,6 +380,21 @@ Driver::Driver(const std::string& name, const osiSockAddr& peer)
 }
 
 Driver::~Driver() {}
+
+void Driver::onTimeout()
+{
+    for(sequences_t::iterator it = sequences.begin(), end = sequences.end();
+        it!=end; ++it)
+    {
+        CompleteSequence& seq = it->second;
+
+        seq.timeReceived.secPastEpoch = seq.timeReceived.nsec = 0;
+        seq.timeBase = 0;
+        seq.complete.clear();
+        seq.partials.clear();
+        scanIoRequest(seq.scanUpdate);
+    }
+}
 
 #include <epicsExport.h>
 

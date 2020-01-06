@@ -167,7 +167,7 @@ long read_regval(dbCommon *pcommon)
         }
         prec->val = seq.at(info->offset);
         return 0;
-    }catch(std::range_error&){
+    }catch(std::out_of_range&){
         (void)recGblSetSevr(prec, READ_ALARM, INVALID_ALARM);
     }CATCH()
     return -2;

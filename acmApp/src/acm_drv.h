@@ -148,6 +148,8 @@ struct Driver {
 
     explicit Driver(const std::string& name, const osiSockAddr& peer);
     ~Driver();
+
+    void onTimeout();
 };
 
 extern "C"
