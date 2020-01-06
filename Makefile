@@ -17,6 +17,8 @@ testApp_DEPEND_DIRS += acmApp
 DIRS += $(wildcard iocBoot)
 iocBoot_DEPEND_DIRS += configure
 
+UNINSTALL_DIRS += $(INSTALL_LOCATION)/opi
+
 # Add any additional dependency rules here:
 
 include $(TOP)/configure/RULES_TOP
