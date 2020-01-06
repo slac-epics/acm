@@ -3,6 +3,7 @@
 /lib/
 /db/
 /dbd/
+/opi/
 /include/
 /configure/*.local
 O.*/
