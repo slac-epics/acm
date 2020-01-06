@@ -14,6 +14,8 @@ import logging
 import socket
 import asyncio
 
+import numpy
+
 _log = logging.getLogger(__name__)
 
 class msgID(enum.IntEnum):
@@ -24,9 +26,9 @@ class msgID(enum.IntEnum):
 
 LastFlag = 0x01
 
-TBFreq = 1.0e6 # Hz
+TBFreq = 9.43e6 # Hz
 
-RegFreq = 1.0 # Hz
+RegFreq = 1.0 # Hz (actual 100Hz)
 
 class ACMSim:
     def __init__(self, loop, dests):
@@ -65,10 +67,15 @@ class ACMSim:
             TB = int((now-self.T0)*TBFreq) # cnts
             TB &= 0xffffffff
 
-            # header and 3 register values
-            msg = struct.pack('>BBHIIII', msgID.Reg, LastFlag, 0, TB,
-                              0xdeadbeef, self.regcount, 0xf1234567)
+            regs = numpy.arange(73, dtype='>u4')
+            regs[52] = 0xdeadbeef # FwVersion
+            # make something change
+            regs[0] = self.regcount
+            regs[1] = self.regcount ^ 0xffffffff
             self.regcount += 1
+
+            # header and 3 register values
+            msg = struct.pack('>BBHI', msgID.Reg, LastFlag, 0, TB) + regs.tobytes()
 
             for dest in self.dests:
                 _log.debug('send register data to %s', dest)
