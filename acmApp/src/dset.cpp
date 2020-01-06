@@ -3,6 +3,7 @@
 
 #include <sstream>
 
+#include <aiRecord.h>
 #include <longoutRecord.h>
 #include <mbboDirectRecord.h>
 #include <longinRecord.h>
@@ -118,7 +119,7 @@ struct dset6 {
 };
 
 #define TRY(rtype) \
-    rtype##Record *prec = reinterpret_cast<rtype##Record*>(pcommon); \
+    rtype *prec = reinterpret_cast<rtype*>(pcommon); \
     linkInfo *info = static_cast<linkInfo*>(prec->dpvt); \
     if(!info) return -1; \
     Driver *drv = info->driver; (void)drv; \
@@ -144,7 +145,7 @@ long init_record(dbCommon *prec)
 
 long read_info(dbCommon *pcommon)
 {
-    TRY(stringin) {
+    TRY(stringinRecord) {
         const char* val;
 
         switch(info->offset) {
@@ -165,7 +166,7 @@ dset6 devACMSiInfo = {6, 0, 0, &init_record, 0, &read_info};
 
 long read_counter(dbCommon *pcommon)
 {
-    TRY(longin) {
+    TRY(longinRecord) {
         // no locking needed
         switch(info->offset) {
         case 0: prec->val = epics::atomic::get(drv->nRX); break;
@@ -182,15 +183,16 @@ long read_counter(dbCommon *pcommon)
 
 dset6 devACMLiCounter = {6, 0, 0, &init_record, 0, &read_counter};
 
+template<typename R, epicsInt32 (R::*FLD)>
 long read_regval(dbCommon *pcommon)
 {
-    TRY(longin) {
+    TRY(R) {
         Guard G(drv->lock);
         CompleteSequence& seq = drv->sequences[info->cmd];
         if(prec->tse==epicsTimeEventDeviceTime) {
             prec->time = seq.timeReceived;
         }
-        prec->val = seq.at(info->offset);
+        prec->*FLD = seq.at(info->offset);
         return 0;
     }catch(std::out_of_range&){
         (void)recGblSetSevr(prec, READ_ALARM, INVALID_ALARM);
@@ -198,11 +200,12 @@ long read_regval(dbCommon *pcommon)
     return -2;
 }
 
-dset6 devACMLiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval};
+dset6 devACMLiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<longinRecord, &longinRecord::val>};
+dset6 devACMAiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<aiRecord, &aiRecord::rval>};
 
 long write_log_mask(dbCommon *pcommon)
 {
-    TRY(mbboDirect) {
+    TRY(mbboDirectRecord) {
         // no locking needed
         epics::atomic::set(drv->log_mask, prec->val);
         LOGREC(0xffff, "Log mask set to %04x\n", prec->val);
@@ -221,5 +224,6 @@ extern "C" {
 epicsExportAddress(dset, devACMSiInfo);
 epicsExportAddress(dset, devACMLiCounter);
 epicsExportAddress(dset, devACMLiRegVal);
+epicsExportAddress(dset, devACMAiRegVal);
 epicsExportAddress(dset, devACMMbboDirectLogMask);
 }
