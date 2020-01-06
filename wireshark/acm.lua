@@ -80,5 +80,7 @@ function acm.dissector (buf, pkt, root)
 end
 
 local utbl = DissectorTable.get("udp.port")
+utbl:add(50004, acm)
+utbl:add(50005, acm)
 utbl:add(50006, acm)
 utbl:add(50007, acm)
