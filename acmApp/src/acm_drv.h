@@ -64,7 +64,6 @@ struct CompleteSequence {
     // time of first packet in sequence
     epicsTimeStamp timeReceived;
     uint32_t timeBase;
-    unsigned timetimeReceivedSrc;
 
     typedef std::map<uint32_t, PartialSequence> partials_t;
     partials_t partials;
@@ -75,7 +74,6 @@ struct CompleteSequence {
     IOSCANPVT scanUpdate;
 
     CompleteSequence();
-    ~CompleteSequence();
 
     epicsUInt32 at(size_t i) const;
 };
@@ -119,7 +117,7 @@ struct Driver {
     static drivers_t drivers; // const after iocInit
 
     const std::string name;
-    const osiSockAddr peer;
+    const osiSockAddr peer; // only addr used, not port
 
     /** atomic
      *
@@ -146,9 +144,15 @@ struct Driver {
     // all other data members guarded by lock
     mutable epicsMutex lock;
 
+    epicsEvent testCycle;
+
     explicit Driver(const std::string& name, const osiSockAddr& peer);
     ~Driver();
 };
 
+extern "C"
+int acmSetup(const char* name,
+              const char* deviceName,
+              const char* bindNames);
 
 #endif // ACM_DRV_H

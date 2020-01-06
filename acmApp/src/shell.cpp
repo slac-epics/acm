@@ -8,8 +8,7 @@
 
 #include "acm_drv.h"
 
-namespace {
-
+static
 bool started = false;
 
 int acmSetup(const char* name,
@@ -37,15 +36,13 @@ int acmSetup(const char* name,
     printf("Creating ACM '%s' for %s\n", name, driver->peerName.c_str());
 
     std::istringstream strm(bindNames);
-    while(true) {
+    while(strm.good()) {
         std::string iface;
         strm>>iface;
 
         if(strm.bad()) {
             fprintf(stderr, "Error: unable to parse an iface in : \"%s\"\n", bindNames);
             return 1;
-        } else if(strm.eof()) {
-            break;
         }
 
         osiSockAddr ifaceAddr;
@@ -64,6 +61,8 @@ int acmSetup(const char* name,
     driver.release();
     return 0;
 }
+
+namespace {
 
 void acmExit(void *unused)
 {
@@ -153,7 +152,7 @@ void acmRegistrar()
     initHookRegister(&acmHook);
 }
 
-drvet ACM = {2, NULL, (DRVSUPFUN)&acmReport};
+drvet ACM = {2, (DRVSUPFUN)&acmReport, NULL};
 
 } // namespace
 

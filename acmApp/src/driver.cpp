@@ -26,11 +26,6 @@ CompleteSequence::CompleteSequence()
     scanIoInit(&scanUpdate);
 }
 
-CompleteSequence::~CompleteSequence()
-{
-    assert(false); // never destroyed
-}
-
 epicsUInt32 CompleteSequence::at(size_t i) const
 {
     if(complete.empty())
@@ -119,8 +114,12 @@ DriverSock::DriverSock(Driver *driver, osiSockAddr& bindAddr)
 
 DriverSock::~DriverSock()
 {
-    // never free'd
-    assert(false);
+    {
+        Guard G(driver->lock);
+        running = false;
+    }
+    sock.close();
+    worker->exitWait();
 }
 
 void DriverSock::run()
@@ -189,21 +188,24 @@ void DriverSock::run()
             msg.msg_control = &control;
             msg.msg_controllen = sizeof(control);
 
+            driver->testCycle.signal();
+
             // actually I/O
             ssize_t ret = recvmsg(sock.sock, &msg, 0);
-            if(ret<=0) {
-                int err = SOCKERRNO;
-                epicsTimeGetCurrent(&now); // may clobber SOCKERRNO
+            int err = SOCKERRNO;
+            epicsTimeGetCurrent(&now);
+            if(!running) {
+                break;
+
+            } else if(ret<0) {
                 ::epics::atomic::increment(driver->nTimeout);
-                LOGDRV(1, driver, "Error Rx on %s : (%d) %s\n", bindName.c_str(), err, strerror(err));
+                LOGDRV(1, driver, "Error Rx on %s : (%d, %d) %s\n", bindName.c_str(), unsigned(ret), err, strerror(err));
                 // TODO sleep for other errors, not actual timeout
                 epicsThreadSleep(1.0); // slow down error spam
                 continue; // will test sequence timeout above
             }
-            epicsTimeGetCurrent(&now);
             LOGDRV(2, driver, "Worker recvmsg() -> %d\n", int(ret));
 
-            rxBuf.resize(size_t(ret));
 
             if(peer.sa.sa_family!=AF_INET ||
                     peer.ia.sin_addr.s_addr!=driver->peer.ia.sin_addr.s_addr)
@@ -223,6 +225,10 @@ void DriverSock::run()
                 LOGDRV(1, driver, "Error: runt msg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
                 continue;
             }
+
+            rxBuf.resize((size_t(ret)-sizeof(header))/4u);
+            for(size_t i=0; i<rxBuf.size(); i++)
+                rxBuf[i] = ntohl(rxBuf[i]);
 
             if(msg.msg_flags&MSG_CTRUNC) {
                 LOGDRV(1, driver, "Warning: truncated cmsg %u -> %u\n", ntohs(peer.ia.sin_port), ntohs(bindAddr.ia.sin_port));
@@ -298,7 +304,7 @@ void DriverSock::run()
                 }
 
                 // are we done yet?
-                if(partial.lastSeq>=0 && partial.packets.size()==size_t(partial.lastSeq)) {
+                if(partial.lastSeq>=0 && partial.packets.size()-1u==size_t(partial.lastSeq)) {
                     // should be...
                     uint16_t expect = 0u;
                     bool match = true;
@@ -312,6 +318,9 @@ void DriverSock::run()
                     if(match) {
                         // yup.
                         seq.complete.swap(partial.packets);
+                        seq.timeReceived = rxTime;
+                        seq.timeBase = header.timebase;
+
                         epics::atomic::increment(driver->nComplete);
                         scanIoRequest(seq.scanUpdate);
                         LOGDRV(8, driver, "Sequence completion %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
@@ -353,10 +362,7 @@ Driver::Driver(const std::string& name, const osiSockAddr& peer)
     peerName = addr.buf;
 }
 
-Driver::~Driver()
-{
-    assert(false);
-}
+Driver::~Driver() {}
 
 #include <epicsExport.h>
 

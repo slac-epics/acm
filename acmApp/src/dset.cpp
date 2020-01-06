@@ -116,8 +116,8 @@ struct dset6 {
 #define TRY(rtype) \
     rtype##Record *prec = reinterpret_cast<rtype##Record*>(pcommon); \
     linkInfo *info = static_cast<linkInfo*>(prec->dpvt); \
-    Driver *drv = info->driver; (void)drv; \
     if(!info) return -1; \
+    Driver *drv = info->driver; (void)drv; \
     try
 
 #define CATCH() \
