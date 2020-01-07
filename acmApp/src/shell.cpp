@@ -114,14 +114,20 @@ long acmReport(int lvl)
         it!=end; ++it)
     {
         Driver* drv = it->second;
-        printf("ACM: \"%s\" peer: %s RX=%u TMO=%u ERR=%u IGN=%u\n",
+        printf("ACM: \"%s\" peer: %s RX=%u Cpl=%u TMO=%u ERR=%u IGN=%u\n",
                drv->name.c_str(), drv->peerName.c_str(),
                ::epics::atomic::get(drv->nRX),
+               ::epics::atomic::get(drv->nComplete),
                ::epics::atomic::get(drv->nTimeout),
                ::epics::atomic::get(drv->nError),
                ::epics::atomic::get(drv->nIgnore));
         if(lvl<=0)
             continue;
+
+        Guard G(drv->lock);
+
+        printf("  intimeout=%c\n",
+               drv->intimeout ? 'Y' : 'N');
     }
     return 0;
 }

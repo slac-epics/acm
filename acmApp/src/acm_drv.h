@@ -128,6 +128,9 @@ struct Driver {
      */
     int log_mask;
 
+    epicsTimeStamp lastRx;
+    bool intimeout;
+
     // const after acmSetup()
     std::string peerName;
 

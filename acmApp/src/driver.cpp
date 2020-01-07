@@ -134,6 +134,14 @@ void DriverSock::run()
 
     while(running) {
         try {
+            if(!driver->intimeout) {
+                double age = epicsTimeDiffInSeconds(&now, &driver->lastRx);
+
+                if(age > acmRxTimeoutMS/1000.0) {
+                    driver->intimeout = true;
+                    driver->onTimeout();
+                }
+            }
 
             // check for time'd out, or obsolete, sequences.
             for(Driver::sequences_t::iterator it_seq=driver->sequences.begin();
@@ -201,10 +209,9 @@ void DriverSock::run()
                     break;
 
                 } else if(ret<0) {
-                    driver->onTimeout();
+
                     if(err==EAGAIN) {
                         // timeout
-                        ::epics::atomic::increment(driver->nTimeout);
                         LOGDRV(1, driver, "RX Timeout %s\n", bindName.c_str());
 
                     } else {
@@ -215,7 +222,6 @@ void DriverSock::run()
                     continue; // will test sequence timeout above
                 }
                 LOGDRV(2, driver, "Worker recvmsg() -> %d\n", int(ret));
-
 
                 if(peer.sa.sa_family!=AF_INET ||
                         peer.ia.sin_addr.s_addr!=driver->peer.ia.sin_addr.s_addr)
@@ -278,6 +284,9 @@ void DriverSock::run()
                 LOGDRV(8, driver, "RX %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
             }
             // locked again
+
+            driver->lastRx = rxTime;
+            driver->intimeout = false;
 
             if(rxTimeSrc!=0) {
                 // TODO revise time mapping with rxTime and header.timebase
@@ -369,12 +378,16 @@ Driver::Driver(const std::string& name, const osiSockAddr& peer)
     :name(name)
     ,peer(peer)
     ,log_mask(1)
+    ,intimeout(true)
     ,nRX(0u)
     ,nTimeout(0u)
     ,nError(0u)
     ,nIgnore(0u)
     ,nComplete(0u)
 {
+    lastRx.secPastEpoch = 0;
+    lastRx.nsec = 0;
+
     Socket::ShowAddr addr(peer);
     peerName = addr.buf;
 }
@@ -383,6 +396,8 @@ Driver::~Driver() {}
 
 void Driver::onTimeout()
 {
+    ::epics::atomic::increment(nTimeout);
+
     for(sequences_t::iterator it = sequences.begin(), end = sequences.end();
         it!=end; ++it)
     {
