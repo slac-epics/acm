@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 USR_CPPFLAGS += -DUSE_TYPED_RSET
 
 # fault on any undefined symbols (eg. from missing LIB_SYS_LIBS)
-USR_LDFLAGS += -Wl,--no-undefined -Wl,--no-allow-shlib-undefined
+#USR_LDFLAGS += -Wl,--no-undefined -Wl,--no-allow-shlib-undefined
 
 #=============================
 # Build the IOC application
