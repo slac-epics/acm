@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <epicsAtomic.h>
+#include <epicsMath.h>
 #include <dbDefs.h>
 
 #include "acm_drv.h"
@@ -22,8 +23,14 @@ PartialSequence::PartialSequence()
 }
 
 CompleteSequence::CompleteSequence()
+    :timeBase(0u)
+    ,ntotal(0u)
 {
+    timeReceived.secPastEpoch = 0;
+    timeReceived.nsec = 0;
+
     scanIoInit(&scanUpdate);
+    scanIoInit(&totalUpdate);
 }
 
 epicsUInt32 CompleteSequence::at(size_t i) const
@@ -151,11 +158,13 @@ void DriverSock::run()
                     it_partial!=it_seq->second.partials.end();)
                 {
                     CompleteSequence::partials_t::iterator cur = it_partial++;
-                    bool expired = epicsTimeDiffInSeconds(&now, &it_partial->second.firstRx) > acmReconstructTimeoutMS*1000.0;
+                    assert(cur->second.firstRx.secPastEpoch!=0);
+                    double age = epicsTimeDiffInSeconds(&now, &cur->second.firstRx);
+                    bool expired = age > acmReconstructTimeoutMS/1000.0;
 
                     if(expired) {
                         if(!cur->second.pushed) {
-                            LOGDRV(8, driver, "Timeout %02x:%08x\n", it_seq->first, cur->first);
+                            LOGDRV(8, driver, "Timeout %02x:%08x age=%f\n", it_seq->first, cur->first, age);
                             ::epics::atomic::increment(driver->nTimeout);
                         }
                         it_seq->second.partials.erase(cur);
@@ -298,10 +307,13 @@ void DriverSock::run()
             // late arrival from completed/expired sequence?
 
             PartialSequence& partial = seq.partials[header.timebase];
+
             if(partial.firstRx.secPastEpoch==0 && partial.firstRx.nsec==0) {
                 // added new partial
                 partial.firstRx = rxTime;
             }
+            assert(partial.firstRx.secPastEpoch!=0);
+
             if(partial.pushed) {
                 // sequence already pushed.
                 // late, duplicate, or otherwise invalid
@@ -329,7 +341,7 @@ void DriverSock::run()
                         bool match = true;
 
                         for(PartialSequence::packets_t::const_iterator it=partial.packets.begin(), end=partial.packets.end();
-                            match && it!=end; ++it)
+                            match && it!=end; ++it, expect++)
                         {
                             match &= it->first==expect;
                         }
@@ -339,6 +351,19 @@ void DriverSock::run()
                             seq.complete.swap(partial.packets);
                             seq.timeReceived = rxTime;
                             seq.timeBase = header.timebase;
+
+                            size_t ntotal=0u;
+
+                            for(PartialSequence::packets_t::const_iterator it=seq.complete.begin(), end=seq.complete.end();
+                                it!=end; ++it)
+                            {
+                                ntotal += it->second.values.size();
+                            }
+
+                            if(ntotal!=seq.ntotal) {
+                                seq.ntotal = ntotal;
+                                scanIoRequest(seq.totalUpdate);
+                            }
 
                             epics::atomic::increment(driver->nComplete);
                             scanIoRequest(seq.scanUpdate);

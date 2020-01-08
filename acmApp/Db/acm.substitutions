@@ -4,6 +4,13 @@ file "acm_base.db"
 {P="\$(P)",	DEV="\$(DEV)",	DEBUG="\$(DEBUG)"}
 }
 
+file "acm_trace.db"
+{
+{P="\$(P)INT:",	DEV="\$(DEV)",	CMD="0x33", TSHIFT="-2e-3"}
+{P="\$(P)EXT:",	DEV="\$(DEV)",	CMD="0x28", TSHIFT="0"}
+{P="\$(P)TRP:",	DEV="\$(DEV)",	CMD="0xe7", TSHIFT="0"}
+}
+
 file "acm_regval.db"
 {
 #{P="\$(P)",	DEV="\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR=""}

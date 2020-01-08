@@ -9,6 +9,8 @@
 #include <longinRecord.h>
 #include <aaiRecord.h>
 #include <stringinRecord.h>
+#include <biRecord.h>
+#include <menuFtype.h>
 
 #include <epicsAtomic.h>
 #include <epicsStdlib.h>
@@ -32,6 +34,14 @@ long long asInt(const char* s)
     return ret;
 }
 
+double asDouble(const char* s)
+{
+    double ret;
+    if(epicsParseDouble(s, &ret, 0))
+        throw std::runtime_error(SB()<<"Not a double '"<<s<<"'");
+    return ret;
+}
+
 DBLINK* xdbGetDevLink(dbCommon* prec)
 {
     DBLINK *plink = 0;
@@ -49,6 +59,14 @@ struct linkInfo {
 
     unsigned cmd;
     unsigned offset;
+    double slope, intercept;
+
+    linkInfo()
+        :cmd(0)
+        ,offset(0)
+        ,slope(1.0)
+        ,intercept(0.0)
+    {}
 };
 
 linkInfo* parseLink(dbCommon *prec)
@@ -80,6 +98,12 @@ linkInfo* parseLink(dbCommon *prec)
         } else if(key=="cmd") {
             info->cmd = asInt(value.c_str());
 
+        } else if(key=="slope") {
+            info->slope = asDouble(value.c_str());
+
+        } else if(key=="intercept") {
+            info->intercept = asDouble(value.c_str());
+
         } else {
             errlogPrintf("%s : unknown link key '%s'\n", prec->name, key.c_str());
         }
@@ -105,6 +129,15 @@ long cmd_update(int detach, struct dbCommon *prec, IOSCANPVT* pscan)
     linkInfo *info = static_cast<linkInfo*>(prec->dpvt);
     if(info) {
         *pscan = info->driver->sequences[info->cmd].scanUpdate;
+    }
+    return 0;
+}
+
+long cmd_ntotal(int detach, struct dbCommon *prec, IOSCANPVT* pscan)
+{
+    linkInfo *info = static_cast<linkInfo*>(prec->dpvt);
+    if(info) {
+        *pscan = info->driver->sequences[info->cmd].totalUpdate;
     }
     return 0;
 }
@@ -164,6 +197,20 @@ long read_info(dbCommon *pcommon)
 
 dset6 devACMSiInfo = {6, 0, 0, &init_record, 0, &read_info};
 
+long read_status(dbCommon *pcommon)
+{
+    TRY(biRecord) {
+        Guard G(drv->lock);
+
+        prec->rval = drv->intimeout ? 0 : 1;
+        return 0;
+
+    }CATCH()
+    return -2;
+}
+
+dset6 devACMBiStatus = {6, 0, 0, &init_record, 0, &read_status};
+
 long read_counter(dbCommon *pcommon)
 {
     TRY(longinRecord) {
@@ -203,6 +250,75 @@ long read_regval(dbCommon *pcommon)
 dset6 devACMLiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<longinRecord, &longinRecord::val>};
 dset6 devACMAiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<aiRecord, &aiRecord::rval>};
 
+epicsInt32 sextend(epicsUInt32 val, unsigned sbit)
+{
+    epicsUInt32 smask = epicsUInt32(1u)<<sbit,
+                emask = ~(smask | (smask-1u)); // bits sbit+1 and higher
+    if(val&smask)
+        val |= emask;
+    else
+        val &= ~emask;
+    return val;
+}
+
+long read_trace(dbCommon *pcommon)
+{
+    TRY(aaiRecord) {
+        if(prec->ftvl!=menuFtypeDOUBLE)
+            throw std::runtime_error("FTVL must be DOUBLE");
+
+        double* arr = reinterpret_cast<double*>(prec->bptr);
+        epicsUInt32 out=0, cnt=prec->nelm;
+
+        Guard G(drv->lock);
+        CompleteSequence& seq = drv->sequences[info->cmd];
+
+        if(!seq.complete.empty()) {
+
+            for(PartialSequence::packets_t::const_iterator it=seq.complete.begin(), end=seq.complete.end();
+                it!=end && out<cnt; ++it)
+            {
+                const std::vector<epicsUInt32>& values = it->second.values;
+
+                for(size_t i=0, N=values.size(); i+4 <= N && out<cnt; i+=4)
+                {
+                    epicsInt32 val;
+                    switch(info->offset) {
+                    case 0: val = sextend(values[i+0]>> 0u, 15u); break;
+                    case 1: val = sextend(values[i+0]>>16u, 15u); break;
+                    case 2: val = sextend(values[i+1], 23u); break;
+                    case 3: val = sextend(values[i+2], 23u); break;
+                    case 4: val = (values[i+3]); break;
+                    case 5: val = out; break; // time
+                    default: val = 0xdeadbeef; break;
+                    }
+                    arr[out++] = double(val)*info->slope + info->intercept;
+                }
+            }
+
+            prec->nord = out;
+
+            if(prec->tse==epicsTimeEventDeviceTime) {
+                prec->time = seq.timeReceived;
+            }
+
+        } else {
+            recGblSetSevr(prec, UDF_ALARM, INVALID_ALARM);
+
+            if(prec->tse==epicsTimeEventDeviceTime) {
+                epicsTimeGetCurrent(&prec->time);
+            }
+        }
+
+        return 0;
+
+    }CATCH()
+    return -2;
+}
+
+dset6 devACMAaiTrace = {6, 0, 0, &init_record, &cmd_update, &read_trace};
+dset6 devACMAaiTimebase = {6, 0, 0, &init_record, &cmd_ntotal, &read_trace};
+
 long write_log_mask(dbCommon *pcommon)
 {
     TRY(mbboDirectRecord) {
@@ -222,8 +338,11 @@ dset6 devACMMbboDirectLogMask = {6, 0, 0, &init_record, 0, &write_log_mask};
 
 extern "C" {
 epicsExportAddress(dset, devACMSiInfo);
+epicsExportAddress(dset, devACMBiStatus);
 epicsExportAddress(dset, devACMLiCounter);
 epicsExportAddress(dset, devACMLiRegVal);
 epicsExportAddress(dset, devACMAiRegVal);
+epicsExportAddress(dset, devACMAaiTrace);
+epicsExportAddress(dset, devACMAaiTimebase);
 epicsExportAddress(dset, devACMMbboDirectLogMask);
 }

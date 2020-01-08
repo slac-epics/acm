@@ -8,9 +8,12 @@ variable(acmReconstructTimeoutMS,int)
 device(longin , INST_IO, devACMLiCounter, "ACM Counter")
 # Driver static info
 device(stringin, INST_IO, devACMSiInfo, "ACM Info")
+device(bi, INST_IO, devACMBiStatus, "ACM Status")
 # Debug log control mask
 device(mbboDirect, INST_IO, devACMMbboDirectLogMask, "ACM Log Mask")
 
 # Value of most recent sequence
 device(longin, INST_IO, devACMLiRegVal, "ACM Reg Value")
 device(ai    , INST_IO, devACMAiRegVal, "ACM Reg Value")
+device(aai   , INST_IO, devACMAaiTrace, "ACM Trace")
+device(aai   , INST_IO, devACMAaiTimebase, "ACM Trace Time")

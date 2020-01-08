@@ -1,0 +1,78 @@
+# Trace data
+# Macros
+#  P   - prefix
+#  DEV - device name
+#  SIG - signal name
+#  CMD - trace command code 0x33, 0x28, or 0xe7
+#  TSHIFT - time offset of sample 0
+#  FLNK - to external logic
+
+record(aai, "$(P)I") {
+    field(DESC, "Beam vector I")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(NELM=32768)")
+    field(DTYP, "ACM Trace")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=0 slope=3.0517578125e-05 intercept=0.0") # slope=1/0x8000
+    field(SCAN, "I/O Intr")
+    field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(P)Q")
+}
+
+record(aai, "$(P)Q") {
+    field(DESC, "Beam vector Q")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(NELM=32768)")
+    field(DTYP, "ACM Trace")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=1 slope=3.0517578125e-05 intercept=0.0")
+    field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(P)CUR")
+}
+
+record(aai, "$(P)CUR") {
+    field(DESC, "Beam current")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(NELM=32768)")
+    field(DTYP, "ACM Trace")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=2 slope=1.1920928955078125e-07 intercept=0.0") # slope=1/0x800000
+    field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(P)PHA")
+}
+
+record(aai, "$(P)PHA") {
+    field(DESC, "Beam phase")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(NELM=32768)")
+    field(DTYP, "ACM Trace")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=3 slope=1.1920928955078125e-07 intercept=0.0")
+    field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(P)ICUR")
+}
+
+record(aai, "$(P)ICUR") {
+    field(DESC, "Beam current integrated")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(NELM=32768)")
+    field(DTYP, "ACM Trace")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=4 slope=4.656612873077393e-10 intercept=0.0") # slope=1/0x80000000
+    field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(FLNK=)")
+}
+
+
+# Timebase
+
+record(aai, "$(P)T") {
+    field(DESC, "Timebase")
+    field(FTVL, "DOUBLE")
+    field(NELM, "$(NELM=32768)")
+    field(DTYP, "ACM Trace Time")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=5 slope=1.0604453870625663e-07 intercept=$(TSHIFT=0.0)") # slope=1/9.43MHz
+    field(SCAN, "I/O Intr")
+    field(TSE , "-2") # TIME from driver
+
+    alias("$(P)IT")
+    alias("$(P)QT")
+    alias("$(P)CURT")
+    alias("$(P)PHAT")
+    alias("$(P)ICURT")
+}

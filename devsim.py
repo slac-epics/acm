@@ -28,7 +28,28 @@ LastFlag = 0x01
 
 TBFreq = 9.43e6 # Hz
 
-RegFreq = 2.0 # Hz (actual 100Hz)
+RegFreq = 1.0 # Hz (actual 100Hz)
+
+NSamples = 32768
+
+dsamples = numpy.dtype([
+    ('i', '>i2'),
+    ('q', '>i2'),
+    ('cur', '>i4'),
+    ('pha', '>i4'),
+    ('int', '>i4'),
+])
+
+def alog_error(fn):
+    async def wrapper(self):
+        try:
+            return await fn(self)
+        except asyncio.CancelledError:
+            raise
+        except:
+            _log.exception('Error')
+            raise
+    return wrapper
 
 class ACMSim:
     def __init__(self, loop, dests):
@@ -36,20 +57,24 @@ class ACMSim:
         self.transport = None
 
         self.regcount = 0
+        self.iphase = 0.0
         self.T0 = loop.time()
-        self.regsender = None
+        self.tasks = []
 
     async def close(self):
-        if self.regsender is not None:
-            self.regsender.cancel()
+        for task in self.tasks:
+            task.cancel()
             try:
-                await self.regsender
+                await task
             except asyncio.CancelledError:
                 pass # expected
 
     def connection_made(self, transport):
         self.transport = transport
-        self.regsender = asyncio.create_task(self.send_register_data())
+        self.tasks += [
+            asyncio.create_task(self.send_register_data()),
+            asyncio.create_task(self.send_internal_data()),
+        ]
 
     def datagram_received(self, data, src):
         _log.warn('Silence broken by %s', src)
@@ -61,11 +86,17 @@ class ACMSim:
     def connection_lost(self, exc):
         _log.error("Connection closed")
 
+    @property
+    def time_base(self):
+        now = self.loop.time()
+        TB = int((now-self.T0)*TBFreq) # cnts
+        TB &= 0xffffffff
+        return TB
+
+    @alog_error
     async def send_register_data(self):
         while True:
-            now = self.loop.time()
-            TB = int((now-self.T0)*TBFreq) # cnts
-            TB &= 0xffffffff
+            TB = self.time_base
 
             regs = numpy.arange(73, dtype='>u4')
             regs[52] = 0xdeadbeef # FwVersion
@@ -74,7 +105,6 @@ class ACMSim:
             regs[1] = self.regcount ^ 0xffffffff
             self.regcount += 1
 
-            # header and 3 register values
             msg = struct.pack('>BBHI', msgID.Reg, LastFlag, 0, TB) + regs.tobytes()
 
             for dest in self.dests:
@@ -82,6 +112,50 @@ class ACMSim:
                 self.transport.sendto(msg, dest)
 
             await asyncio.sleep(1.0/RegFreq)
+
+    @alog_error
+    async def send_internal_data(self):
+        while True:
+            TB = self.time_base
+
+            T = numpy.arange(NSamples)/TBFreq
+            A = 0.5 + 0.5/T[-1]*T
+            P = numpy.mod(self.iphase + (numpy.pi*2)/T[-1]*T, numpy.pi*2)
+
+            I = A*numpy.sin(P)
+            Q = A*numpy.cos(P)
+            S = A.cumsum()/T[-1]
+            S = S/S.max() # arbitrary
+
+            P = (P/numpy.pi)-1
+
+            self.iphase += numpy.pi/12.
+
+            assert I.max()<=1.0 and I.min()>=-1.0, (I.max(), I.min())
+            assert Q.max()<=1.0 and Q.min()>=-1.0, (Q.max(), Q.min())
+            assert A.max()<=1.0 and A.min()>=-1.0, (A.max(), A.min())
+            assert P.max()<=1.0 and P.min()>=-1.0, (P.max(), P.min())
+            assert S.max()<=1.0 and S.min()>=-1.0, (S.max(), S.min())
+
+            data = numpy.ndarray(NSamples, dtype=dsamples)
+
+            data['i'] = I*0x7fff
+            data['q'] = Q*0x7fff
+            data['cur'] = A*0x7fffff
+            data['pha'] = P*0x7fffff
+            data['int'] = S*0x7fffffff
+
+            data = data.tobytes()
+            for i in range(0, len(data), 1024):
+                last = 0 if i+1024 < len(data) else LastFlag
+
+                msg = struct.pack('>BBHI', msgID.Int, last, i>>10, TB) + data[i:i+1024]
+
+                for dest in self.dests:
+                    _log.debug('send register data to %s', dest)
+                    self.transport.sendto(msg, dest)
+
+            await asyncio.sleep(5.0)
 
 def getargs():
     def endpoint(val):

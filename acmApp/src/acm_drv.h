@@ -73,6 +73,11 @@ struct CompleteSequence {
 
     IOSCANPVT scanUpdate;
 
+    // sum of samples in complete sequence.
+    size_t ntotal;
+
+    IOSCANPVT totalUpdate;
+
     CompleteSequence();
 
     epicsUInt32 at(size_t i) const;
