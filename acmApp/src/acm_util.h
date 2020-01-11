@@ -42,6 +42,70 @@ static inline void swap(auto_ptr<T>& lhs, auto_ptr<T>& rhs) {
     rhs = temp;
 }
 #endif
+
+// like std::vector<T> with stable capacity and resize() w/o initialization.
+// only works for POD types.
+template<typename T>
+class Buffer {
+    T* buf;
+    size_t mark, limit;
+public:
+
+    Buffer() :buf(0), mark(0u), limit(0u) {}
+    explicit Buffer(size_t limit):buf(new T[limit]), mark(0u), limit(limit) {}
+private:
+    Buffer(const Buffer&);
+    Buffer& operator=(const Buffer&);
+public:
+    ~Buffer() { delete[] buf; }
+
+    void swap(Buffer& o) {
+        if(this!=&o) {
+            std::swap(buf, o.buf);
+            std::swap(mark, o.mark);
+            std::swap(limit, o.limit);
+        }
+    }
+
+    void reserve(size_t limit) {
+        T* temp = new T[limit];
+        std::swap(temp, buf);
+        mark = 0u;
+        this->limit = limit;
+        delete[] temp;
+    }
+
+    size_t size() const { return mark; }
+    bool empty() const { return mark==0u; }
+    size_t capacity() const { return limit; }
+
+    T* data() { return buf; }
+    const T* data() const { return buf; }
+
+    void resize(size_t s) {
+        if(s<=limit)
+            mark = s;
+        else
+            throw std::invalid_argument("Can't set size() in excess of capacity()");
+    }
+
+    T& operator[](size_t i) { return buf[i]; }
+    const T&  operator[](size_t i) const { return buf[i]; }
+
+    T& at(size_t i) {
+        if(i<mark)
+            return buf[i];
+        else
+            throw std::out_of_range("index out of range");
+    }
+    const T& at(size_t i) const {
+        if(i<mark)
+            return buf[i];
+        else
+            throw std::out_of_range("index out of range");
+    }
+};
+
 } // namespace util
 
 typedef epicsGuard<epicsMutex> Guard;

@@ -132,7 +132,7 @@ DriverSock::~DriverSock()
 void DriverSock::run()
 {
     LOGDRV(2, driver, "Worker starting\n");
-    std::vector<uint32_t> rxBuf;
+    PacketData::values_t rxBuf;
 
     Guard G(driver->lock);
 
@@ -185,7 +185,7 @@ void DriverSock::run()
             {
                 UnGuard U(G); // unlock for I/O
 
-                rxBuf.resize(0x10000/4u); // theoretical max for UDP
+                rxBuf.reserve(0x10000/4u); // theoretical max for UDP
 
                 // all sorts of fun to prepare for recvmsg()
                 union {
@@ -197,7 +197,7 @@ void DriverSock::run()
                 vec[0].iov_base = &header;
                 vec[0].iov_len = sizeof(header);
                 vec[1].iov_base = &rxBuf[0];
-                vec[1].iov_len = 4*rxBuf.size(); // uint32_t to bytes
+                vec[1].iov_len = 4*rxBuf.capacity(); // uint32_t to bytes
 
                 msghdr msg;
                 memset(&msg, 0 , sizeof(msg));

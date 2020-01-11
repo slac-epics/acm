@@ -278,7 +278,7 @@ long read_trace(dbCommon *pcommon)
             for(PartialSequence::packets_t::const_iterator it=seq.complete.begin(), end=seq.complete.end();
                 it!=end && out<cnt; ++it)
             {
-                const std::vector<epicsUInt32>& values = it->second.values;
+                const PacketData::values_t& values = it->second.values;
 
                 for(size_t i=0, N=values.size(); i+4 <= N && out<cnt; i+=4)
                 {

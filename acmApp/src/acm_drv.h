@@ -27,16 +27,13 @@ struct ACMType {
     static const char* name(type c);
 };
 
-// map<pair<timebase, cmd>, map<seq, vector<uint8>>>
-
-// cmd: map<timeBase, map<seq, pair<bool, vector<uint8>>>>
-
 struct PacketData {
     osiSockAddr sender;
     epicsTimeStamp timeReceived;
     bool last; // Flag[0]
 
-    std::vector<epicsUInt32> values;
+    typedef util::Buffer<epicsUInt32> values_t;
+    values_t values;
 };
 
 /* A new PartialSequnce is added to CompleteSequence::partials
