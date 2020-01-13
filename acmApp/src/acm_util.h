@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <memory>
+#include <algorithm>
 
 #include <epicsGuard.h>
 #include <epicsMutex.h>
@@ -53,10 +54,32 @@ public:
 
     Buffer() :buf(0), mark(0u), limit(0u) {}
     explicit Buffer(size_t limit):buf(new T[limit]), mark(0u), limit(limit) {}
-private:
-    Buffer(const Buffer&);
-    Buffer& operator=(const Buffer&);
-public:
+    Buffer(const Buffer& o)
+        :buf(!o.buf ? NULL : new T[o.limit])
+        ,mark(o.mark)
+        ,limit(o.limit)
+    {
+        if(buf)
+            std::copy(o.buf,
+                      o.buf+mark,
+                      buf);
+    }
+    Buffer& operator=(const Buffer& o)
+    {
+        if(this!=&o) {
+            T* temp = !o.buf ? NULL : new T[o.limit];
+            if(temp)
+                std::copy(temp,
+                          temp+mark,
+                          o.buf);
+
+            delete[] buf;
+            buf = temp;
+            mark = o.mark;
+            limit = o.limit;
+        }
+        return *this;
+    }
     ~Buffer() { delete[] buf; }
 
     void swap(Buffer& o) {
