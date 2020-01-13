@@ -13,9 +13,6 @@ USR_CPPFLAGS += -DUSE_TYPED_RSET
 #=============================
 # Build the IOC application
 
-GENVERSION = acmVCS.h
-GENVERSIONMACRO = ACM_VCS
-
 LIBRARY_IOC = acm
 
 DBD += acmSupport.dbd
@@ -34,4 +31,9 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
-dset$(DEP): $(COMMON_DIR)/$(GENVERSION)
+dset$(DEP): $(COMMON_DIR)/acmVCS.h
+
+$(COMMON_DIR)/acmVCS.h: FORCE
+	PERLLIB=$(EPICS_BASE)/lib/perl $(PERL) $(TOP)/genVersionHeader.pl -t $(TOP) -N ACM_VCS -V "" $@
+
+.PHONY: FORCE
