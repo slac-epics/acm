@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #=============================
 # Build the IOC application
 
-PROD_IOC = acmDemo
+PROD_Linux = acmDemo
 # acm.dbd will be created and installed
 DBD += acmDemo.dbd
 

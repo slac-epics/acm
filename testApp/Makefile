@@ -20,7 +20,7 @@ TESTFILES += $(COMMON_DIR)/acmTest.dbd
 PROD_SRCS += acmTest_registerRecordDeviceDriver.cpp
 PROD_LIBS += acm
 
-TESTPROD += testreconstruct
+TESTPROD_Linux += testreconstruct
 testreconstruct_SRCS += testreconstruct.cpp
 TESTS += testreconstruct
 

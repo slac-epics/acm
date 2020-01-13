@@ -13,7 +13,7 @@ USR_CPPFLAGS += -DUSE_TYPED_RSET
 #=============================
 # Build the IOC application
 
-LIBRARY_IOC = acm
+LIBRARY_Linux = acm
 
 DBD += acmSupport.dbd
 
