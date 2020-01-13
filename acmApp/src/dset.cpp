@@ -3,6 +3,8 @@
 
 #include <sstream>
 
+#include <epicsVersion.h>
+
 #include <aiRecord.h>
 #include <longoutRecord.h>
 #include <mbboDirectRecord.h>
@@ -24,6 +26,11 @@
 #include "acm_drv.h"
 #include "acmVCS.h"
 
+#ifndef VERSION_INT
+#  define VERSION_INT(V,R,M,P) ( ((V)<<24) | ((R)<<16) | ((M)<<8) | (P))
+#  define EPICS_VERSION_INT VERSION_INT(EPICS_VERSION, EPICS_REVISION, EPICS_MODIFICATION, EPICS_PATCH_LEVEL)
+#endif
+
 namespace {
 
 long long asInt(const char* s)
@@ -42,7 +49,18 @@ double asDouble(const char* s)
     return ret;
 }
 
-DBLINK* xdbGetDevLink(dbCommon* prec)
+#if EPICS_VERSION_INT<VERSION_INT(3,16,1,0)
+static
+void dbInitEntryFromRecord(dbCommon *prec, DBENTRY *pdbentry)
+{
+    long status = dbFindRecord(pdbentry, prec->name);
+    assert(status==0);
+}
+#endif
+
+#if EPICS_VERSION_INT<VERSION_INT(7,0,2,0)
+static
+DBLINK* dbGetDevLink(dbCommon* prec)
 {
     DBLINK *plink = 0;
     DBENTRY entry;
@@ -53,6 +71,7 @@ DBLINK* xdbGetDevLink(dbCommon* prec)
     dbFinishEntry(&entry);
     return plink;
 }
+#endif
 
 struct linkInfo {
     Driver *driver;
@@ -71,7 +90,7 @@ struct linkInfo {
 
 linkInfo* parseLink(dbCommon *prec)
 {
-    DBLINK *plink = xdbGetDevLink(prec);
+    DBLINK *plink = dbGetDevLink(prec);
     assert(plink && plink->type==INST_IO);
 
     std::istringstream strm(plink->value.instio.string);
