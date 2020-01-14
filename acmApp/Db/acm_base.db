@@ -111,3 +111,21 @@ record(calc, "$(P)Rate:CPL-I") {
     field(PREC, "0")
     field(SCAN, "1 second")
 }
+
+
+record(aai, "$(P)TB:A-I") {
+    field(DTYP, "ACM TB Hist")
+    field(INP , "@$(DEV) offset=0")
+    field(SCAN, "10 second")
+    field(FTVL, "DOUBLE")
+    field(NELM, "1024")
+    field(FLNK, "$(P)TB:B-I")
+}
+
+record(aai, "$(P)TB:B-I") {
+    field(FTVL, "DOUBLE")
+    field(DTYP, "ACM TB Hist")
+    field(INP , "@$(DEV) offset=1")
+    field(NELM, "1024")
+    field(FLNK, "")
+}

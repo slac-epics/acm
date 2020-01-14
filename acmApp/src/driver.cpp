@@ -294,12 +294,24 @@ void DriverSock::run()
             }
             // locked again
 
-            driver->lastRx = rxTime;
-            driver->intimeout = false;
+            if(rxTimeSrc!=0 && header.seqNum==0 && driver->tbhist.size()<1024u) {
+                if(driver->tbhist.empty()) {
+                    driver->tbhist.push_back(std::make_pair(0, 0.0));
 
-            if(rxTimeSrc!=0) {
-                // TODO revise time mapping with rxTime and header.timebase
+                } else {
+                    double dtb = double(header.timebase) - double(driver->lastTimebase);
+                    if(dtb <= 0.0) // roleover
+                        dtb += 0x100000000;
+
+                    driver->tbhist.push_back(std::make_pair(dtb,
+                                                            epicsTimeDiffInSeconds(&rxTime, &driver->lastRx)));
+                }
+
+                driver->lastTimebase = header.timebase;
+                driver->lastRx = rxTime;
             }
+
+            driver->intimeout = false;
 
             // insert this packet into a sequence
             CompleteSequence& seq = driver->sequences[header.cmd];
@@ -412,6 +424,7 @@ Driver::Driver(const std::string& name, const osiSockAddr& peer)
 {
     lastRx.secPastEpoch = 0;
     lastRx.nsec = 0;
+    lastTimebase = 0u;
 
     Socket::ShowAddr addr(peer);
     peerName = addr.buf;
@@ -434,6 +447,8 @@ void Driver::onTimeout()
         seq.partials.clear();
         scanIoRequest(seq.scanUpdate);
     }
+
+    tbhist.clear();
 }
 
 #include <epicsExport.h>

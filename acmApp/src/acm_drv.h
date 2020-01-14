@@ -146,6 +146,10 @@ struct Driver {
     typedef  std::map<uint8_t, CompleteSequence> sequences_t;
     sequences_t sequences;
 
+    uint32_t lastTimebase;
+    typedef std::vector<std::pair<uint32_t, double> > tbhist_t;
+    tbhist_t tbhist;
+
     // all other data members guarded by lock
     mutable epicsMutex lock;
 

@@ -17,3 +17,6 @@ device(longin, INST_IO, devACMLiRegVal, "ACM Reg Value")
 device(ai    , INST_IO, devACMAiRegVal, "ACM Reg Value")
 device(aai   , INST_IO, devACMAaiTrace, "ACM Trace")
 device(aai   , INST_IO, devACMAaiTimebase, "ACM Trace Time")
+
+# timebase history
+device(aai   , INST_IO, devACMAaiTBHist, "ACM TB Hist")

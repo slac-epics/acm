@@ -338,6 +338,42 @@ long read_trace(dbCommon *pcommon)
 dset6 devACMAaiTrace = {6, 0, 0, &init_record, &cmd_update, &read_trace};
 dset6 devACMAaiTimebase = {6, 0, 0, &init_record, &cmd_ntotal, &read_trace};
 
+long read_tbhist(dbCommon *pcommon)
+{
+    TRY(aaiRecord) {
+        if(prec->ftvl!=menuFtypeDOUBLE)
+            throw std::runtime_error("FTVL must be DOUBLE");
+
+        double* arr = reinterpret_cast<double*>(prec->bptr);
+        epicsUInt32 out=0, cnt=prec->nelm;
+
+        Guard G(drv->lock);
+
+        for(size_t i=0, N=drv->tbhist.size(); i<N && out<cnt; i++) {
+            double val;
+            switch(info->offset) {
+            case 0: val = drv->tbhist[i].first; break;
+            case 1: val = drv->tbhist[i].second; break;
+            default: val = 42.0; recGblSetSevr(prec, COMM_ALARM, INVALID_ALARM); break;
+            }
+            arr[out++] = val;
+        }
+
+        if(info->offset==1)
+            drv->tbhist.clear(); // hack
+
+        if(out==0)
+            arr[out++] = 0.0; // CA doesn't handle empty arrays well
+
+        prec->nord = out;
+
+        return 0;
+    }CATCH()
+    return -2;
+}
+
+dset6 devACMAaiTBHist = {6, 0, 0, &init_record, 0, &read_tbhist};
+
 long write_log_mask(dbCommon *pcommon)
 {
     TRY(mbboDirectRecord) {
@@ -363,5 +399,6 @@ epicsExportAddress(dset, devACMLiRegVal);
 epicsExportAddress(dset, devACMAiRegVal);
 epicsExportAddress(dset, devACMAaiTrace);
 epicsExportAddress(dset, devACMAaiTimebase);
+epicsExportAddress(dset, devACMAaiTBHist);
 epicsExportAddress(dset, devACMMbboDirectLogMask);
 }
