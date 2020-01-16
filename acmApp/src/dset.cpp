@@ -53,6 +53,7 @@ double asDouble(const char* s)
 static
 void dbInitEntryFromRecord(dbCommon *prec, DBENTRY *pdbentry)
 {
+    dbInitEntry(pdbbase, pdbentry);
     long status = dbFindRecord(pdbentry, prec->name);
     assert(status==0);
 }
