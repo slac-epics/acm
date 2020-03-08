@@ -96,30 +96,28 @@ struct Socket {
 
 struct Driver;
 
-struct DriverSock : public epicsThreadRunable {
-    Driver* const driver;
-
-    bool running;
-
-    Socket sock;
-    osiSockAddr bindAddr;
-    std::string bindName;
-
-    util::auto_ptr<epicsThread> worker;
-
-    DriverSock(Driver* driver, osiSockAddr& bind_addr);
-    virtual ~DriverSock();
-    virtual void run() override final;
+struct DriverEndpoint
+{
+    osiSockAddr peer;
+    std::string peerName;
+    epicsTimeStamp lastRx;
+    bool intimeout;
+    DriverEndpoint()
+        :intimeout(false)
+    {
+        lastRx.secPastEpoch = 0;
+        lastRx.nsec = 0;
+    }
 };
 
 #define LOGDRV(mask, pdriver, FMT, ...) do{ if(::epics::atomic::get((pdriver)->log_mask)&(mask)) errlogPrintf("%s " FMT, (pdriver)->name.c_str(), ##__VA_ARGS__); }while(0)
 
-struct Driver {
+struct Driver : public epicsThreadRunable
+{
     typedef std::map<std::string, Driver*> drivers_t;
     static drivers_t drivers; // const after iocInit
 
     const std::string name;
-    const osiSockAddr peer; // only addr used, not port
 
     /** atomic
      *
@@ -130,14 +128,18 @@ struct Driver {
      */
     int log_mask;
 
+    bool running;
+
+    Socket sock;
+
     epicsTimeStamp lastRx;
     bool intimeout;
 
     // const after acmSetup()
     std::string peerName;
 
-    typedef std::vector<DriverSock*> sockets_t;
-    sockets_t sockets; // only vector is const.  individual DriverSock are guarded by our lock
+    typedef std::vector<DriverEndpoint> endpoints_t;
+    endpoints_t endpoints; // only vector is const.  individual DriverSock are guarded by our lock
 
     // (atomic) stat counters
     int nRX, nTimeout, nError, nIgnore, nComplete;
@@ -155,9 +157,12 @@ struct Driver {
 
     epicsEvent testCycle;
 
-    explicit Driver(const std::string& name, const osiSockAddr& peer);
+    util::auto_ptr<epicsThread> worker;
+
+    explicit Driver(const std::string& name);
     ~Driver();
 
+    virtual void run() override final;
     void onTimeout();
 };
 

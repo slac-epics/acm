@@ -52,9 +52,10 @@ def alog_error(fn):
     return wrapper
 
 class ACMSim:
-    def __init__(self, loop, dests):
-        self.loop, self.dests = loop, dests
+    def __init__(self, loop):
+        self.loop = loop
         self.transport = None
+        self.peer = None
 
         self.regcount = 0
         self.iphase = 0.0
@@ -77,7 +78,8 @@ class ACMSim:
         ]
 
     def datagram_received(self, data, src):
-        _log.warn('Silence broken by %s', src)
+        _log.info('Registering peer %s', src)
+        self.peer = src
 
     def error_received(self, exc):
         _log.error('Error received: %s', exc)
@@ -107,9 +109,9 @@ class ACMSim:
 
             msg = struct.pack('>BBHI', msgID.Reg, LastFlag, 0, TB) + regs.tobytes()
 
-            for dest in self.dests:
-                _log.debug('send register data to %s', dest)
-                self.transport.sendto(msg, dest)
+            if self.peer is not None:
+                _log.debug('send register data to %s', self.peer)
+                self.transport.sendto(msg, self.peer)
 
             await asyncio.sleep(1.0/RegFreq)
 
@@ -151,9 +153,9 @@ class ACMSim:
 
                 msg = struct.pack('>BBHI', msgID.Int, last, i>>10, TB) + data[i:i+1024]
 
-                for dest in self.dests:
-                    _log.debug('send register data to %s', dest)
-                    self.transport.sendto(msg, dest)
+                if self.peer is not None:
+                    _log.debug('send register data to %s', self.peer)
+                    self.transport.sendto(msg, self.peer)
 
             await asyncio.sleep(5.0)
 
@@ -166,18 +168,14 @@ def getargs():
     P = ArgumentParser()
     P.add_argument('-v','--verbose', action='store_const', dest='level', default=logging.INFO, const=logging.DEBUG,
                    help='Make more noise')
-    P.add_argument('dest', nargs='+', type=endpoint,
-                   help='List of target endpoints in IP:port# form')
-    P.add_argument('-B','--bind', type=endpoint, default=':0',
+    P.add_argument('bind', type=endpoint, default=':0',
                    help='Address to bind sender')
     return P
 
 async def main(args):
     loop = asyncio.get_running_loop()
 
-    _log.debug('Sending to: %s', args.dest)
-
-    sock, proto = await loop.create_datagram_endpoint(lambda: ACMSim(loop, args.dest),
+    sock, proto = await loop.create_datagram_endpoint(lambda: ACMSim(loop),
                                                       local_addr=args.bind,
                                                       family=socket.AF_INET,
                                                       allow_broadcast=True)

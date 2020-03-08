@@ -11,9 +11,6 @@ acmApp_DEPEND_DIRS += configure
 DIRS += demoApp
 demoApp_DEPEND_DIRS += acmApp
 
-DIRS += testApp
-testApp_DEPEND_DIRS += acmApp
-
 DIRS += $(wildcard iocBoot)
 iocBoot_DEPEND_DIRS += configure
 

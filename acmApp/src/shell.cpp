@@ -13,10 +13,10 @@ bool started = false;
 
 int acmSetup(const char* name,
               const char* deviceName,
-              const char* bindNames)
+              const char* unused)
 {
-    if(!name || !deviceName || !bindNames) {
-        printf("Usage: acmSetup(\"instanceName\", \"peerIP:port#\", \"ifaceIP:port# ...\")\n");
+    if(!name || !deviceName || unused) {
+        printf("Usage: acmSetup(\"instanceName\", \"peerIP:port# ...\")\n");
         return 1;
     } else if(started) {
         fprintf(stderr, "Error: can't call after iocInit\n");
@@ -26,35 +26,30 @@ int acmSetup(const char* name,
         return 1;
     }
 
-    osiSockAddr peer;
-    if(aToIPAddr(deviceName, 0, &peer.ia) || peer.ia.sin_family!=AF_INET) {
-        fprintf(stderr, "Error: Unable to parse device host/IP: \"%s\"\n", deviceName);
-        return 1;
-    }
-
-    util::auto_ptr<Driver> driver(new Driver(name, peer));
+    util::auto_ptr<Driver> driver(new Driver(name));
     printf("Creating ACM '%s' for %s\n", name, driver->peerName.c_str());
 
-    std::istringstream strm(bindNames);
+    std::istringstream strm(deviceName);
     while(strm.good()) {
         std::string iface;
         strm>>iface;
 
         if(strm.bad()) {
-            fprintf(stderr, "Error: unable to parse an iface in : \"%s\"\n", bindNames);
+            fprintf(stderr, "Error: unable to parse host:port in : \"%s\"\n", deviceName);
             return 1;
         }
 
-        osiSockAddr ifaceAddr;
-        if(aToIPAddr(iface.c_str(), 0, &ifaceAddr.ia) || ifaceAddr.ia.sin_family!=AF_INET) {
+        DriverEndpoint ep;
+        if(aToIPAddr(iface.c_str(), 0, &ep.peer.ia) || ep.peer.ia.sin_family!=AF_INET) {
             fprintf(stderr, "Error: Unable to parse interface host/IP: \"%s\"\n", iface.c_str());
             return 1;
         }
 
-        util::auto_ptr<DriverSock> sock(new DriverSock(driver.get(), ifaceAddr));
-        driver->sockets.push_back(sock.get());
-        printf("  Listen on %s\n", sock->bindName.c_str());
-        sock.release();
+        Socket::ShowAddr show(ep.peer);
+        ep.peerName = show.buf;
+
+        printf("  Peer %s\n", ep.peerName.c_str());
+        driver->endpoints.push_back(ep);
     }
 
     Driver::drivers[driver->name] = driver.get();
@@ -66,27 +61,15 @@ namespace {
 
 void acmExit(void *unused)
 {
+    // provoke workers to stop
     for(Driver::drivers_t::iterator it=Driver::drivers.begin(), end=Driver::drivers.end();
         it!=end; ++it)
     {
-        // provoke workers to stop
         {
             Guard G(it->second->lock);
-
-            for(Driver::sockets_t::iterator it2=it->second->sockets.begin(), end2=it->second->sockets.end();
-                it2!=end2; ++it2)
-            {
-                (*it2)->running = false;
-                (void)shutdown((*it2)->sock.sock, SHUT_RDWR); // on Linux, interrupts recvmsg()
-                (*it2)->sock.close();
-            }
+            it->second->running = false;
         }
-        // wait for workers to stop
-        for(Driver::sockets_t::iterator it2=it->second->sockets.begin(), end2=it->second->sockets.end();
-            it2!=end2; ++it2)
-        {
-            (*it2)->worker->exitWait();
-        }
+        it->second->worker->exitWait();
     }
 }
 
@@ -99,11 +82,7 @@ void acmHook(initHookState hook)
         for(Driver::drivers_t::iterator it=Driver::drivers.begin(), end=Driver::drivers.end();
             it!=end; ++it)
         {
-            for(Driver::sockets_t::iterator it2=it->second->sockets.begin(), end2=it->second->sockets.end();
-                it2!=end2; ++it2)
-            {
-                (*it2)->worker->start();
-            }
+            it->second->worker->start();
         }
     }
 }
