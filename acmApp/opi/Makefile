@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 INSTALL_DB = $(INSTALL_LOCATION)/opi
 
+DB += acm_expert.opi
 DB += _acm_reg.opi
 DB += acm_registers.opi
 
