@@ -5,6 +5,7 @@ include $(TOP)/configure/CONFIG
 
 DB += acm_base.db
 DB += acm.db
+DB += acm_tonegen.db
 
 #----------------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

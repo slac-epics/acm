@@ -16,80 +16,80 @@ file "acm_analog.db"
 #{P="\$(P)",	DEV="\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR="", ASLO="", AOFF="", EGU=""}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamPhs",       OFF="5",  HOPR="180",  LOPR="-180",ASLO="8.58306884765625E-05", PREC="6", EGU="deg"}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbeDarkPhs",       OFF="12", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotRawI",     OFF="13", HOPR="100", LOPR="-100", ASLO="0.00038147118176",     PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotRawQ",     OFF="14", HOPR="100", LOPR="-100", ASLO="0.00038147118176",     PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotI",        OFF="15", HOPR="100", LOPR="-100", ASLO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotQ",        OFF="16", HOPR="100", LOPR="-100", ASLO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotMag",      OFF="17", HOPR="200", LOPR="0",    ALSO="2.98023232758738E-06", PREC="3", EGU="%"}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbePilotPhs",      OFF="18", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotMagHi",    OFF="19", HOPR="200", LOPR="0",    ALSO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotMagLo",    OFF="20", HOPR="200", LOPR="0",    ALSO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestConfRawI",       OFF="21", HOPR="100", LOPR="-100", ASLO="0.00038147118176",     PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestConfRawQ",       OFF="22", HOPR="100", LOPR="-100", ASLO="0.00038147118176",     PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestConfI",          OFF="23", HOPR="100", LOPR="-100", ASLO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestConfQ",          OFF="24", HOPR="100", LOPR="-100", ASLO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestConfMag",        OFF="25", HOPR="200", LOPR="0",    ALSO="2.98023232758738E-06", PREC="3", EGU="%"}
 {P="\$(P)", DEV="\$(DEV)", REG="TestConfPhs",        OFF="26", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestConfMagLim",     OFF="27", HOPR="200", LOPR="0",    ALSO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotRawI",      OFF="28", HOPR="100", LOPR="-100", ASLO="0.00038147118176",     PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotRawQ",      OFF="29", HOPR="100", LOPR="-100", ASLO="0.00038147118176",     PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotI",         OFF="30", HOPR="100", LOPR="-100", ASLO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotQ",         OFF="31", HOPR="100", LOPR="-100", ASLO="2.98023232758738E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotMag",       OFF="32", HOPR="200", LOPR="0",    ALSO="2.98023232758738E-06", PREC="3", EGU="%"}
 {P="\$(P)", DEV="\$(DEV)", REG="TestPilotPhs",       OFF="33", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
 {P="\$(P)", DEV="\$(DEV)", REG="TestPilotOffsetPhs", OFF="34", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffMag",   OFF="35", HOPR="100", LOPR="-100", ASLO="1.49011614158923E-06", PREC="3", EGU="%"}
 {P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffPhs",   OFF="36", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffMagHi", OFF="37", HOPR="100", LOPR="-100", ASLO="1.49011614158923E-06", PREC="3", EGU="%"}
+{P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffMagLo", OFF="38", HOPR="100", LOPR="-100", ASLO="1.49011614158923E-06", PREC="3", EGU="%"}
 {P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffPhsHi", OFF="39", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
 {P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffPhsLo", OFF="40", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
 {P="\$(P)", DEV="\$(DEV)", REG="GenPilotPhs",        OFF="46", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
 {P="\$(P)", DEV="\$(DEV)", REG="GenPilotDiffPhs",    OFF="48", HOPR="180", LOPR="-180", ASLO="5.36441802978516E-06", PREC="6", EGU="deg"}
+{P="\$(P)", DEV="\$(DEV)", REG="TimeCheck",          OFF="49", HOPR="45553", LOPR="0",  ASLO="1.06060606060606E-05", PREC="3", EGU="ms"}
+{P="\$(P)", DEV="\$(DEV)", REG="WFPacketDelay",      OFF="51", HOPR="696", LOPR="0",    ASLO="0.010606060606061",    PREC="3", EGU="us"}
 {P="\$(P)", DEV="\$(DEV)", REG="DigitizerTempA",     OFF="55", HOPR="85",  LOPR="0",    ASLO="7.04169273376465E-06", AOFF="25.0", PREC="3", EGU="C"}
 {P="\$(P)", DEV="\$(DEV)", REG="DigitizerTempB",     OFF="56", HOPR="85",  LOPR="0",    ASLO="7.04169273376465E-06", AOFF="25.0", PREC="3", EGU="C"}
 {P="\$(P)", DEV="\$(DEV)", REG="DigitizerTempC",     OFF="57", HOPR="85",  LOPR="0",    ASLO="7.04169273376465E-06", AOFF="25.0", PREC="3", EGU="C"}
 {P="\$(P)", DEV="\$(DEV)", REG="DigitizerTempD",     OFF="58", HOPR="85",  LOPR="0",    ASLO="7.04169273376465E-06", AOFF="25.0", PREC="3", EGU="C"}
-{P="\$(P)", DEV="\$(DEV)", REG="DigitizerTemp",      OFF="59", HOPR="200", LOPR="0",    ASLO="3.172", AOFF="-273", PREC="3", EGU="C"}
-{P="\$(P)", DEV="\$(DEV)", REG="Digitizer12Volts",   OFF="60", HOPR="15",  LOPR="0",    ASLO="0.003437243009868", PREC="3", EGU="V"}
-{P="\$(P)", DEV="\$(DEV)", REG="Digitizer3p7Volts",  OFF="61", HOPR="15",  LOPR="0",    ASLO="0.003437243009868", PREC="3", EGU="V"}
-{P="\$(P)", DEV="\$(DEV)", REG="Digitizer3p3Volts",  OFF="62", HOPR="15",  LOPR="0",    ASLO="0.003437243009868", PREC="3", EGU="V"}
-{P="\$(P)", DEV="\$(DEV)", REG="Digitizer2p2Volts",  OFF="63", HOPR="15",  LOPR="0",    ASLO="0.003437243009868", PREC="3", EGU="V"}
+{P="\$(P)", DEV="\$(DEV)", REG="DigitizerTemp",      OFF="59", HOPR="200", LOPR="0",    ASLO="3.172", AOFF="-273",   PREC="3", EGU="C"}
+{P="\$(P)", DEV="\$(DEV)", REG="Digitizer12Volts",   OFF="60", HOPR="15",  LOPR="0",    ASLO="0.003437243009868",    PREC="3", EGU="V"}
+{P="\$(P)", DEV="\$(DEV)", REG="Digitizer3p7Volts",  OFF="61", HOPR="15",  LOPR="0",    ASLO="0.003437243009868",    PREC="3", EGU="V"}
+{P="\$(P)", DEV="\$(DEV)", REG="Digitizer3p3Volts",  OFF="62", HOPR="15",  LOPR="0",    ASLO="0.003437243009868",    PREC="3", EGU="V"}
+{P="\$(P)", DEV="\$(DEV)", REG="Digitizer2p2Volts",  OFF="63", HOPR="15",  LOPR="0",    ASLO="0.003437243009868",    PREC="3", EGU="V"}
+{P="\$(P)", DEV="\$(DEV)", REG="DigitizerCurrent",   OFF="64", HOPR="24994", LOPR="0",  ASLO="6.103515625",          PREC="3", EGU="mA"}
+{P="\$(P)", DEV="\$(DEV)", REG="DigitizerLOPower",   OFF="65", HOPR="0.4", LOPR="0",    ASLO="9.68812003968254E-05", PREC="9", EGU="Vrms"}
+{P="\$(P)", DEV="\$(DEV)", REG="DwnConTemp",         OFF="68", HOPR="128", LOPR="-128", ASLO="0.00390625",           PREC="2", EGU="C"}
+{P="\$(P)", DEV="\$(DEV)", REG="DwnConVolt",         OFF="69", HOPR="656", LOPR="0",    ASLO="0.01",                 PREC="3", EGU="V"}
+{P="\$(P)", DEV="\$(DEV)", REG="DwnConCurr",         OFF="70", HOPR="160", LOPR="-160", ASLO="0.0048828125",         PREC="3", EGU="A"}
+{P="\$(P)", DEV="\$(DEV)", REG="DwnConTime",         OFF="71", HOPR="49711", LOPR="0", ASLO="1.15740740740741E-05",  PREC="3", EGU="days"}
+{P="\$(P)", DEV="\$(DEV)", REG="CavTempRTD",         OFF="72", HOPR="1792", LOPR="-256", ASLO="0.03125", AOFF="-256",PREC="3", EGU="C"}
 }
 
 file "acm_regval.db"
 {
 #{P="\$(P)",	DEV="\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR=""}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamRawI", OFF="0", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamRawQ", OFF="1", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamI", OFF="2", HOPR="2097151", LOPR="-2097151"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamQ", OFF="3", HOPR="2097151", LOPR="-2097151"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamRawI", OFF="0", HOPR="262143", LOPR="-262144"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamRawQ", OFF="1", HOPR="262143", LOPR="-262144"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamI", OFF="2", HOPR="2097151", LOPR="-2097152"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamQ", OFF="3", HOPR="2097151", LOPR="-2097152"}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamMag", OFF="4", HOPR="4194303", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbeBeam", OFF="6", HOPR="4294967295", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamLim", OFF="7", HOPR="4294967295", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbeBeamConfLim", OFF="8", HOPR="4294967295", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbeDarkI", OFF="9", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbeDarkQ", OFF="10", HOPR="33554431", LOPR="-33554431"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbeDarkI", OFF="9", HOPR="33554431", LOPR="-33554432"}
+{P="\$(P)", DEV="\$(DEV)", REG="ProbeDarkQ", OFF="10", HOPR="33554431", LOPR="-33554432"}
 {P="\$(P)", DEV="\$(DEV)", REG="ProbeDarkMag", OFF="11", HOPR="67108863", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotRawI", OFF="13", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotRawQ", OFF="14", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotI", OFF="15", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotQ", OFF="16", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotMag", OFF="17", HOPR="67108863", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotMagHi", OFF="19", HOPR="67108863", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="ProbePilotMagLo", OFF="20", HOPR="67108863", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestConfRawI", OFF="21", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestConfRawQ", OFF="22", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestConfI", OFF="23", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestConfQ", OFF="24", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestConfMag", OFF="25", HOPR="67108863", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestConfMagLim", OFF="27", HOPR="67108863", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotRawI", OFF="28", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotRawQ", OFF="29", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotI", OFF="30", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotQ", OFF="31", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotMag", OFF="32", HOPR="67108863", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffMag", OFF="35", HOPR="67108863", LOPR="-67108863"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffMagHi", OFF="37", HOPR="67108863", LOPR="-67108863"}
-{P="\$(P)", DEV="\$(DEV)", REG="TestPilotDiffMagLo", OFF="38", HOPR="67108863", LOPR="-67108863"}
-{P="\$(P)", DEV="\$(DEV)", REG="GenPilotRawI", OFF="41", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="GenPilotRawQ", OFF="42", HOPR="262143", LOPR="-262143"}
-{P="\$(P)", DEV="\$(DEV)", REG="GenPilotI", OFF="43", HOPR="33554431", LOPR="-33554431"}
-{P="\$(P)", DEV="\$(DEV)", REG="GenPilotQ", OFF="44", HOPR="33554431", LOPR="-33554431"}
+{P="\$(P)", DEV="\$(DEV)", REG="GenPilotRawI", OFF="41", HOPR="262143", LOPR="-262144"}
+{P="\$(P)", DEV="\$(DEV)", REG="GenPilotRawQ", OFF="42", HOPR="262143", LOPR="-262144"}
+{P="\$(P)", DEV="\$(DEV)", REG="GenPilotI", OFF="43", HOPR="33554431", LOPR="-33554432"}
+{P="\$(P)", DEV="\$(DEV)", REG="GenPilotQ", OFF="44", HOPR="33554431", LOPR="-33554432"}
 {P="\$(P)", DEV="\$(DEV)", REG="GenPilotMag", OFF="45", HOPR="67108863", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="GenPilotDiffMag", OFF="47", HOPR="67108863", LOPR="-67108863"}
-{P="\$(P)", DEV="\$(DEV)", REG="TimeCheck", OFF="49", HOPR="4294967295", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="BufTrigLim", OFF="50", HOPR="4194303", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="WFPacketDelay", OFF="51", HOPR="65535", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="FwVersion", OFF="52", HOPR="4294967295", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="Faults", OFF="53", HOPR="63", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="TestMode", OFF="54", HOPR="2047", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="DigitizerCurrent", OFF="64", HOPR="4095", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="DigitizerLOPower", OFF="65", HOPR="4095", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="DwnConSerNumHi", OFF="66", HOPR="4294967295", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="DwnConSerNumLo", OFF="67", HOPR="4294967295", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="DwnConTemp", OFF="68", HOPR="32767", LOPR="-32767"}
-{P="\$(P)", DEV="\$(DEV)", REG="DwnConVolt", OFF="69", HOPR="65535", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="DwnConCurr", OFF="70", HOPR="32767", LOPR="-32767"}
-{P="\$(P)", DEV="\$(DEV)", REG="DwnConTime", OFF="71", HOPR="4294967295", LOPR="0"}
-{P="\$(P)", DEV="\$(DEV)", REG="CavTempRTD", OFF="72", HOPR="65535", LOPR="0"}
 }
