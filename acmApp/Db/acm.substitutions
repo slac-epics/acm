@@ -93,3 +93,14 @@ file "acm_regval.db"
 {P="\$(P)", DEV="\$(DEV)", REG="DwnConSerNumHi", OFF="66", HOPR="4294967295", LOPR="0"}
 {P="\$(P)", DEV="\$(DEV)", REG="DwnConSerNumLo", OFF="67", HOPR="4294967295", LOPR="0"}
 }
+
+file "acm_reg_binary.db"
+{
+# breakout of Faults
+{P="\$(P)", DEV="\$(DEV)", REG="FaultFast",         OFF="53", MASK="0x01", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="FaultSlow",         OFF="53", MASK="0x02", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="FaultPilotMag",     OFF="53", MASK="0x04", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="FaultPilotDiffMag", OFF="53", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="FaultPilotDiffPhs", OFF="53", MASK="0x10", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="FaultConfMag",      OFF="53", MASK="0x20", ZNAM="Ok", ONAM="Fault"}
+}

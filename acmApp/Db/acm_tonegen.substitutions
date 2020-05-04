@@ -44,4 +44,13 @@ file "acm_regval.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="UpConSerNumLo",	OFF="20",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumHi",	OFF="25",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumLo",	OFF="26",	HOPR="4294967295",	LOPR="0", EGU="hex"}
+
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLcl",	OFF="7",	MASK="0xf", SHIFT="0", HOPR="15",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeRem",	OFF="7",	MASK="0x7", SHIFT="4", HOPR="7",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestMode",     OFF="7",	MASK="0xf", SHIFT="7", HOPR="15",	LOPR="0"}
+}
+
+file "acm_reg_binary.db"
+{
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLclRem",	OFF="7",	MASK="1", ZNAM="Local", ONAM="Remote"}
 }

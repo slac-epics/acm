@@ -105,6 +105,7 @@ class ACMSim:
             # make something change
             regs[0] = self.regcount
             regs[1] = self.regcount ^ 0xffffffff
+            regs[53] = 1<<(self.regcount%6)
             self.regcount += 1
 
             msg = struct.pack('>BBHI', msgID.Reg, LastFlag, 0, TB) + regs.tobytes()
