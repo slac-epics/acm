@@ -13,6 +13,8 @@ device(bi, INST_IO, devACMBiStatus, "ACM Status")
 device(mbboDirect, INST_IO, devACMMbboDirectLogMask, "ACM Log Mask")
 
 # Value of most recent sequence
+device(bi    , INST_IO, devACMBiRegVal, "ACM Reg Value")
+device(mbbi  , INST_IO, devACMMbbiRegVal, "ACM Reg Value")
 device(longin, INST_IO, devACMLiRegVal, "ACM Reg Value")
 device(ai    , INST_IO, devACMAiRegVal, "ACM Reg Value")
 device(aai   , INST_IO, devACMAaiTrace, "ACM Trace")

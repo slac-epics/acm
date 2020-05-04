@@ -12,6 +12,7 @@
 #include <aaiRecord.h>
 #include <stringinRecord.h>
 #include <biRecord.h>
+#include <mbbiRecord.h>
 #include <menuFtype.h>
 
 #include <epicsAtomic.h>
@@ -77,13 +78,22 @@ DBLINK* dbGetDevLink(dbCommon* prec)
 struct linkInfo {
     Driver *driver;
 
+    // packet ID
     unsigned cmd;
+    // dword offset in packet body
     unsigned offset;
+    // bit mask
+    epicsUInt32 mask;
+    // after mask, right bit shift
+    unsigned shift;
+    // scaling
     double slope, intercept;
 
     linkInfo()
         :cmd(0)
         ,offset(0)
+        ,mask(0xffffffff)
+        ,shift(0u)
         ,slope(1.0)
         ,intercept(0.0)
     {}
@@ -117,6 +127,12 @@ linkInfo* parseLink(dbCommon *prec)
 
         } else if(key=="cmd") {
             info->cmd = asInt(value.c_str());
+
+        } else if(key=="mask") {
+            info->mask = asInt(value.c_str());
+
+        } else if(key=="shift") {
+            info->shift = asInt(value.c_str());
 
         } else if(key=="slope") {
             info->slope = asDouble(value.c_str());
@@ -250,7 +266,7 @@ long read_counter(dbCommon *pcommon)
 
 dset6 devACMLiCounter = {6, 0, 0, &init_record, 0, &read_counter};
 
-template<typename R, epicsInt32 (R::*FLD)>
+template<typename R, typename T, T (R::*FLD)>
 long read_regval(dbCommon *pcommon)
 {
     TRY(R) {
@@ -259,7 +275,8 @@ long read_regval(dbCommon *pcommon)
         if(prec->tse==epicsTimeEventDeviceTime) {
             prec->time = seq.timeReceived;
         }
-        prec->*FLD = seq.at(info->offset);
+        epicsUInt32 rval = seq.at(info->offset);
+        prec->*FLD = (rval&info->mask)>>info->shift;
         return 0;
     }catch(std::out_of_range&){
         (void)recGblSetSevr(prec, READ_ALARM, INVALID_ALARM);
@@ -267,8 +284,10 @@ long read_regval(dbCommon *pcommon)
     return -2;
 }
 
-dset6 devACMLiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<longinRecord, &longinRecord::val>};
-dset6 devACMAiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<aiRecord, &aiRecord::rval>};
+dset6 devACMBiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<biRecord, epicsUInt32, &biRecord::rval>};
+dset6 devACMMbbiRegVal={6, 0, 0, &init_record, &cmd_update, &read_regval<mbbiRecord, epicsUInt32, &mbbiRecord::rval>};
+dset6 devACMLiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<longinRecord, epicsInt32, &longinRecord::val>};
+dset6 devACMAiRegVal = {6, 0, 0, &init_record, &cmd_update, &read_regval<aiRecord, epicsInt32, &aiRecord::rval>};
 
 epicsInt32 sextend(epicsUInt32 val, unsigned sbit)
 {
@@ -396,6 +415,8 @@ extern "C" {
 epicsExportAddress(dset, devACMSiInfo);
 epicsExportAddress(dset, devACMBiStatus);
 epicsExportAddress(dset, devACMLiCounter);
+epicsExportAddress(dset, devACMBiRegVal);
+epicsExportAddress(dset, devACMMbbiRegVal);
 epicsExportAddress(dset, devACMLiRegVal);
 epicsExportAddress(dset, devACMAiRegVal);
 epicsExportAddress(dset, devACMAaiTrace);
