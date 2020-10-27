@@ -245,7 +245,7 @@ void Driver::run()
 
                 header.seqNum = ntohs(header.seqNum);
                 header.timebase = ntohl(header.timebase);
-                LOGDRV(8, this, "RX %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                LOGDRV(0x10, this, "RX %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
             }
             // locked again
 
