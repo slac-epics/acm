@@ -379,6 +379,7 @@ Driver::Driver(const std::string& name)
     ,intimeout(true)
     ,nRX(0u)
     ,nTimeout(0u)
+    ,nTimeoutGbl(0u)
     ,nError(0u)
     ,nIgnore(0u)
     ,nComplete(0u)
@@ -437,7 +438,8 @@ Driver::~Driver()
 
 void Driver::onTimeout()
 {
-    ::epics::atomic::increment(nTimeout);
+    LOGDRV(1, this, "Timeout");
+    ::epics::atomic::increment(nTimeoutGbl);
 
     for(sequences_t::iterator it = sequences.begin(), end = sequences.end();
         it!=end; ++it)

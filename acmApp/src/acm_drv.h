@@ -142,7 +142,7 @@ struct Driver : public epicsThreadRunable
     endpoints_t endpoints; // only vector is const.  individual DriverSock are guarded by our lock
 
     // (atomic) stat counters
-    int nRX, nTimeout, nError, nIgnore, nComplete;
+    int nRX, nTimeout, nTimeoutGbl, nError, nIgnore, nComplete;
 
     // by packet type
     typedef  std::map<uint8_t, CompleteSequence> sequences_t;
