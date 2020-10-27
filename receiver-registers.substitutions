@@ -4,24 +4,17 @@ file "acm_base.db"
 {P="\$(P)",	DEV="\$(DEV)",	DEBUG="\$(DEBUG)"}
 }
 
-file "acm_trace.db"
-{
-{P="\$(P)INT:",	DEV="\$(DEV)",	CMD="0x33", TSHIFT="-2e-3"}
-{P="\$(P)EXT:",	DEV="\$(DEV)",	CMD="0x28", TSHIFT="0"}
-{P="\$(P)TRP:",	DEV="\$(DEV)",	CMD="0xe7", TSHIFT="0"}
-}
-
 file "acm_analog.db"
 {
 #{P="\$(P)",	DEV="\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR="", ASLO="", AOFF="", PREC="", EGU=""}
-{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamPhs",	OFF="5",	HOPR="179.999914169312",	LOPR="-180", ASLO="8.58306884765625E-05", AOFF="0", PREC="4", EGU="deg"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeDarkPhs",	OFF="14",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamPhs",	OFF="5",	HOPR="179.999914169312",	LOPR="-180", ASLO="8.58306884765625E-05", AOFF="0", PREC="4", EGU="Degrees"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeDarkPhs",	OFF="14",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotRawI",	OFF="15",	HOPR="100",	LOPR="-100.000381471182", ASLO="0.00038147118176", AOFF="0", PREC="3", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotRawQ",	OFF="16",	HOPR="100",	LOPR="-100.000381471182", ASLO="0.00038147118176", AOFF="0", PREC="3", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotI",	OFF="17",	HOPR="100",	LOPR="-100.000002980232", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotQ",	OFF="18",	HOPR="100",	LOPR="-100.000002980232", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotMag",	OFF="19",	HOPR="200.000002980232",	LOPR="0", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotPhs",	OFF="20",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotPhs",	OFF="20",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotMagHi",	OFF="21",	HOPR="200.000002980232",	LOPR="0", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotMagLo",	OFF="22",	HOPR="200.000002980232",	LOPR="0", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestConfRawI",	OFF="23",	HOPR="100",	LOPR="-100.000381471182", ASLO="0.00038147118176", AOFF="0", PREC="3", EGU="%"}
@@ -29,23 +22,23 @@ file "acm_analog.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestConfI",	OFF="25",	HOPR="100",	LOPR="-100.000002980232", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestConfQ",	OFF="26",	HOPR="100",	LOPR="-100.000002980232", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestConfMag",	OFF="27",	HOPR="200.000002980232",	LOPR="0", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestConfPhs",	OFF="28",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestConfPhs",	OFF="28",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestConfMagLim",	OFF="29",	HOPR="200.000002980232",	LOPR="0", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotRawI",	OFF="30",	HOPR="100",	LOPR="-100.000381471182", ASLO="0.00038147118176", AOFF="0", PREC="3", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotRawQ",	OFF="31",	HOPR="100",	LOPR="-100.000381471182", ASLO="0.00038147118176", AOFF="0", PREC="3", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotI",	OFF="32",	HOPR="100",	LOPR="-100.000002980232", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotQ",	OFF="33",	HOPR="100",	LOPR="-100.000002980232", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotMag",	OFF="34",	HOPR="200.000002980232",	LOPR="0", ASLO="2.98023232758738E-06", AOFF="0", PREC="6", EGU="%"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotPhs",	OFF="35",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotOffsetPhs",	OFF="36",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotPhs",	OFF="35",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotOffsetPhs",	OFF="36",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffMag",	OFF="37",	HOPR="100",	LOPR="-100.000001490116", ASLO="1.49011614158923E-06", AOFF="0", PREC="6", EGU="%"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffPhs",	OFF="38",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffPhs",	OFF="38",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffMagHi",	OFF="39",	HOPR="100",	LOPR="-100.000001490116", ASLO="1.49011614158923E-06", AOFF="0", PREC="6", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffMagLo",	OFF="40",	HOPR="100",	LOPR="-100.000001490116", ASLO="1.49011614158923E-06", AOFF="0", PREC="6", EGU="%"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffPhsHi",	OFF="41",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffPhsLo",	OFF="42",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="GenPilotPhs",	OFF="48",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="GenPilotDiffPhs",	OFF="50",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffPhsHi",	OFF="41",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestPilotDiffPhsLo",	OFF="42",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="GenPilotPhs",	OFF="48",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="GenPilotDiffPhs",	OFF="50",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="Degrees"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TimeCheck",	OFF="51",	HOPR="45552.6834318182",	LOPR="0", ASLO="1.06060606060606E-05", AOFF="0", PREC="5", EGU="msec"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="WFPacketDelay",	OFF="53",	HOPR="695.068181818182",	LOPR="0", ASLO="0.010606060606061", AOFF="0", PREC="2", EGU="usec"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerTempA",	OFF="57",	HOPR="84.0699929583073",	LOPR="-34.07", ASLO="7.04169273376465E-06", AOFF="25", PREC="5", EGU="°C"}
@@ -94,15 +87,4 @@ file "acm_regval.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestModes",	OFF="56",	HOPR="65535",	LOPR="0", EGU=""}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumHi",	OFF="68",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumLo",	OFF="69",	HOPR="4294967295",	LOPR="0", EGU="hex"}
-}
-
-file "acm_reg_binary.db"
-{
-# breakout of Faults
-{P="\$(P)", DEV="\$(DEV)", REG="FaultFast",         OFF="55", MASK="0x01", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="FaultSlow",         OFF="55", MASK="0x02", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="FaultPilotMag",     OFF="55", MASK="0x04", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="FaultPilotDiffMag", OFF="55", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="FaultPilotDiffPhs", OFF="55", MASK="0x10", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="FaultConfMag",      OFF="55", MASK="0x20", ZNAM="Ok", ONAM="Fault"}
 }
