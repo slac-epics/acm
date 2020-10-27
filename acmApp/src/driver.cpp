@@ -167,7 +167,7 @@ void Driver::run()
 
                     if(err==EAGAIN) {
                         // timeout
-                        LOGDRV(1, this, "RX Timeout %s\n", peerName.c_str());
+                        LOGDRV(1, this, "RX Timeout\n");
 
                     } else {
                         ::epics::atomic::increment(nError);
@@ -371,8 +371,9 @@ void Driver::run()
 
 Driver::drivers_t Driver::drivers;
 
-Driver::Driver(const std::string& name)
+Driver::Driver(const char *name, const char *peers)
     :name(name)
+    ,peers(peers)
     ,log_mask(1)
     ,running(true)
     ,sock(AF_INET, SOCK_DGRAM)
@@ -399,7 +400,7 @@ Driver::Driver(const std::string& name)
         if(ret) {
             int err = SOCKERRNO;
             LOGDRV(1, this, "Warning: %s Unable to set RX timeout to %d ms : (%d) %s\n",
-                   peerName.c_str(), acmRxTimeoutMS,
+                   name, acmRxTimeoutMS,
                    err, strerror(err));
         }
     }
@@ -413,13 +414,13 @@ Driver::Driver(const std::string& name)
         if(ret) {
             int err = SOCKERRNO;
             LOGDRV(1, this, "Warning: %s Unable to enable RX time capture : (%d) %s\n",
-                   peerName.c_str(),
+                   name,
                    err, strerror(err));
         }
     }
 
     worker.reset(new epicsThread(*this,
-                                 std::string(SB()<<"ACM "<<name<<"/"<<peerName).c_str(),
+                                 std::string(SB()<<"ACM/"<<name).c_str(),
                                  epicsThreadGetStackSize(epicsThreadStackBig),
                                  epicsThreadPriorityHigh
                                  ));

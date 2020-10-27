@@ -219,7 +219,7 @@ long read_info(dbCommon *pcommon)
 
         switch(info->offset) {
         case 0: val = drv->name.c_str(); break;
-        case 1: val = drv->peerName.c_str(); break;
+        case 1: val = drv->peers.c_str(); break;
         case 2: val = ACM_VCS; break;
         default:val = "\?\?\?"; recGblSetSevr(prec, READ_ALARM, INVALID_ALARM); break;
         }

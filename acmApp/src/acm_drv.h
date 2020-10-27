@@ -118,6 +118,7 @@ struct Driver : public epicsThreadRunable
     static drivers_t drivers; // const after iocInit
 
     const std::string name;
+    const std::string peers;
 
     /** atomic
      *
@@ -135,9 +136,6 @@ struct Driver : public epicsThreadRunable
 
     epicsTimeStamp lastRx;
     bool intimeout;
-
-    // const after acmSetup()
-    std::string peerName;
 
     typedef std::vector<DriverEndpoint> endpoints_t;
     endpoints_t endpoints; // only vector is const.  individual DriverSock are guarded by our lock
@@ -160,7 +158,7 @@ struct Driver : public epicsThreadRunable
 
     util::auto_ptr<epicsThread> worker;
 
-    explicit Driver(const std::string& name);
+    explicit Driver(const char* name, const char* peers);
     ~Driver();
 
     virtual void run() override final;
@@ -169,7 +167,7 @@ struct Driver : public epicsThreadRunable
 
 extern "C"
 int acmSetup(const char* name,
-              const char* deviceName,
+              const char* peers,
               const char* bindNames);
 
 #endif // ACM_DRV_H

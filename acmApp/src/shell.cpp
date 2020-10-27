@@ -12,10 +12,10 @@ static
 bool started = false;
 
 int acmSetup(const char* name,
-              const char* deviceName,
+              const char* peers,
               const char* unused)
 {
-    if(!name || !deviceName || unused) {
+    if(!name || !peers || unused) {
         printf("Usage: acmSetup(\"instanceName\", \"peerIP:port# ...\")\n");
         return 1;
     } else if(started) {
@@ -26,16 +26,16 @@ int acmSetup(const char* name,
         return 1;
     }
 
-    util::auto_ptr<Driver> driver(new Driver(name));
-    printf("Creating ACM '%s' for %s\n", name, driver->peerName.c_str());
+    util::auto_ptr<Driver> driver(new Driver(name, peers));
+    printf("Creating ACM '%s' for %s\n", name, driver->peers.c_str());
 
-    std::istringstream strm(deviceName);
+    std::istringstream strm(peers);
     while(strm.good()) {
         std::string iface;
         strm>>iface;
 
         if(strm.bad()) {
-            fprintf(stderr, "Error: unable to parse host:port in : \"%s\"\n", deviceName);
+            fprintf(stderr, "Error: unable to parse host:port in : \"%s\"\n", peers);
             return 1;
         }
 
@@ -93,8 +93,8 @@ long acmReport(int lvl)
         it!=end; ++it)
     {
         Driver* drv = it->second;
-        printf("ACM: \"%s\" peer: %s RX=%u Cpl=%u TMO=%u ERR=%u IGN=%u\n",
-               drv->name.c_str(), drv->peerName.c_str(),
+        printf("ACM: \"%s\" peers: \"%s\" RX=%u Cpl=%u TMO=%u ERR=%u IGN=%u\n",
+               drv->name.c_str(), drv->peers.c_str(),
                ::epics::atomic::get(drv->nRX),
                ::epics::atomic::get(drv->nComplete),
                ::epics::atomic::get(drv->nTimeout),
