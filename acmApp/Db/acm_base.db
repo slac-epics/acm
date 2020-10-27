@@ -42,8 +42,22 @@ record(longin, "$(P)Cnt:RX-I") {
 record(calc, "$(P)Rate:RX-I") {
     field(INPA, "$(P)Cnt:RX-I NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
-    field(EGU , "Hz")
+    field(EGU , "pkt/s")
     field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)Cnt:BRX-I") {
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) offset=6")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)Rate:BRX-I") {
+    field(INPA, "$(P)Cnt:BRX-I NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C/2**20*8")
+    field(EGU , "Mbps")
+    field(PREC, "3")
     field(SCAN, "1 second")
 }
 

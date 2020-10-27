@@ -258,6 +258,7 @@ long read_counter(dbCommon *pcommon)
         case 3: prec->val = epics::atomic::get(drv->nIgnore); break;
         case 4: prec->val = epics::atomic::get(drv->nComplete); break;
         case 5: prec->val = epics::atomic::get(drv->nTimeoutGbl); break;
+        case 6: prec->val = epics::atomic::get(drv->nBytesRx); break;
         default: prec->val = -1; recGblSetSevr(prec, READ_ALARM, INVALID_ALARM); break;
         }
         return 0;

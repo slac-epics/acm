@@ -194,6 +194,8 @@ void Driver::run()
                     ::epics::atomic::increment(nIgnore);
                     continue;
                 }
+                // assume 42 bytes of transport headers (Ethernet+IP+UDP headers)
+                ::epics::atomic::add(nBytesRx, ret + 42u);
                 ::epics::atomic::increment(nRX);
 
                 if(msg.msg_flags&MSG_TRUNC) {
@@ -379,6 +381,7 @@ Driver::Driver(const char *name, const char *peers)
     ,sock(AF_INET, SOCK_DGRAM)
     ,intimeout(true)
     ,nRX(0u)
+    ,nBytesRx(0u)
     ,nTimeout(0u)
     ,nTimeoutGbl(0u)
     ,nError(0u)
