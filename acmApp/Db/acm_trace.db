@@ -55,9 +55,21 @@ record(aai, "$(P)ICUR") {
     field(DTYP, "ACM Trace")
     field(INP , "@$(DEV) cmd=$(CMD) offset=4 slope=4.656612873077393e-10 intercept=0.0") # slope=1/0x80000000
     field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(P)CNT")
+}
+
+record(calc, "$(P)CNT") {
+    field(CALC, "VAL+1")
     field(FLNK, "$(FLNK=)")
 }
 
+record(calc, "$(P)RATE") {
+    field(DESC, "Eff. trace update rate")
+    field(SCAN, "1 second")
+    field(INPA, "$(P)CNT NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+}
 
 # Timebase
 
