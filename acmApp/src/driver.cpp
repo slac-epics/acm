@@ -241,7 +241,7 @@ void Driver::run()
                 if(rxTimeSrc==0) {
                     rxTime = now;
                 }
-                LOGDRV(4, this, "RX timestamp%u %08x:%08x\n", rxTimeSrc, unsigned(rxTime.secPastEpoch), unsigned(rxTime.nsec));
+                LOGDRV(4, this, "RX timestamp%u %08x:%08x %08x\n", rxTimeSrc, unsigned(rxTime.secPastEpoch), unsigned(rxTime.nsec), ntohl(header.timebase));
 
                 // finally time to process RX buffer
 
@@ -262,8 +262,6 @@ void Driver::run()
 
                 } else {
                     double dtb = double(header.timebase) - double(lastTimebase);
-                    if(dtb <= 0.0) // roleover
-                        dtb += 0x100000000;
 
                     tbhist.push_back(std::make_pair(dtb,
                                                             epicsTimeDiffInSeconds(&rxTime, &lastRx)));
@@ -442,7 +440,7 @@ Driver::~Driver()
 
 void Driver::onTimeout()
 {
-    LOGDRV(1, this, "Timeout");
+    LOGDRV(1, this, "Timeout\n");
     ::epics::atomic::increment(nTimeoutGbl);
 
     for(sequences_t::iterator it = sequences.begin(), end = sequences.end();
