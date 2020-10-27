@@ -99,7 +99,7 @@
     <horizontal_alignment>0</horizontal_alignment>
     <name>Text Update</name>
     <precision>0</precision>
-    <precision_from_pv>true</precision_from_pv>
+    <precision_from_pv>false</precision_from_pv>
     <pv_name>$(P)$(REG)</pv_name>
     <pv_value />
     <rotation_angle>0.0</rotation_angle>
@@ -110,7 +110,7 @@
       <keep_wh_ratio>false</keep_wh_ratio>
     </scale_options>
     <scripts />
-    <show_units>true</show_units>
+    <show_units>false</show_units>
     <text>######</text>
     <tooltip>$(pv_name)
 $(pv_value)</tooltip>
