@@ -93,11 +93,13 @@ long acmReport(int lvl)
         it!=end; ++it)
     {
         Driver* drv = it->second;
-        printf("ACM: \"%s\" peers: \"%s\" RX=%u Cpl=%u TMO=%u ERR=%u IGN=%u\n",
+        printf("ACM: \"%s\" peers: \"%s\" #pkt RX=%u #bytes RX=%u #complete=%u #sock timeout=%u #global timeout=%u #error=%u #ignore=%u\n",
                drv->name.c_str(), drv->peers.c_str(),
                ::epics::atomic::get(drv->nRX),
+               ::epics::atomic::get(drv->nBytesRx),
                ::epics::atomic::get(drv->nComplete),
                ::epics::atomic::get(drv->nTimeout),
+               ::epics::atomic::get(drv->nTimeoutGbl),
                ::epics::atomic::get(drv->nError),
                ::epics::atomic::get(drv->nIgnore));
         if(lvl<=0)
@@ -105,8 +107,20 @@ long acmReport(int lvl)
 
         Guard G(drv->lock);
 
-        printf("  intimeout=%c\n",
-               drv->intimeout ? 'Y' : 'N');
+        printf("  intimeout=%c #seq=%u\n",
+               drv->intimeout ? 'Y' : 'N',
+               (unsigned)drv->sequences.size());
+
+        if(lvl<=1)
+            continue;
+
+        for(Driver::sequences_t::const_iterator it=drv->sequences.begin(), end=drv->sequences.end();
+            it!=end; it++)
+        {
+            const CompleteSequence& seq = it->second;
+
+            printf("  seq 0x%2x #partial=%zu\n", (unsigned)it->first, seq.partials.size());
+        }
     }
     return 0;
 }
