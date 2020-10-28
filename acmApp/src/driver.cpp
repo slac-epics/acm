@@ -25,6 +25,7 @@ PartialSequence::PartialSequence()
 CompleteSequence::CompleteSequence()
     :timeBase(0u)
     ,ntotal(0u)
+    ,nComplete(0u)
 {
     timeReceived.secPastEpoch = 0;
     timeReceived.nsec = 0;
@@ -348,6 +349,7 @@ void Driver::run()
                             LOGDRV(1, this, "Sequence completion logic error? %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
                         }
                         partial.pushed = true;
+                        seq.nComplete++;
                     }
 
                 } else {

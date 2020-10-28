@@ -72,6 +72,7 @@ struct CompleteSequence {
 
     // sum of samples in complete sequence.
     size_t ntotal;
+    size_t nComplete;
 
     IOSCANPVT totalUpdate;
 

@@ -119,7 +119,10 @@ long acmReport(int lvl)
         {
             const CompleteSequence& seq = it->second;
 
-            printf("  seq 0x%2x #partial=%zu\n", (unsigned)it->first, seq.partials.size());
+            printf("  seq 0x%2x #partial=%zu #complete=%zu\n",
+                   (unsigned)it->first,
+                   seq.partials.size(),
+                   seq.nComplete);
         }
     }
     return 0;
