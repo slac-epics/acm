@@ -93,7 +93,8 @@ long acmReport(int lvl)
         it!=end; ++it)
     {
         Driver* drv = it->second;
-        printf("ACM: \"%s\" peers: \"%s\" #pkt RX=%u #bytes RX=%u #complete=%u #sock timeout=%u #global timeout=%u #error=%u #ignore=%u\n",
+        printf("ACM: \"%s\" peers: \"%s\"\n"
+               "  #pkt RX=%u #bytes RX=%u #complete=%u #sock timeout=%u #global timeout=%u #error=%u #ignore=%u\n",
                drv->name.c_str(), drv->peers.c_str(),
                ::epics::atomic::get(drv->nRX),
                ::epics::atomic::get(drv->nBytesRx),
