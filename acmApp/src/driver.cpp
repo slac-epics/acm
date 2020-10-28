@@ -191,6 +191,7 @@ void Driver::run()
                 if(!ep)
                 {
                     // ignore traffic from unknown peer
+                    LOGDRV(0x20, this, "RX Ignore: %08x:%d", (unsigned)ntohl(peer.ia.sin_addr.s_addr), ntohs(peer.ia.sin_port));
                     ::epics::atomic::increment(nIgnore);
                     continue;
                 }
@@ -290,7 +291,7 @@ void Driver::run()
                 // sequence already pushed.
                 // late, duplicate, or otherwise invalid
                 epics::atomic::increment(nIgnore);
-                LOGDRV(8, this, "Ignore dup/late/invalid %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                LOGDRV(0x28, this, "Ignore dup/late/invalid %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
 
             } else if(partial.lastSeq<0 || int(header.seqNum)<partial.lastSeq) {
                 // this packet may be new
@@ -352,12 +353,12 @@ void Driver::run()
                 } else {
                     // duplicate packet?
                     epics::atomic::increment(nIgnore);
-                    LOGDRV(8, this, "Ignore dup %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                    LOGDRV(0x28, this, "Ignore dup %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
                 }
 
             } else {
                 epics::atomic::increment(nIgnore);
-                LOGDRV(8, this, "Warning seq data after last %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                LOGDRV(0x28, this, "Warning seq data after last %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
             }
 
         }catch(std::exception& e){

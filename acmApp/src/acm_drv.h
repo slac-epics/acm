@@ -127,6 +127,7 @@ struct Driver : public epicsThreadRunable
      * 0x0004 - timestamp capture
      * 0x0008 - Sequence reconstruction
      * 0x0010 - Raw packet RX
+     * 0x0020 - Ignored packets
      */
     int log_mask;
 
