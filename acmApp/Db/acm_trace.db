@@ -65,10 +65,11 @@ record(calc, "$(P)CNT") {
 
 record(calc, "$(P)RATE") {
     field(DESC, "Eff. trace update rate")
-    field(SCAN, "1 second")
+    field(SCAN, "10 second")
     field(INPA, "$(P)CNT NPP MSI")
-    field(CALC, "C:=A-B;B:=A;C")
+    field(CALC, "C:=A-B;B:=A;C/10")
     field(EGU , "Hz")
+    field(PREC, "1")
 }
 
 # Timebase
