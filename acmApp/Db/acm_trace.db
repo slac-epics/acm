@@ -12,7 +12,7 @@ record(aai, "$(P)I") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=0 slope=3.0517578125e-05 intercept=0.0") # slope=1/0x8000
+    field(INP , "@$(DEV) cmd=$(CMD) offset=0 slope=1 intercept=0.0")
     field(SCAN, "I/O Intr")
     field(TSE , "-2") # TIME from driver
     field(FLNK, "$(P)Q")
@@ -23,7 +23,7 @@ record(aai, "$(P)Q") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=1 slope=3.0517578125e-05 intercept=0.0")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=1 slope=1 intercept=0.0")
     field(TSE , "-2") # TIME from driver
     field(FLNK, "$(P)CUR")
 }
@@ -33,7 +33,7 @@ record(aai, "$(P)CUR") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=2 slope=1.1920928955078125e-07 intercept=0.0") # slope=1/0x800000
+    field(INP , "@$(DEV) cmd=$(CMD) offset=2 slope=1 intercept=0.0")
     field(TSE , "-2") # TIME from driver
     field(FLNK, "$(P)PHA")
 }
@@ -53,7 +53,7 @@ record(aai, "$(P)ICUR") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=4 slope=4.656612873077393e-10 intercept=0.0") # slope=1/0x80000000
+    field(INP , "@$(DEV) cmd=$(CMD) offset=4 slope=1 intercept=0.0")
     field(TSE , "-2") # TIME from driver
     field(FLNK, "$(P)CNT")
 }
@@ -79,7 +79,7 @@ record(aai, "$(P)T") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace Time")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=5 slope=1.0604453870625663e-07 intercept=$(TSHIFT=0.0)") # slope=1/9.43MHz
+    field(INP , "@$(DEV) cmd=$(CMD) offset=5 slope=3.181818181818e-8 intercept=$(TSHIFT=0.0)") # slope=1/31.4MHz
     field(SCAN, "I/O Intr")
     field(TSE , "-2") # TIME from driver
 

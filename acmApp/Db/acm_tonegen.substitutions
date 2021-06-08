@@ -17,12 +17,12 @@ file "acm_analog.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerTempC",	OFF="10",	HOPR="84.0699929583073",	LOPR="-34.07", ASLO="7.04169273376465E-06", AOFF="25", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerTempD",	OFF="11",	HOPR="84.0699929583073",	LOPR="-34.07", ASLO="7.04169273376465E-06", AOFF="25", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerTemp",	OFF="12",	HOPR="6221.67",	LOPR="-273", ASLO="1.586", AOFF="-273", EGU="°C"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="Digitizer12Volts",	OFF="13",	HOPR="14.0755101254112",	LOPR="0", ASLO="0.003437243009868", AOFF="0", EGU="V"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="Digitizer6p1Volts",	OFF="13",	HOPR="14.0755101254112",	LOPR="0", ASLO="0.003437243009868", AOFF="0", EGU="V"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="Digitizer3p7Volts",	OFF="14",	HOPR="4.998779296875",	LOPR="0", ASLO="0.001220703125", AOFF="0", EGU="V"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="Digitizer3p3Volts",	OFF="15",	HOPR="4.998779296875",	LOPR="0", ASLO="0.001220703125", AOFF="0", EGU="V"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="Digitizer2p2Volts",	OFF="16",	HOPR="4.998779296875",	LOPR="0", ASLO="0.001220703125", AOFF="0", EGU="V"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerCurrent",	OFF="17",	HOPR="24993.896484375",	LOPR="0", ASLO="6.103515625", AOFF="0", EGU="mA"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerLOPower",	OFF="18",	HOPR="0.396728515625",	LOPR="0", ASLO="9.68812003968254E-05", AOFF="0", EGU="Vrms"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerCurrent",	OFF="17",	HOPR="2.4993896484375",	LOPR="0", ASLO="6.103515625E-4", AOFF="0", EGU="mA"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerLOVrms",	OFF="18",	HOPR="0.396728515625",	LOPR="0", ASLO="9.68812003968254E-05", AOFF="0", EGU="Vrms"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="UpConTemp",	OFF="21",	HOPR="127.99609375",	LOPR="-128", ASLO="0.00390625", AOFF="0", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="UpConVolt",	OFF="22",	HOPR="655.35",	LOPR="0", ASLO="0.01", AOFF="0", EGU="V"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="UpConCurr",	OFF="23",	HOPR="159.9951171875",	LOPR="-160", ASLO="0.0048828125", AOFF="0", EGU="A"}
@@ -45,12 +45,16 @@ file "acm_regval.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumHi",	OFF="25",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumLo",	OFF="26",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLcl",	OFF="7",	MASK="0xf", SHIFT="0", HOPR="15",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLcl",	OFF="7",	MASK="0x7", SHIFT="1", HOPR="7",	LOPR="0"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestModeRem",	OFF="7",	MASK="0x7", SHIFT="4", HOPR="7",	LOPR="0"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestMode",     OFF="7",	MASK="0xf", SHIFT="7", HOPR="15",	LOPR="0"}
 }
 
 file "acm_reg_binary.db"
 {
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLclRem",	OFF="7",	MASK="1", ZNAM="Local", ONAM="Remote"}
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x1", ZNAM="Disabled", ONAM="Enabled",	REG="PilotEnaCav1" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x2", ZNAM="Disabled", ONAM="Enabled",	REG="ConfEnaCav1" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x4", ZNAM="Disabled", ONAM="Enabled",	REG="PilotEnaCav2" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x8", ZNAM="Disabled", ONAM="Enabled",	REG="ConfEnaCav2" }
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLclRem",	OFF="7",	MASK="1", ZNAM="Local", ONAM="Remote" }
 }
