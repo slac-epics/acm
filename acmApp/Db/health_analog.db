@@ -1,0 +1,13 @@
+record(ai, "$(P)$(REG)") {
+    field(DTYP, "ACM Reg Value")
+    field(INP , "@$(DEV) cmd=0xAE offset=$(OFF)")
+    field(SCAN, "$(SCAN=I/O Intr)")
+    field(HOPR, "$(HOPR=)")
+    field(LOPR, "$(LOPR=)")
+    field(EGU , "$(EGU=)")
+    field(PREC, "$(PREC=)")
+    field(ASLO, "$(ASLO=)")
+    field(AOFF, "$(AOFF=)")
+    field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(FLNK=)")
+}

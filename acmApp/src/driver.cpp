@@ -211,8 +211,9 @@ void Driver::run()
                 }
 
                 rxBuf.resize((size_t(ret)-sizeof(header))/4u);
-                for(size_t i=0; i<rxBuf.size(); i++)
-                    rxBuf[i] = ntohl(rxBuf[i]);
+                if(header.cmd != ACMType::HealthData)
+                    for(size_t i=0; i<rxBuf.size(); i++)
+                        rxBuf[i] = ntohl(rxBuf[i]);
 
                 if(msg.msg_flags&MSG_CTRUNC) {
                     LOGDRV(1, this, "Warning: truncated cmsg %u\n", ntohs(peer.ia.sin_port));

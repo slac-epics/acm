@@ -1,0 +1,119 @@
+file "health_analog.db"
+{
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexTemp",    OFF="0",    HOPR="255.99609375",    LOPR="0", ASLO="3.906250E-03", AOFF="0", PREC="2", EGU="C"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="BoardTemp",    OFF="1",    HOPR="255.99609375",    LOPR="0", ASLO="3.906250E-03", AOFF="0", PREC="2", EGU="C"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="FmcTopVadj",    OFF="2",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Fmc3p3Volts",    OFF="3",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Fmc12Volts",    OFF="4",    HOPR="28.1595703125",    LOPR="0", ASLO="4.296875E-04", AOFF="0", PREC="3", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="FmcBotVadj",    OFF="5",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccIntTemp",    OFF="6",    HOPR="28493285.8695652",    LOPR="-192.3913043478", ASLO="4.347826E+02", AOFF="-192.3913043478", PREC="0", EGU="C"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Main3p3Volts",    OFF="7",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexAuxAV",    OFF="8",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexAuxBV",    OFF="9",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Input12Volts",    OFF="10",    HOPR="28.1595703125",    LOPR="0", ASLO="4.296875E-04", AOFF="0", PREC="3", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Boot1p2Volts",    OFF="11",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccAux",    OFF="12",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccInt",    OFF="13",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexMgtaVtt",    OFF="14",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexMgtaVcc",    OFF="15",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexMgtaVccAux",    OFF="16",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Boot3p3Volts",    OFF="17",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Main3p3vCurr",    OFF="18",    HOPR="40.959375",    LOPR="0", ASLO="6.250000E-04", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Fmc3p3vCurr",    OFF="19",    HOPR="40.959375",    LOPR="0", ASLO="6.250000E-04", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Fmc12Volts",    OFF="20",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="FmcTopVadjCurr",    OFF="21",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Boot3p3vCurr",    OFF="22",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccIntCurr",    OFF="23",    HOPR="40.959375",    LOPR="0", ASLO="6.250000E-04", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccAuxCurr",    OFF="24",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexMgtaVccCurr",    OFF="25",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Boot1p2vCurr",    OFF="26",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Input12vCurr",    OFF="27",    HOPR="40.959375",    LOPR="0", ASLO="6.250000E-04", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="FanSpeed",    OFF="77",    HOPR="3932100",    LOPR="0", ASLO="60", AOFF="0", PREC="0", EGU="pulses/min"}
+}
+
+file "health_regval.db"
+{
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_0_0",    OFF="28",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_1_0",    OFF="29",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_2_0",    OFF="30",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_3_0",    OFF="31",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_4_0",    OFF="32",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_5_0",    OFF="33",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_6_0",    OFF="34",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_7_0",    OFF="35",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_8_0",    OFF="36",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="INA226_9_0",    OFF="37",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpPresent",    OFF="38",    HOPR="1",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpLos",    OFF="39",    HOPR="255",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpTxFault",    OFF="40",    HOPR="15",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpTemp",    OFF="41",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpVoltage",    OFF="42",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpTx4Bias",    OFF="43",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpTx3Bias",    OFF="44",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpTx2Bias",    OFF="45",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpTx1Bias",    OFF="46",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpRx4Pwr",    OFF="47",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpRx3Pwr",    OFF="48",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpRx2Pwr",    OFF="49",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanQsfpRx1Pwr",    OFF="50",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Present",    OFF="51",    HOPR="1",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Los",    OFF="52",    HOPR="255",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1TxFault",    OFF="53",    HOPR="15",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Temp",    OFF="54",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Voltage",    OFF="55",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Tx4Bias",    OFF="56",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Tx3Bias",    OFF="57",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Tx2Bias",    OFF="58",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Tx1Bias",    OFF="59",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Rx4Pwr",    OFF="60",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Rx3Pwr",    OFF="61",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Rx2Pwr",    OFF="62",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp1Rx1Pwr",    OFF="63",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Present",    OFF="64",    HOPR="1",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Los",    OFF="65",    HOPR="255",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2TxFault",    OFF="66",    HOPR="15",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Temp",    OFF="67",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Voltage",    OFF="68",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Tx4Bias",    OFF="69",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Tx3Bias",    OFF="70",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Tx2Bias",    OFF="71",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Tx1Bias",    OFF="72",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Rx4Pwr",    OFF="73",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Rx3Pwr",    OFF="74",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Rx2Pwr",    OFF="75",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexQsfp2Rx1Pwr",    OFF="76",    HOPR="65535",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum0",    OFF="78",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum1",    OFF="79",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum2",    OFF="80",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum3",    OFF="81",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum4",    OFF="82",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum5",    OFF="83",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum6",    OFF="84",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanBootChksum7",    OFF="85",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum0",    OFF="86",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum1",    OFF="87",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum2",    OFF="88",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum3",    OFF="89",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum4",    OFF="90",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum5",    OFF="91",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum6",    OFF="92",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SpartanRunChksum7",    OFF="93",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum0",    OFF="94",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum1",    OFF="95",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum2",    OFF="96",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum3",    OFF="97",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum4",    OFF="98",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum5",    OFF="99",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum6",    OFF="100",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum7",    OFF="101",    HOPR="4294967295",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="SeuPromStatus",    OFF="102",    HOPR="15",    LOPR="0", EGU=""}
+}
+
+file "health_reg_binary.db"
+{
+# breakout of SeuPromStatus
+{P="\$(P)", DEV="\$(DEV)", REG="KintexSEUFault",         OFF="102", MASK="0x01", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="PromLockedStatus",         OFF="102", MASK="0x02", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="PromSwitchStatus",         OFF="102", MASK="0x04", ZNAM="Ok", ONAM="Fault"}
+}
+

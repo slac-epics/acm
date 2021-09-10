@@ -327,7 +327,7 @@ long read_trace(dbCommon *pcommon)
                     switch(info->offset) {
                     case 0: val = sextend(values[i+0]>> 0u, 15u); break;
                     case 1: val = sextend(values[i+0]>>16u, 15u); break;
-                    case 2: val = sextend(values[i+1], 23u); break;
+                    case 2: val = (values[i+1]); break;
                     case 3: val = sextend(values[i+2], 23u); break;
                     case 4: val = (values[i+3]); break;
                     case 5: val = out; break; // time

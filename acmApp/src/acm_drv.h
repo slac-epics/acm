@@ -19,6 +19,7 @@
 
 struct ACMType {
     enum type {
+        HealthData = 0xae,
         RegData = 0x51,
         SampFault = 0xe7,
         SampInt = 0x33,

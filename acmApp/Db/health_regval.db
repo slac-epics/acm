@@ -1,0 +1,10 @@
+record(longin, "$(P)$(REG)") {
+    field(DTYP, "ACM Reg Value")
+    field(INP , "@$(DEV) cmd=0xAE offset=$(OFF) mask=$(MASK=0xffffffff) shift=$(SHIFT=0)")
+    field(SCAN, "$(SCAN=I/O Intr)")
+    field(HOPR, "$(HOPR=)")
+    field(LOPR, "$(LOPR=)")
+    field(EGU , "$(EGU=)")
+    field(TSE , "-2") # TIME from driver
+    field(FLNK, "$(FLNK=)")
+}
