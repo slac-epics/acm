@@ -82,7 +82,7 @@ file "acm_analog.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConVolt",	OFF="71",	HOPR="655.35",	LOPR="0", ASLO="0.01", AOFF="0", PREC="2", EGU="V"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConCurr",	OFF="72",	HOPR="159.9951171875",	LOPR="-160", ASLO="0.0048828125", AOFF="0", PREC="2", EGU="A"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConTime",	OFF="73",	HOPR="49710.2696180556",	LOPR="0", ASLO="1.15740740740741E-05", AOFF="0", PREC="5", EGU="days"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="CavTempRTD",	OFF="74",	HOPR="1791.96875",	LOPR="-256", ASLO="0.03125", AOFF="-256", PREC="2", EGU="°C"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="CavTempRTD",	OFF="74",	HOPR="1791.96875",	LOPR="-256", ASLO="0.015625", AOFF="-256", PREC="2", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="BufTrigLim",	OFF="52",	HOPR="4194303",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU=""}
 }
 
