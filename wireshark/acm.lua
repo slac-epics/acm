@@ -3,6 +3,7 @@
 print("Loading ACM...")
 
 local msgs = {
+    [0xae] = "Health",
     [0x51] = "Reg",
     [0xe7] = "Trip",
     [0x33] = "Int",
