@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>390</width>
+    <height>30</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="PyDMLabel" name="RegName">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>160</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="text">
+    <string>${P}${REG}</string>
+   </property>
+  </widget>
+  <widget class="PyDMLabel" name="PVHexVal">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>0</y>
+     <width>100</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="precisionFromPV" stdset="0">
+    <bool>false</bool>
+   </property>
+   <property name="alarmSensitiveBorder" stdset="0">
+    <bool>false</bool>
+   </property>
+   <property name="channel" stdset="0">
+    <string>ca://${P}${REG}</string>
+   </property>
+   <property name="displayFormat" stdset="0">
+    <enum>PyDMLabel::Hex</enum>
+   </property>
+  </widget>
+  <widget class="PyDMLabel" name="PVRegVal">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>0</y>
+     <width>100</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="channel" stdset="0">
+    <string>ca://${P}${REG}</string>
+   </property>
+   <property name="displayFormat" stdset="0">
+    <enum>PyDMLabel::Default</enum>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMLabel</class>
+   <extends>QLabel</extends>
+   <header>pydm.widgets.label</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

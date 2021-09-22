@@ -1,0 +1,1003 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>410</width>
+    <height>40</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item column="0" row="0">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamRawI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamRawI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="1">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamRawQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamRawQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="2">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="3">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="4">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="5">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="6">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeam">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeam</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="7">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamMagPeak">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamMagPeak</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="8">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamPeak">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamPeak</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="9">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamLim">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamLim</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="10">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeBeamConfLim">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeBeamConfLim</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="11">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeDarkI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeDarkI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="12">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeDarkQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeDarkQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="13">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeDarkMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeDarkMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="14">
+    <widget class="PyDMEmbeddedDisplay" name="ProbeDarkPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbeDarkPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="15">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotRawI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotRawI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="16">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotRawQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotRawQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="17">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="18">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="0" row="19">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="0">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="1">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotMagHi">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotMagHi</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="2">
+    <widget class="PyDMEmbeddedDisplay" name="ProbePilotMagLo">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=ProbePilotMagLo</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="3">
+    <widget class="PyDMEmbeddedDisplay" name="TestConfRawI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestConfRawI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="4">
+    <widget class="PyDMEmbeddedDisplay" name="TestConfRawQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestConfRawQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="5">
+    <widget class="PyDMEmbeddedDisplay" name="TestConfI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestConfI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="6">
+    <widget class="PyDMEmbeddedDisplay" name="TestConfQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestConfQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="7">
+    <widget class="PyDMEmbeddedDisplay" name="TestConfMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestConfMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="8">
+    <widget class="PyDMEmbeddedDisplay" name="TestConfPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestConfPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="9">
+    <widget class="PyDMEmbeddedDisplay" name="TestConfMagLim">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestConfMagLim</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="10">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotRawI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotRawI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="11">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotRawQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotRawQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="12">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="13">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="14">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="15">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="16">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotOffsetPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotOffsetPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="17">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotDiffMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotDiffMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="18">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotDiffPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotDiffPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="1" row="19">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotDiffMagHi">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotDiffMagHi</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="0">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotDiffMagLo">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotDiffMagLo</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="1">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotDiffPhsHi">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotDiffPhsHi</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="2">
+    <widget class="PyDMEmbeddedDisplay" name="TestPilotDiffPhsLo">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestPilotDiffPhsLo</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="3">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotRawI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotRawI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="4">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotRawQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotRawQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="5">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotI">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotI</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="6">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotQ">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotQ</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="7">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="8">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="9">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotDiffMag">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotDiffMag</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="10">
+    <widget class="PyDMEmbeddedDisplay" name="GenPilotDiffPhs">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=GenPilotDiffPhs</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="11">
+    <widget class="PyDMEmbeddedDisplay" name="TimeCheck">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TimeCheck</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="12">
+    <widget class="PyDMEmbeddedDisplay" name="BufTrigLim">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=BufTrigLim</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="13">
+    <widget class="PyDMEmbeddedDisplay" name="WFPacketDelay">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=WFPacketDelay</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="14">
+    <widget class="PyDMEmbeddedDisplay" name="FwVersion">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=FwVersion</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="15">
+    <widget class="PyDMEmbeddedDisplay" name="Faults">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=Faults</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="16">
+    <widget class="PyDMEmbeddedDisplay" name="TestModes">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=TestModes</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="17">
+    <widget class="PyDMEmbeddedDisplay" name="DigitizerTempA">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DigitizerTempA</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="18">
+    <widget class="PyDMEmbeddedDisplay" name="DigitizerTempB">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DigitizerTempB</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="2" row="19">
+    <widget class="PyDMEmbeddedDisplay" name="DigitizerTempC">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DigitizerTempC</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="0">
+    <widget class="PyDMEmbeddedDisplay" name="DigitizerTempD">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DigitizerTempD</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="1">
+    <widget class="PyDMEmbeddedDisplay" name="DigitizerTemp">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DigitizerTemp</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="2">
+    <widget class="PyDMEmbeddedDisplay" name="Digitizer6p1Volts">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=Digitizer6p1Volts</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="3">
+    <widget class="PyDMEmbeddedDisplay" name="Digitizer3p7Volts">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=Digitizer3p7Volts</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="4">
+    <widget class="PyDMEmbeddedDisplay" name="Digitizer3p3Volts">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=Digitizer3p3Volts</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="5">
+    <widget class="PyDMEmbeddedDisplay" name="Digitizer2p2Volts">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=Digitizer2p2Volts</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="6">
+    <widget class="PyDMEmbeddedDisplay" name="DigitizerCurrent">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DigitizerCurrent</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="7">
+    <widget class="PyDMEmbeddedDisplay" name="DigitizerLOVrms">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DigitizerLOVrms</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="8">
+    <widget class="PyDMEmbeddedDisplay" name="DwnConSerNumHi">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DwnConSerNumHi</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="9">
+    <widget class="PyDMEmbeddedDisplay" name="DwnConSerNumLo">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DwnConSerNumLo</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="10">
+    <widget class="PyDMEmbeddedDisplay" name="DwnConTemp">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DwnConTemp</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="11">
+    <widget class="PyDMEmbeddedDisplay" name="DwnConVolt">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DwnConVolt</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="12">
+    <widget class="PyDMEmbeddedDisplay" name="DwnConCurr">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DwnConCurr</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="13">
+    <widget class="PyDMEmbeddedDisplay" name="DwnConTime">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=DwnConTime</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  <item column="3" row="14">
+    <widget class="PyDMEmbeddedDisplay" name="CavTempRTD">
+     <property name="toolTip">
+      <string />
+     </property>
+     <property name="macros" stdset="0">
+      <string>REG=CavTempRTD</string>
+     </property>
+     <property name="filename" stdset="0">
+      <string>_acm_reg.ui</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PyDMEmbeddedDisplay</class>
+   <extends>QFrame</extends>
+   <header>pydm.widgets.embedded_display</header>
+  </customwidget>
+ </customwidgets>
+ <resources />
+ <connections />
+</ui>
