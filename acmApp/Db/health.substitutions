@@ -107,6 +107,9 @@ file "health_regval.db"
 {P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum6",    OFF="100",    HOPR="4294967295",    LOPR="0", EGU=""}
 {P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum7",    OFF="101",    HOPR="4294967295",    LOPR="0", EGU=""}
 {P="\$(P)",    DEV="\$(DEV)",    REG="SeuPromStatus",    OFF="102",    HOPR="15",    LOPR="0", EGU=""}
+#{P="\$(P)",    DEV="\$(DEV)",    REG="Reg103",    OFF="103",    HOPR="4294967295",    LOPR="0", EGU=""}
+#{P="\$(P)",    DEV="\$(DEV)",    REG="Reg104",    OFF="104",    HOPR="4294967295",    LOPR="0", EGU=""}
+#{P="\$(P)",    DEV="\$(DEV)",    REG="Reg105",    OFF="105",    HOPR="4294967295",    LOPR="0", EGU=""}
 }
 
 file "health_reg_binary.db"
