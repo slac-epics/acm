@@ -1,6 +1,6 @@
 
 
-record(mbboDirect, "$(P)Log-SP") {
+record(mbboDirect, "$(P)LogSp") {
     field(DTYP, "ACM Log Mask")
     field(OUT , "@$(DEV)")
     field(PINI, "YES")
@@ -10,19 +10,19 @@ record(mbboDirect, "$(P)Log-SP") {
     info(autosaveFields_pass0, "RVAL")
 }
 
-record(stringin, "$(P)IP-I") {
+record(stringin, "$(P)IpI") {
     field(DTYP, "ACM Info")
     field(INP , "@$(DEV) offset=1")
     field(PINI, "YES")
 }
 
-record(stringin, "$(P)SWVER-I") {
+record(stringin, "$(P)SwverI") {
     field(DTYP, "ACM Info")
     field(INP , "@$(DEV) offset=2")
     field(PINI, "YES")
 }
 
-record(bi, "$(P)CONN-STS") {
+record(bi, "$(P)ConnSts") {
     field(DTYP, "ACM Status")
     field(INP , "@$(DEV) offset=0")
     field(SCAN, "1 second")
@@ -33,42 +33,42 @@ record(bi, "$(P)CONN-STS") {
 
 # Stat counters
 
-record(longin, "$(P)Cnt:RX-I") {
+record(longin, "$(P)Cnt:RxI") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=0")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:RX-I") {
-    field(INPA, "$(P)Cnt:RX-I NPP MSI")
+record(calc, "$(P)Rate:RxI") {
+    field(INPA, "$(P)Cnt:RxI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "pkt/s")
     field(PREC, "0")
     field(SCAN, "1 second")
 }
 
-record(longin, "$(P)Cnt:BRX-I") {
+record(longin, "$(P)Cnt:BrxI") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=6")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:BRX-I") {
-    field(INPA, "$(P)Cnt:BRX-I NPP MSI")
+record(calc, "$(P)Rate:BrxI") {
+    field(INPA, "$(P)Cnt:BrxI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C/2**20*8")
     field(EGU , "Mbps")
     field(PREC, "3")
     field(SCAN, "1 second")
 }
 
-record(longin, "$(P)Cnt:TMO-I") {
+record(longin, "$(P)Cnt:TmoI") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=1")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:TMO-I") {
-    field(INPA, "$(P)Cnt:TMO-I NPP MSI")
+record(calc, "$(P)Rate:TmoI") {
+    field(INPA, "$(P)Cnt:TmoI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")
@@ -77,14 +77,14 @@ record(calc, "$(P)Rate:TMO-I") {
     field(HSV , "MAJOR")
 }
 
-record(longin, "$(P)Cnt:GTMO-I") {
+record(longin, "$(P)Cnt:GtmoI") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=5")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:GTMO-I") {
-    field(INPA, "$(P)Cnt:GTMO-I NPP MSI")
+record(calc, "$(P)Rate:GtmoI") {
+    field(INPA, "$(P)Cnt:GtmoI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")
@@ -93,14 +93,14 @@ record(calc, "$(P)Rate:GTMO-I") {
     field(HSV , "MAJOR")
 }
 
-record(longin, "$(P)Cnt:ERR-I") {
+record(longin, "$(P)Cnt:ErrI") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=2")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:ERR-I") {
-    field(INPA, "$(P)Cnt:ERR-I NPP MSI")
+record(calc, "$(P)Rate:ErrI") {
+    field(INPA, "$(P)Cnt:ErrI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")
@@ -109,29 +109,29 @@ record(calc, "$(P)Rate:ERR-I") {
     field(HSV , "MAJOR")
 }
 
-record(longin, "$(P)Cnt:IGN-I") {
+record(longin, "$(P)Cnt:IgnI") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=3")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:IGN-I") {
-    field(INPA, "$(P)Cnt:IGN-I NPP MSI")
+record(calc, "$(P)Rate:IgnI") {
+    field(INPA, "$(P)Cnt:IgnI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")
     field(SCAN, "1 second")
 }
 
-record(longin, "$(P)Cnt:CPL-I") {
+record(longin, "$(P)Cnt:CplI") {
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=4")
     field(SCAN, "1 second")
     field(FLNK, "")
 }
 
-record(calc, "$(P)Rate:CPL-I") {
-    field(INPA, "$(P)Cnt:CPL-I NPP MSI")
+record(calc, "$(P)Rate:CplI") {
+    field(INPA, "$(P)Cnt:CplI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")
@@ -139,16 +139,16 @@ record(calc, "$(P)Rate:CPL-I") {
 }
 
 
-record(aai, "$(P)TB:A-I") {
+record(aai, "$(P)Tb:AI") {
     field(DTYP, "ACM TB Hist")
     field(INP , "@$(DEV) offset=0")
     field(SCAN, "10 second")
     field(FTVL, "DOUBLE")
     field(NELM, "1024")
-    field(FLNK, "$(P)TB:B-I")
+    field(FLNK, "$(P)Tb:BI")
 }
 
-record(aai, "$(P)TB:B-I") {
+record(aai, "$(P)Tb:BI") {
     field(FTVL, "DOUBLE")
     field(DTYP, "ACM TB Hist")
     field(INP , "@$(DEV) offset=1")
