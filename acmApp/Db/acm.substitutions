@@ -8,7 +8,7 @@ file "acm_trace.db"
 {
 {P="\$(P)INT:",	DEV="\$(DEV)",	CMD="0x33", TSHIFT="-2e-3"}
 {P="\$(P)EXT:",	DEV="\$(DEV)",	CMD="0x28", TSHIFT="0"}
-{P="\$(P)TRP:",	DEV="\$(DEV)",	CMD="0xe7", TSHIFT="0"}
+{P="\$(P)FLT:",	DEV="\$(DEV)",	CMD="0xe7", TSHIFT="0"}
 }
 
 file "acm_analog.db"
@@ -109,7 +109,7 @@ file "acm_reg_binary.db"
 {P="\$(P)", DEV="\$(DEV)", REG="PilotDiffMagFault", OFF="55", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="PilotDiffPhsFault", OFF="55", MASK="0x10", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="ConfMagFault",      OFF="55", MASK="0x20", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="PromTimeoutFault",  OFF="55", MASK="0x40", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="PromTimeout",  OFF="55", MASK="0x40", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="MonitorTimeout",    OFF="55", MASK="0x80", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)",	DEV="\$(DEV)", REG="TestModeLclRem",	OFF="56", MASK="0x01", ZNAM="Local", ONAM="Remote"}
 }

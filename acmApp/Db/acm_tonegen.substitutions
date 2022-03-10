@@ -11,7 +11,7 @@ file "acm_analog.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="ConfMagCav1",	OFF="1",	HOPR="100",	LOPR="0", ASLO="0.012208521548041", AOFF="0", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="PilotMagCav2",	OFF="2",	HOPR="100",	LOPR="0", ASLO="0.012208521548041", AOFF="0", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ConfMagCav2",	OFF="3",	HOPR="100",	LOPR="0", ASLO="0.012208521548041", AOFF="0", EGU="%"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TimeCheck",	OFF="4",	HOPR="45552.6834318182",	LOPR="0", ASLO="1.06060606060606E-05", AOFF="0", EGU="msec"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TimeCheck",	OFF="4",	HOPR="22776.3417159091",	LOPR="0", ASLO="1.06060606060606E-05", AOFF="0", EGU="msec"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerTempA",	OFF="8",	HOPR="84.0699929583073",	LOPR="-34.07", ASLO="7.04169273376465E-06", AOFF="25", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerTempB",	OFF="9",	HOPR="84.0699929583073",	LOPR="-34.07", ASLO="7.04169273376465E-06", AOFF="25", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DigitizerTempC",	OFF="10",	HOPR="84.0699929583073",	LOPR="-34.07", ASLO="7.04169273376465E-06", AOFF="25", EGU="°C"}
@@ -26,12 +26,12 @@ file "acm_analog.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="UpConTemp",	OFF="21",	HOPR="127.99609375",	LOPR="-128", ASLO="0.00390625", AOFF="0", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="UpConVolt",	OFF="22",	HOPR="655.35",	LOPR="0", ASLO="0.01", AOFF="0", EGU="V"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="UpConCurr",	OFF="23",	HOPR="159.9951171875",	LOPR="-160", ASLO="0.0048828125", AOFF="0", EGU="A"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="UpConTime",	OFF="24",	HOPR="49710.2696180556",	LOPR="0", ASLO="1.15740740740741E-05", AOFF="0", EGU="days"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="UpConTime",	OFF="24",	HOPR="49710.2696180556",	LOPR="0", ASLO="2.31481E-05", AOFF="0", EGU="days"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConTemp",	OFF="27",	HOPR="127.99609375",	LOPR="-128", ASLO="0.00390625", AOFF="0", EGU="°C"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConVolt",	OFF="28",	HOPR="655.35",	LOPR="0", ASLO="0.01", AOFF="0", EGU="V"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConCurr",	OFF="29",	HOPR="159.9951171875",	LOPR="-160", ASLO="0.0048828125", AOFF="0", EGU="A"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="DwnConTime",	OFF="30",	HOPR="49710.2696180556",	LOPR="0", ASLO="1.15740740740741E-05", AOFF="0", EGU="days"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="SprTempRTD",	OFF="31",	HOPR="-256",	LOPR="1791.96875", ASLO="0.03125", AOFF="-256", EGU="°C"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="DwnConTime",	OFF="30",	HOPR="49710.2696180556",	LOPR="0", ASLO="2.31481E-05", AOFF="0", EGU="days"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="SprTempRTD",	OFF="31",	HOPR="-256",	LOPR="767.984375", ASLO="0.015625", AOFF="-256", EGU="°C"}
 }
 
 file "acm_regval.db"
@@ -48,13 +48,16 @@ file "acm_regval.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLcl",	OFF="7",	MASK="0x7", SHIFT="1", HOPR="7",	LOPR="0"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestModeRem",	OFF="7",	MASK="0x7", SHIFT="4", HOPR="7",	LOPR="0"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestMode",     OFF="7",	MASK="0xf", SHIFT="7", HOPR="15",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="VrfyTestState",OFF="7",	MASK="0x1f", SHIFT="11", HOPR="31",	LOPR="0"}
 }
 
 file "acm_reg_binary.db"
 {
-{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x1", ZNAM="Disabled", ONAM="Enabled",	REG="PilotEnaCav1" }
-{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x2", ZNAM="Disabled", ONAM="Enabled",	REG="ConfEnaCav1" }
-{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x4", ZNAM="Disabled", ONAM="Enabled",	REG="PilotEnaCav2" }
-{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x8", ZNAM="Disabled", ONAM="Enabled",	REG="ConfEnaCav2" }
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLclRem",	OFF="7",	MASK="1", ZNAM="Local", ONAM="Remote" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x1",  ZNAM="Disabled", ONAM="Enabled",	REG="PilotEnaCav1" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x2",  ZNAM="Disabled", ONAM="Enabled",	REG="ConfEnaCav1" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x4",  ZNAM="Disabled", ONAM="Enabled",	REG="PilotEnaCav2" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x8",  ZNAM="Disabled", ONAM="Enabled",	REG="ConfEnaCav2" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x40", ZNAM="No Timeout", ONAM="Timeout",	REG="PromTimeout" }
+{P="\$(P)",	DEV="\$(DEV)",	OFF="6",	MASK="0x80", ZNAM="No Timeout", ONAM="Timeout",	REG="MonitorTimeout" }
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLclRem",	 OFF="7",	MASK="1", ZNAM="Local", ONAM="Remote" }
 }
