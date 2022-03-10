@@ -6,7 +6,7 @@ file "health_analog.db"
 {P="\$(P)",    DEV="\$(DEV)",    REG="Fmc3p3Volts",    OFF="3",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="Fmc12Volts",    OFF="4",    HOPR="28.1595703125",    LOPR="0", ASLO="4.296875E-04", AOFF="0", PREC="3", EGU="V"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="FmcBotVadj",    OFF="5",    HOPR="2.5599609375",    LOPR="0", ASLO="3.906250E-05", AOFF="0", PREC="4", EGU="V"}
-{P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccIntTemp",    OFF="6",    HOPR="28493285.8695652",    LOPR="-192.3913043478", ASLO="4.347826E+02", AOFF="-192.3913043478", PREC="0", EGU="C"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccIntTemp",    OFF="6",    HOPR="28493285.8695652",    LOPR="-192.3913043478", ASLO="-1.698370E-02", AOFF="242.3913043", PREC="0", EGU="C"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="Main3p3Volts",    OFF="7",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="KintexAuxAV",    OFF="8",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="KintexAuxBV",    OFF="9",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
@@ -20,7 +20,7 @@ file "health_analog.db"
 {P="\$(P)",    DEV="\$(DEV)",    REG="Boot3p3Volts",    OFF="17",    HOPR="5.119921875",    LOPR="0", ASLO="7.812500E-05", AOFF="0", PREC="4", EGU="V"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="Main3p3vCurr",    OFF="18",    HOPR="40.959375",    LOPR="0", ASLO="6.250000E-04", AOFF="0", PREC="3", EGU="A"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="Fmc3p3vCurr",    OFF="19",    HOPR="40.959375",    LOPR="0", ASLO="6.250000E-04", AOFF="0", PREC="3", EGU="A"}
-{P="\$(P)",    DEV="\$(DEV)",    REG="Fmc12Volts",    OFF="20",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="Fmc12VoltsCurr",    OFF="20",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="FmcTopVadjCurr",    OFF="21",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="Boot3p3vCurr",    OFF="22",    HOPR="163.8375",    LOPR="0", ASLO="2.500000E-03", AOFF="0", PREC="3", EGU="A"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="KintexVccIntCurr",    OFF="23",    HOPR="40.959375",    LOPR="0", ASLO="6.250000E-04", AOFF="0", PREC="3", EGU="A"}
@@ -111,14 +111,20 @@ file "health_regval.db"
 {P="\$(P)",    DEV="\$(DEV)",    REG="SpartanMixChksum32",    OFF="104",    HOPR="4294967295",    LOPR="0", EGU=""}
 {P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum32",    OFF="105",    HOPR="4294967295",    LOPR="0", EGU=""}
 {P="\$(P)",    DEV="\$(DEV)",    REG="SeuPromStatus",    OFF="106",    HOPR="15",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="PromConfig",    OFF="106", MASK="0xFC7F",    HOPR="0xFFFF",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="ModbusParams",    OFF="107",    HOPR="15",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="ModbusAddr",    OFF="107",    HOPR="0xFF",    LOPR="0", MASK="0xFF"}
+{P="\$(P)",    DEV="\$(DEV)",    REG="ModbusCRC",    OFF="107",    HOPR="0xFFFF",    LOPR="0", MASK="0xFFFF", SHIFT="8"}
 }
 
 file "health_reg_binary.db"
 {
 # breakout of SeuPromStatus
-{P="\$(P)", DEV="\$(DEV)", REG="SpartanSEUFault",         OFF="106", MASK="0x01", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="KintexSEUFault",         OFF="106", MASK="0x02", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="PromLockedStatus",         OFF="106", MASK="0x04", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="SpartanSEUFault",          OFF="106", MASK="0x01", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="KintexSEUFault",           OFF="106", MASK="0x02", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="PromLockedStatus",         OFF="106", MASK="0x04", ZNAM="Locked", ONAM="Unlocked"}
 {P="\$(P)", DEV="\$(DEV)", REG="PromSwitchStatus",         OFF="106", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="PromSwitchStatus",         OFF="106", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
+{P="\$(P)", DEV="\$(DEV)", REG="PromSwitch",               OFF="106", MASK="0x01", SHIFT="24", ZNAM="Locked"    ONAM="NotLocked"}
 }
 
