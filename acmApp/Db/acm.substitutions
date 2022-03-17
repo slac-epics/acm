@@ -18,16 +18,16 @@ file "acm_analog.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamRawQ",	OFF="1",	HOPR="262143",	LOPR="-262144", ASLO="1", AOFF="0", PREC="5", EGU=""}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamI",	OFF="2",	HOPR="2097151",	LOPR="-2097152", ASLO="1", AOFF="0", PREC="5", EGU=""}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamQ",	OFF="3",	HOPR="2097151",	LOPR="-2097152", ASLO="1", AOFF="0", PREC="5", EGU=""}
-{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamMag",	OFF="4",	HOPR="4194303",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamMagRaw",	OFF="4",	HOPR="4194303",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamPhs",	OFF="5",	HOPR="179.999914169312",	LOPR="-180", ASLO="8.58306884765625E-05", AOFF="0", PREC="4", EGU="deg"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeam",	OFF="6",	HOPR="2147483647",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamRaw",	OFF="6",	HOPR="2147483647",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamMagPeak",	OFF="7",	HOPR="4194303",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamPeak",	OFF="8",	HOPR="2147483647",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamLim",	OFF="9",	HOPR="2147483647",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeBeamConfLim",	OFF="10",	HOPR="2147483647",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeDarkI",	OFF="11",	HOPR="33554431",	LOPR="-33554432", ASLO="1", AOFF="0", PREC="5", EGU=""}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeDarkQ",	OFF="12",	HOPR="33554431",	LOPR="-33554432", ASLO="1", AOFF="0", PREC="5", EGU=""}
-{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeDarkMag",	OFF="13",	HOPR="67108863",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="ProbeDarkMagRaw",	OFF="13",	HOPR="67108863",	LOPR="0", ASLO="1", AOFF="0", PREC="5", EGU="nA"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbeDarkPhs",	OFF="14",	HOPR="179.999994635582",	LOPR="-180", ASLO="5.36441802978516E-06", AOFF="0", PREC="5", EGU="deg"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotRawI",	OFF="15",	HOPR="100",	LOPR="-100.000381471182", ASLO="0.00038147118176", AOFF="0", PREC="3", EGU="%"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="ProbePilotRawQ",	OFF="16",	HOPR="100",	LOPR="-100.000381471182", ASLO="0.00038147118176", AOFF="0", PREC="3", EGU="%"}
@@ -92,10 +92,10 @@ file "acm_regval.db"
 {P="\$(P)",	DEV="\$(DEV)",	REG="FwVersion",	OFF="54",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="Faults",	OFF="55",	HOPR="63",	LOPR="0", EGU=""}
 {P="\$(P)",	DEV="\$(DEV)",	REG="TestModes",	OFF="56",	HOPR="65535",	LOPR="0", EGU=""}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLocal",	OFF="56",	MASK="0x7", SHIFT="1", HOPR="7",	LOPR="0"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeRemote",	OFF="56",	MASK="0x7", SHIFT="4", HOPR="7",	LOPR="0"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="TestMode",     OFF="56",	MASK="0xf", SHIFT="7", HOPR="15",	LOPR="0"}
-{P="\$(P)",	DEV="\$(DEV)",	REG="VrfyTestState",OFF="56",	MASK="0x1f",SHIFT="11", HOPR="31",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeLocal",	OFF="56",	MASK="0xE", SHIFT="1", HOPR="7",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestModeRemote",	OFF="56",	MASK="0x70", SHIFT="4", HOPR="7",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="TestMode",     OFF="56",	MASK="0x780", SHIFT="7", HOPR="15",	LOPR="0"}
+{P="\$(P)",	DEV="\$(DEV)",	REG="VrfyTestState",OFF="56",	MASK="0xF800",SHIFT="11", HOPR="31",	LOPR="0"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumHi",	OFF="68",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 {P="\$(P)",	DEV="\$(DEV)",	REG="DwnConSerNumLo",	OFF="69",	HOPR="4294967295",	LOPR="0", EGU="hex"}
 }
