@@ -111,7 +111,7 @@ file "health_regval.db"
 {P="\$(P)",    DEV="\$(DEV)",    REG="SpartanMixChksum32",    OFF="104",    HOPR="4294967295",    LOPR="0", EGU=""}
 {P="\$(P)",    DEV="\$(DEV)",    REG="KintexFrmwrChksum32",    OFF="105",    HOPR="4294967295",    LOPR="0", EGU=""}
 {P="\$(P)",    DEV="\$(DEV)",    REG="SeuPromStatus",    OFF="106",    HOPR="15",    LOPR="0", EGU=""}
-{P="\$(P)",    DEV="\$(DEV)",    REG="PromConfig",    OFF="106", MASK="0xFC7F",    HOPR="0xFFFF",    LOPR="0", EGU=""}
+{P="\$(P)",    DEV="\$(DEV)",    REG="PromStatCnfg",    OFF="106", HOPR="0xFFFF",    LOPR="0", EGU=""}
 {P="\$(P)",    DEV="\$(DEV)",    REG="ModbusParams",    OFF="107"                                                 }
 {P="\$(P)",    DEV="\$(DEV)",    REG="ModbusAddr",    OFF="107",    HOPR="0xFF",    LOPR="0", MASK="0xFF"}
 {P="\$(P)",    DEV="\$(DEV)",    REG="ModbusCRC",    OFF="107",    HOPR="0xFFFF",    LOPR="0", MASK="0xFFFF00", SHIFT="8"}
@@ -125,6 +125,6 @@ file "health_reg_binary.db"
 {P="\$(P)", DEV="\$(DEV)", REG="PromLockedStatus",         OFF="106", MASK="0x04", ZNAM="Locked", ONAM="Unlocked"}
 {P="\$(P)", DEV="\$(DEV)", REG="PromSwitchStatus",         OFF="106", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="PromSwitchStatus",         OFF="106", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="PromSwitch",               OFF="106", MASK="0x1000000", SHIFT="24", ZNAM="Locked"    ONAM="NotLocked"}
+{P="\$(P)", DEV="\$(DEV)", REG="PromSwitch",               OFF="106", MASK="0x1000000", SHIFT="24", ZNAM="Locked",    ONAM="NotLocked"}
 }
 
