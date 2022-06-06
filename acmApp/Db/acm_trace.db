@@ -43,7 +43,7 @@ record(aai, "$(P)PHA") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=3 slope=1.1920928955078125e-07 intercept=0.0")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=3 slope=4.291534423828125e-5 intercept=0.0") # 360/2^23
     field(TSE , "-2") # TIME from driver
     field(FLNK, "$(P)ICUR")
 }
