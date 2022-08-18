@@ -5,7 +5,6 @@
 /dbd/
 /opi/
 /include/
-/configure/*.local
 O.*/
 /iocBoot/ioc*/envPaths
 *.pyc
