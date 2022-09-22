@@ -1,5 +1,8 @@
 # acm RELEASE_NOTES
 ====================================
 
+R1.0.2  G. Brown - 2022-09-21
+        Fix typo in ProbeDarkMag scaling table name.
+
 R1.0.1  G. Brown - 2022-08-18
         Updated Michael Davidsaver's original with various tweaks after testing.
