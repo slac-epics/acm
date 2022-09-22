@@ -20,7 +20,7 @@ pattern { REG,                 POS,       CHAIN,       P,                       
         { "ProbeBeamPeak",    "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "8",  "2147483647", "0", "2", "μA"}
         { "ProbeBeamLim",     "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "9",  "2147483647", "0", "2", "μA"}
         { "ProbeBeamConfLim", "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "10", "2147483647", "0", "2", "μA"}
-        { "ProbeDarkMag",     "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeamDark", "\$(DEV)", "13", "67108863",   "0", "2", "nA"}
+        { "ProbeDarkMag",     "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeDarkMag",  "\$(DEV)", "13", "67108863",   "0", "2", "nA"}
         { "BufTrigLim",       "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeamMag",  "\$(DEV)", "52", "4194303",    "0", "2", "pC"}
 }
 
