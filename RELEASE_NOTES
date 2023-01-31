@@ -1,6 +1,9 @@
 # acm RELEASE_NOTES
 ====================================
 
+R1.0.3  G. Brown - 2023-01-31
+        Ops requested autosave for analog alarm limits, for BCS checks.
+
 R1.0.2  G. Brown - 2022-09-21
         Fix typo in ProbeDarkMag scaling table name.
 
