@@ -9,5 +9,6 @@ record(ai, "$(P)$(REG)") {
     field(LINR, "$(BPT=)")
     field(TSE , "-2") # TIME from driver
     field(FLNK, "$(FLNK=)")
+    info(autosaveFields, "DESC EGU PREC HOPR LOPR LOLO LOW HIGH HIHI LLSV LSV HSV HHSV HYST ADEL MDEL")
 }
 
