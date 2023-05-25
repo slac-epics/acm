@@ -3,7 +3,9 @@ record(bi, "$(P)$(REG)") {
     field(INP , "@$(DEV) cmd=0x51 offset=$(OFF) mask=$(MASK=0xffffffff) shift=$(SHIFT=0)")
     field(SCAN, "$(SCAN=I/O Intr)")
     field(ZNAM, "$(ZNAM=Zero)")
+    field(ZSV, "$(ZSV=NO_ALARM)")
     field(ONAM, "$(ONAM=One)")
+    field(OSV, "$(OSV=MAJOR)")
     field(TSE , "-2") # TIME from driver
     field(FLNK, "$(FLNK=)")
 }

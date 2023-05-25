@@ -117,6 +117,6 @@ file "acm_reg_binary.db"
 {P="\$(P)", DEV="\$(DEV)", REG="ConfMagFault",      OFF="55", MASK="0x20", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="PromTimeout",       OFF="55", MASK="0x40", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="MonitorTimeout",    OFF="55", MASK="0x80", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)",	DEV="\$(DEV)", REG="TestModeLclRem",	OFF="56", MASK="0x01", ZNAM="Local", ONAM="Remote"}
+{P="\$(P)",	DEV="\$(DEV)", REG="TestModeLclRem",	OFF="56", MASK="0x01", ZNAM="Local", ZSV="MINOR", ONAM="Remote", OSV="NO_ALARM"}
 }
 

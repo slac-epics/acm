@@ -124,7 +124,6 @@ file "health_reg_binary.db"
 {P="\$(P)", DEV="\$(DEV)", REG="KintexSEUFault",           OFF="106", MASK="0x02", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="PromLockedStatus",         OFF="106", MASK="0x04", ZNAM="Locked", ONAM="Unlocked"}
 {P="\$(P)", DEV="\$(DEV)", REG="PromSwitchStatus",         OFF="106", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
-{P="\$(P)", DEV="\$(DEV)", REG="PromSwitchStatus",         OFF="106", MASK="0x08", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="PromSwitch",               OFF="106", MASK="0x1000000", SHIFT="24", ZNAM="Locked",    ONAM="NotLocked"}
 }
 
