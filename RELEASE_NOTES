@@ -1,6 +1,9 @@
 # acm RELEASE_NOTES
 ====================================
 
+R1.0.4  G. Brown - 2023-05-25
+        CATER 163284 Add alarm severities, so fault status turns red and propagates alarms.
+
 R1.0.3  G. Brown - 2023-01-31
         Ops requested autosave for analog alarm limits, for BCS checks.
 
