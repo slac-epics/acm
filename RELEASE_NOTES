@@ -1,6 +1,11 @@
 # acm RELEASE_NOTES
 ====================================
 
+R1.0.5  G. Brown - 2023-06-01
+        Restore phase scaling. Was planning to scale in BCS app, but with BPT
+        scaling of other waveforms, it's easier to do the slope-based phase
+        scaling here.
+
 R1.0.4  G. Brown - 2023-05-25
         CATER 163284 Add alarm severities, so fault status turns red and propagates alarms.
 
