@@ -1,6 +1,9 @@
 # acm RELEASE_NOTES
 ====================================
 
+R1.0.6  G. Brown - 2023-06-01
+        Phase scaling was off by 1 bit. Shifting the scale factor 1 bit.
+
 R1.0.5  G. Brown - 2023-06-01
         Restore phase scaling. Was planning to scale in BCS app, but with BPT
         scaling of other waveforms, it's easier to do the slope-based phase
