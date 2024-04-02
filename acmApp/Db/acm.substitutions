@@ -14,14 +14,14 @@ file "acm_trace.db"
 file "acm_bpt_analog.db"
 {
 pattern { REG,                 POS,       CHAIN,       P,                           BPT,                                      DEV,       OFF,  HOPR,       LOPR, PREC, EGU}
-        { "ProbeBeamMag",     "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeamMag",  "\$(DEV)", "4",  "4194303",    "0", "2", "pC"}
-        { "ProbeBeam",        "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "6",  "2147483647", "0", "2", "μA"}
-        { "ProbeBeamMagPeak", "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeamMag",  "\$(DEV)", "7",  "4194303",    "0", "2", "pC"}
-        { "ProbeBeamPeak",    "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "8",  "2147483647", "0", "2", "μA"}
-        { "ProbeBeamLim",     "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "9",  "2147483647", "0", "2", "μA"}
-        { "ProbeBeamConfLim", "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "10", "2147483647", "0", "2", "μA"}
-        { "ProbeDarkMag",     "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeDarkMag",  "\$(DEV)", "13", "67108863",   "0", "2", "nA"}
-        { "BufTrigLim",       "\$(POS)", "\$(CHAIN)", "ACM:HTR:\$(POS):\$(CHAIN):", "ACM_HTR_\$(POS)_\$(CHAIN)_ProbeBeamMag",  "\$(DEV)", "52", "4194303",    "0", "2", "pC"}
+        { "ProbeBeamMag",     "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeBeamMag",  "\$(DEV)", "4",  "4194303",    "0", "2", "pC"}
+        { "ProbeBeam",        "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "6",  "2147483647", "0", "2", "μA"}
+        { "ProbeBeamMagPeak", "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeBeamMag",  "\$(DEV)", "7",  "4194303",    "0", "2", "pC"}
+        { "ProbeBeamPeak",    "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "8",  "2147483647", "0", "2", "μA"}
+        { "ProbeBeamLim",     "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "9",  "2147483647", "0", "2", "μA"}
+        { "ProbeBeamConfLim", "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeBeam",     "\$(DEV)", "10", "2147483647", "0", "2", "μA"}
+        { "ProbeDarkMag",     "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeDarkMag",  "\$(DEV)", "13", "67108863",   "0", "2", "nA"}
+        { "BufTrigLim",       "\$(POS)", "\$(CHAIN)", "ACM:\$(AREA=HTR):\$(POS):\$(CHAIN):", "ACM_\$(AREA=HTR)_\$(POS)_\$(CHAIN)_ProbeBeamMag",  "\$(DEV)", "52", "4194303",    "0", "2", "pC"}
 }
 
 file "acm_analog.db"
