@@ -1,6 +1,9 @@
 # acm RELEASE_NOTES
 ====================================
 
+R1.0.7  G. Brown - 2024-04-02
+        To deploy in more places than HTR, make AREA a macro.
+
 R1.0.6  G. Brown - 2023-06-01
         Phase scaling was off by 1 bit. Shifting the scale factor 1 bit.
 
