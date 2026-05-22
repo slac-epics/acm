@@ -4,7 +4,7 @@
 #  DEV - device name
 #  SIG - signal name
 #  CMD - trace command code 0x33, 0x28, or 0xe7
-#  TSHIFT - time offset of sample 0
+#  TSHIFT - time offset of sample 0, in points
 #  FLNK - to external logic
 
 record(aai, "$(P)I") {
@@ -79,7 +79,7 @@ record(aai, "$(P)T") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace Time")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=5 slope=3.181818181818e-8 intercept=$(TSHIFT=0.0)") # slope=1/31.4MHz
+    field(INP , "@$(DEV) cmd=$(CMD) offset=5 shift=$(TSHIFT=0.0)")
     field(SCAN, "I/O Intr")
     field(TSE , "-2") # TIME from driver
 
