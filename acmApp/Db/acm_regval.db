@@ -1,4 +1,5 @@
 record(longin, "$(P)$(REG)") {
+    field(DESC, "$(DESC=)")
     field(DTYP, "ACM Reg Value")
     field(INP , "@$(DEV) cmd=0x51 offset=$(OFF) mask=$(MASK=0xffffffff) shift=$(SHIFT=0)")
     field(SCAN, "$(SCAN=I/O Intr)")
