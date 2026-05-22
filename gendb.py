@@ -24,41 +24,50 @@ areg = []
 
 with open(input, 'r') as F:
     for row in DictReader(F):
-        if row.get('Units')=='none':
-            row['Units'] = ''
+        try:
+            if row.get('Units')=='none':
+                row['Units'] = ''
+        except Exception:
+            print("Units error in row:", row)
 
-        if 'Prec' not in row:
-            row['Prec'] = max(0, round(-log10(float(row['Scaling']))))
+        try:
+            if 'Prec' not in row:
+                row['Prec'] = max(0, round(-log10(abs(float(row['Scaling'])))))
+        except Exception:
+            print("Prec error with Scaling ",row['Scaling']," in row:", row)
 
-        if float(row['Scaling'])==1.0 and float(row['Offset'])==0:
-            ireg.append(row)
-        else:
-            areg.append(row)
+        try:
+            if float(row['Scaling'])==1.0 and float(row['Offset'])==0:
+                ireg.append(row)
+            else:
+                areg.append(row)
+        except Exception:
+            print("error in row:", row)
 
 with open(output, 'w') as F:
     F.write('''
 file "acm_base.db"
 {
-{P="\$(P)",	DEV="\$(DEV)",	DEBUG="\$(DEBUG)"}
+{P="\\$(P)",	DEV="\\$(DEV)",	DEBUG="\\$(DEBUG)"}
 }
 
 file "acm_analog.db"
 {
-#{P="\$(P)",	DEV="\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR="", ASLO="", AOFF="", PREC="", EGU=""}
+#{P="\\$(P)",	DEV="\\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR="", ASLO="", AOFF="", PREC="", EGU=""}
 ''')
 
     for row in areg:
-        F.write('{{P="\$(P)",	DEV="\$(DEV)",	REG="{Register Name}",	OFF="{Num}",	HOPR="{High}",	LOPR="{Low}", ASLO="{Scaling}", AOFF="{Offset}", PREC="{Prec}", EGU="{Units}"}}\n'.format(**row))
+        F.write('{{P="\\$(P)",	DEV="\\$(DEV)",	REG="{Register Name}",	OFF="{Num}",	HOPR="{High}",	LOPR="{Low}", ASLO="{Scaling}", AOFF="{Offset}", PREC="{Prec}", EGU="{Units}", DESC="{Description}"}}\n'.format(**row))
 
     F.write('''}
 
 file "acm_regval.db"
 {
-#{P="\$(P)",	DEV="\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR=""}
+#{P="\\$(P)",	DEV="\\$(DEV)",	REG="",	OFF="",	HOPR="",	LOPR=""}
 ''')
 
     for row in ireg:
-        F.write('{{P="\$(P)",	DEV="\$(DEV)",	REG="{Register Name}",	OFF="{Num}",	HOPR="{High}",	LOPR="{Low}", EGU="{Units}"}}\n'.format(**row))
+        F.write('{{P="\\$(P)",	DEV="\\$(DEV)",	REG="{Register Name}",	OFF="{Num}",	HOPR="{High}",	LOPR="{Low}", EGU="{Units}", DESC="{Description}"}}\n'.format(**row))
 
     F.write('''}
 ''')
