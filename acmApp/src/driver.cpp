@@ -327,8 +327,8 @@ void Driver::run()
                             seq.complete.swap(partial.packets);
                             seq.timeReceived = rxTime;
 
-                            // If the time scale (lowest 4 bits of header.timebase) has changed for waveform data
-                            if(((seq.timeBase ^ header.timebase) & wfDecimationMask) &&
+                            // If the time scale (lowest 4 bits of header.timebase) has changed for waveform data. Special case for timeBase = 0 after timeout.
+                            if((((seq.timeBase & wfDecimationMask) != (header.timebase & wfDecimationMask))||(seq.timeBase == 0)) &&
                                ((header.cmd == ACMType::SampExt)||(header.cmd == ACMType::SampFault)||(header.cmd == ACMType::SampInt)))
                             {
                                   // The x-axis calculation needs the new seq.timeBase value, but the comparison needs to happen before it's set, so flag for later update.
