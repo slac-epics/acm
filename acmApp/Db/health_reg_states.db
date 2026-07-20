@@ -12,8 +12,8 @@ record(calcout, "$(P)PromConfigCalc") {
 record(bi, "$(P)PromConfig") {
 # INP is redundant, but can make tracing data easier
   field(INP, "$(P)PromConfigCalc")
-  field(ZNAM, "Locked")
-  field(ONAM, "Unlocked")
+  field(ZNAM, "Protected")
+  field(ONAM, "Unprotected")
 }
 
 record(calcout, "$(P)PromLockedCalc") {
@@ -21,7 +21,7 @@ record(calcout, "$(P)PromLockedCalc") {
   field(INPA, "$(P)PromSwitch CPP MS")
   field(INPB, "$(P)PromConfig CPP MS")
 # A clever shortening of "(A=0)&&(B=0)"
-  field(CALC, "!(A||B)")
+  field(CALC, "(A||B)")
   field(OUT, "$(P)PromLocked")
 }
 
