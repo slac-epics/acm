@@ -129,7 +129,7 @@ file "health_regval.db"
 file "health_reg_binary.db"
 {
 # breakout of SeuPromStatus"
-{P="\$(P)", DEV="\$(DEV)", REG="PromSwitch",               OFF="106", MASK="0x1000000", SHIFT="24", ZNAM="Locked",    ONAM="NotLocked" }
+{P="\$(P)", DEV="\$(DEV)", REG="PromSwitch",               OFF="106", MASK="0x1000000", SHIFT="24", ZNAM="Enabled",    ONAM="Disabled" }
 }
 
 file "health_reg_states.db"
