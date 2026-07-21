@@ -58,6 +58,7 @@ struct PartialSequence {
     PartialSequence(); // sets timeoutAt
 };
 
+constexpr uint8_t wfDecimationMask = 0xF; // Mask for the "waveform decimation" bits of timeBase
 struct CompleteSequence {
     // time of first packet in sequence
     epicsTimeStamp timeReceived;

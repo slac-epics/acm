@@ -129,6 +129,7 @@ void Driver::run()
             epicsTimeStamp rxTime;
             unsigned rxTimeSrc=0;
             DriverEndpoint *ep = 0;
+            bool bUpdateXAxisFlag = false; // If the header indicates timescale change, flag to update once its IOSCANPVT is in scope
             {
                 UnGuard U(G); // unlock for I/O
 
@@ -192,7 +193,7 @@ void Driver::run()
                 if(!ep)
                 {
                     // ignore traffic from unknown peer
-                    LOGDRV(0x20, this, "RX Ignore: %08x:%d", (unsigned)ntohl(peer.ia.sin_addr.s_addr), ntohs(peer.ia.sin_port));
+                    LOGDRV(0x20, this, "RX Ignore: address:port = %08x:%d", (unsigned)ntohl(peer.ia.sin_addr.s_addr), ntohs(peer.ia.sin_port));
                     ::epics::atomic::increment(nIgnore);
                     continue;
                 }
@@ -202,11 +203,11 @@ void Driver::run()
 
                 if(msg.msg_flags&MSG_TRUNC) {
                     ::epics::atomic::increment(nError);
-                    LOGDRV(1, this, "Error: truncated msg %u\n", ntohs(peer.ia.sin_port));
+                    LOGDRV(1, this, "Error: truncated msg, port:%u\n", ntohs(peer.ia.sin_port));
                     continue;
                 } else if(ret<8) {
                     ::epics::atomic::increment(nError);
-                    LOGDRV(1, this, "Error: runt msg %u\n", ntohs(peer.ia.sin_port));
+                    LOGDRV(1, this, "Error: runt msg, port:%u\n", ntohs(peer.ia.sin_port));
                     continue;
                 }
 
@@ -216,7 +217,7 @@ void Driver::run()
                         rxBuf[i] = ntohl(rxBuf[i]);
 
                 if(msg.msg_flags&MSG_CTRUNC) {
-                    LOGDRV(1, this, "Warning: truncated cmsg %u\n", ntohs(peer.ia.sin_port));
+                    LOGDRV(1, this, "Warning: truncated cmsg, port:%u\n", ntohs(peer.ia.sin_port));
                 }
 
                 for(cmsghdr *cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg = CMSG_NXTHDR(&msg, cmsg))
@@ -244,13 +245,13 @@ void Driver::run()
                 if(rxTimeSrc==0) {
                     rxTime = now;
                 }
-                LOGDRV(4, this, "RX timestamp%u %08x:%08x %08x\n", rxTimeSrc, unsigned(rxTime.secPastEpoch), unsigned(rxTime.nsec), ntohl(header.timebase));
+                LOGDRV(4, this, "RX timestamp%u s:ns = %08x:%08x, header.timebase = %08x\n", rxTimeSrc, unsigned(rxTime.secPastEpoch), unsigned(rxTime.nsec), ntohl(header.timebase));
 
                 // finally time to process RX buffer
 
                 header.seqNum = ntohs(header.seqNum);
                 header.timebase = ntohl(header.timebase);
-                LOGDRV(0x10, this, "RX %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                LOGDRV(0x10, this, "RX cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
             }
             // locked again
 
@@ -293,7 +294,7 @@ void Driver::run()
                 // sequence already pushed.
                 // late, duplicate, or otherwise invalid
                 epics::atomic::increment(nIgnore);
-                LOGDRV(0x28, this, "Ignore dup/late/invalid %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                LOGDRV(0x28, this, "Ignore dup/late/invalid, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
 
             } else if(partial.lastSeq<0 || int(header.seqNum)<partial.lastSeq) {
                 // this packet may be new
@@ -325,6 +326,16 @@ void Driver::run()
                             // yup.
                             seq.complete.swap(partial.packets);
                             seq.timeReceived = rxTime;
+
+                            // If the time scale (lowest 4 bits of header.timebase) has changed for waveform data. Special case for timeBase = 0 after timeout.
+                            if((((seq.timeBase & wfDecimationMask) != (header.timebase & wfDecimationMask))||(seq.timeBase == 0)) &&
+                               ((header.cmd == ACMType::SampExt)||(header.cmd == ACMType::SampFault)||(header.cmd == ACMType::SampInt)))
+                            {
+                                  // The x-axis calculation needs the new seq.timeBase value, but the comparison needs to happen before it's set, so flag for later update.
+                                  bUpdateXAxisFlag = true;
+                                  LOGDRV(4, this, "Setting x-axis update flag. cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                            }
+
                             seq.timeBase = header.timebase;
 
                             size_t ntotal=0u;
@@ -342,8 +353,12 @@ void Driver::run()
 
                             epics::atomic::increment(nComplete);
                             scanIoRequest(seq.scanUpdate);
-                            LOGDRV(8, this, "Sequence completion %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                            LOGDRV(8, this, "Sequence completion, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
 
+                            if(bUpdateXAxisFlag) {
+                                scanIoRequest(seq.totalUpdate);
+                                LOGDRV(4, this, "Triggering totalUpdate for cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                            }
                         } else {
                             // not sure if this can actually happen, but it wouldn't be good.
                             epics::atomic::increment(nError);
@@ -356,12 +371,12 @@ void Driver::run()
                 } else {
                     // duplicate packet?
                     epics::atomic::increment(nIgnore);
-                    LOGDRV(0x28, this, "Ignore dup %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                    LOGDRV(0x28, this, "Ignore dup, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
                 }
 
             } else {
                 epics::atomic::increment(nIgnore);
-                LOGDRV(0x28, this, "Warning seq data after last %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
+                LOGDRV(0x28, this, "Warning seq data after last, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
             }
 
         }catch(std::exception& e){
