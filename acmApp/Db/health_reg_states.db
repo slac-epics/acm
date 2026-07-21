@@ -1,5 +1,5 @@
 # PromConfig is 0 if PromStatCnfg and 0xFC7F (to mask some bits) = 0xE400
-# PromLocked is 1 if PromSwitch = 0 and PromConfig = 0.
+# PromLocked is 0 if PromSwitch = 0 and PromConfig = 0.
 record(calcout, "$(P)PromConfigCalc") {
   field(DESC, "PROM configuration status")
   field(INPA, "$(P)PromStatCnfg CPP MS")
