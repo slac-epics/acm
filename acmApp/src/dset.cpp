@@ -316,6 +316,15 @@ long read_trace(dbCommon *pcommon)
 
         if(!seq.complete.empty()) {
 
+            // If this is the x-axis with a new sample interval, recalculate slope and intercept.
+            if(info->offset == 5)
+            {
+                uint8_t wfDecimation = (uint8_t) seq.timeBase  & wfDecimationMask;
+                 info->slope = ((double) wfDecimation + 1) * (14.0 / 1.32e9);
+                 info->intercept = - info->slope * info->shift;
+                 LOGDRV(4, drv, "For PV %s, decimation = %u, new slope = %g, new intercept = %f.\n", pcommon->name, wfDecimation, info->slope, info->intercept);
+            }
+
             for(PartialSequence::packets_t::const_iterator it=seq.complete.begin(), end=seq.complete.end();
                 it!=end && out<cnt; ++it)
             {
@@ -325,11 +334,17 @@ long read_trace(dbCommon *pcommon)
                 {
                     epicsInt32 val;
                     switch(info->offset) {
+                    // I
                     case 0: val = sextend(values[i+0]>> 0u, 15u); break;
+                    // Q
                     case 1: val = sextend(values[i+0]>>16u, 15u); break;
+                    // Current
                     case 2: val = (values[i+1]); break;
+                    // Phase
                     case 3: val = sextend(values[i+2], 23u); break;
+                    // Integrated current
                     case 4: val = (values[i+3]); break;
+                    // x-axis
                     case 5: val = out; break; // time
                     default: val = 0xdeadbeef; break;
                     }

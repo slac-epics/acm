@@ -1,0 +1,33 @@
+# PromConfig is 0 if PromStatCnfg and 0xFC7F (to mask some bits) = 0xE400
+# PromLocked is 0 if PromSwitch = 0 and PromConfig = 0.
+record(calcout, "$(P)PromConfigCalc") {
+  field(DESC, "PROM configuration status")
+  field(INPA, "$(P)PromStatCnfg CPP MS")
+  field(INPB, "0xFC7F")
+  field(INPC, "0xE400")
+  field(CALC, "A&B # C")
+  field(OUT, "$(P)PromConfig")
+}
+
+record(bi, "$(P)PromConfig") {
+# INP is redundant, but can make tracing data easier
+  field(INP, "$(P)PromConfigCalc")
+  field(ZNAM, "Protected")
+  field(ONAM, "Unprotected")
+}
+
+record(calcout, "$(P)PromLockedCalc") {
+  field(DESC, "PROM lock status")
+  field(INPA, "$(P)PromSwitch CPP MS")
+  field(INPB, "$(P)PromConfig CPP MS")
+#  Output is 0 (Locked) only when both A and B are 0
+  field(CALC, "(A||B)")
+  field(OUT, "$(P)PromLocked")
+}
+
+record(bi, "$(P)PromLocked") {
+# INP is redundant, but can make tracing data easier
+  field(INP, "$(P)PromLockedCalc")
+  field(ZNAM, "Locked")
+  field(ONAM, "Unlocked")
+}
