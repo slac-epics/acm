@@ -79,7 +79,7 @@ record(aai, "$(P)T") {
     field(FTVL, "DOUBLE")
     field(NELM, "$(NELM=32768)")
     field(DTYP, "ACM Trace Time")
-    field(INP , "@$(DEV) cmd=$(CMD) offset=5 shift=$(TSHIFT=0.0)")
+    field(INP , "@$(DEV) cmd=$(CMD) offset=5 shift=$(TSHIFT=0)")
     field(SCAN, "I/O Intr")
     field(TSE , "-2") # TIME from driver
 
