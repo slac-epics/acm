@@ -24,11 +24,8 @@ areg = []
 
 with open(input, 'r') as F:
     for row in DictReader(F):
-        try:
-            if row.get('Units')=='none':
-                row['Units'] = ''
-        except Exception:
-            print("Units error in row:", row)
+        if row.get('Units')=='none':
+            row['Units'] = ''
 
         try:
             if 'Prec' not in row:
