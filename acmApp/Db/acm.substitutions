@@ -107,7 +107,7 @@ file "acm_regval.db"
 
 file "acm_reg_binary.db"
 {
-# breakout of Faults"
+# breakout of Faults
 {P="\$(P)", DEV="\$(DEV)", REG="FastFault",      OFF="55", MASK="0x01", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="SlowFault",      OFF="55", MASK="0x02", ZNAM="Ok", ONAM="Fault"}
 {P="\$(P)", DEV="\$(DEV)", REG="PilotMagFault",  OFF="55", MASK="0x04", ZNAM="Ok", ONAM="Fault", OSV="NO_ALARM"}
