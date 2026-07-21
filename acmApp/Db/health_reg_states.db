@@ -17,10 +17,10 @@ record(bi, "$(P)PromConfig") {
 }
 
 record(calcout, "$(P)PromLockedCalc") {
-  field(DESC, "PROM configuration status")
+  field(DESC, "PROM lock status")
   field(INPA, "$(P)PromSwitch CPP MS")
   field(INPB, "$(P)PromConfig CPP MS")
-# A clever shortening of "(A=0)&&(B=0)"
+#  Output is 0 (Locked) only when both A and B are 0
   field(CALC, "(A||B)")
   field(OUT, "$(P)PromLocked")
 }
