@@ -1,6 +1,9 @@
 # acm RELEASE_NOTES
 ====================================
 
+R1.1.0  G. Brown - 2064-07-20
+        Update register interface for LCLS-HE. Some registers changed scale or bit fields. Use time stamp fields to scale x-axis.
+
 R1.0.7  G. Brown - 2024-04-02
         To deploy in more places than HTR, make AREA a macro.
 
