@@ -247,18 +247,24 @@ long read_status(dbCommon *pcommon)
 
 dset6 devACMBiStatus = {6, 0, 0, &init_record, 0, &read_status};
 
+/* Statistics counters are kept per packet type.  cmd= selects the packet type,
+ * offset= selects which counter of that type.  offset=5 (global RX timeout) is
+ * the exception: it is not split by packet type and ignores cmd=.
+ */
 long read_counter(dbCommon *pcommon)
 {
     TRY(longinRecord) {
         // no locking needed
+        Driver::StatSet& stats = drv->statsFor(info->cmd);
+
         switch(info->offset) {
-        case 0: prec->val = epics::atomic::get(drv->nRX); break;
-        case 1: prec->val = epics::atomic::get(drv->nTimeout); break;
-        case 2: prec->val = epics::atomic::get(drv->nError); break;
-        case 3: prec->val = epics::atomic::get(drv->nIgnore); break;
-        case 4: prec->val = epics::atomic::get(drv->nComplete); break;
+        case 0: prec->val = epics::atomic::get(stats.nRx); break;
+        case 1: prec->val = epics::atomic::get(stats.nTimeout); break;
+        case 2: prec->val = epics::atomic::get(stats.nError); break;
+        case 3: prec->val = epics::atomic::get(stats.nIgnore); break;
+        case 4: prec->val = epics::atomic::get(stats.nComplete); break;
         case 5: prec->val = epics::atomic::get(drv->nTimeoutGbl); break;
-        case 6: prec->val = epics::atomic::get(drv->nBytesRx); break;
+        case 6: prec->val = epics::atomic::get(stats.nBytesRx); break;
         default: prec->val = -1; recGblSetSevr(prec, READ_ALARM, INVALID_ALARM); break;
         }
         return 0;

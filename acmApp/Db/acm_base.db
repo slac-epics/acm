@@ -32,58 +32,46 @@ record(bi, "$(P)ConnSts") {
 }
 
 # Stat counters
+#
+# Every counter below is kept separately for each of the five ACM packet types
+# defined by ACMType::type in acmApp/src/acm_drv.h, plus a sixth "Unknown"
+# bucket, so that a problem with one stream can be told apart from a problem
+# with another.  The PV name carries the type name and the cmd= link parameter
+# carries the corresponding ID field value:
+#
+#   HealthData  cmd=0xae  device and board health registers
+#   RegData     cmd=0x51  measurement and configuration registers
+#   SampFault   cmd=0xe7  waveform samples captured by a fault trip
+#   SampInt     cmd=0x33  waveform samples captured by an internal trigger
+#   SampExt     cmd=0x28  waveform samples captured by an external trigger
+#   Unknown     cmd=0x00  events not attributable to any of the above
+#
+# Each counter is a free running total that is never reset while the IOC is up,
+# and each has a companion :Rate: record that reports its first difference over
+# a 1 second scan.  The counters are read without locking, so a :Cnt: and a
+# :Rate: sampled in the same scan may straddle an update by one count.
 
-record(longin, "$(P)Cnt:RxI") {
-    field(DTYP, "ACM Counter")
-    field(INP , "@$(DEV) offset=0")
-    field(SCAN, "1 second")
-}
-
-record(calc, "$(P)Rate:RxI") {
-    field(INPA, "$(P)Cnt:RxI NPP MSI")
-    field(CALC, "C:=A-B;B:=A;C")
-    field(EGU , "pkt/s")
-    field(PREC, "0")
-    field(SCAN, "1 second")
-}
-
-record(longin, "$(P)Cnt:BrxI") {
-    field(DTYP, "ACM Counter")
-    field(INP , "@$(DEV) offset=6")
-    field(SCAN, "1 second")
-}
-
-record(calc, "$(P)Rate:BrxI") {
-    field(INPA, "$(P)Cnt:BrxI NPP MSI")
-    field(CALC, "C:=A-B;B:=A;C/2**20*8")
-    field(EGU , "Mbps")
-    field(PREC, "3")
-    field(SCAN, "1 second")
-}
-
-record(longin, "$(P)Cnt:TmoI") {
-    field(DTYP, "ACM Counter")
-    field(INP , "@$(DEV) offset=1")
-    field(SCAN, "1 second")
-}
-
-record(calc, "$(P)Rate:TmoI") {
-    field(INPA, "$(P)Cnt:TmoI NPP MSI")
-    field(CALC, "C:=A-B;B:=A;C")
-    field(EGU , "Hz")
-    field(PREC, "0")
-    field(SCAN, "1 second")
-    field(HIGH, "0.001")
-    field(HSV , "MAJOR")
-}
-
+# Receive timeouts for the stream as a whole, counted once per transition into
+# the timed out state, not once per second spent there.  The receive socket has
+# a acmRxTimeoutMS timeout; when nothing at all arrives from any peer for that
+# long, the driver declares the stream down, discards every retained and
+# partial sequence so stale values stop being published, and re-sends a
+# registration packet to each configured peer to ask it to resume streaming.
+#
+# This is the only counter here that is not split by packet type.  A global
+# timeout is by definition the absence of traffic of every type, so there is no
+# packet being processed to attribute it to.  Compare with $(P)ConnSts, which
+# shows whether the stream is timed out right now rather than how often it has
+# been.
 record(longin, "$(P)Cnt:GtmoI") {
+    field(DESC, "Whole-stream receive timeouts")
     field(DTYP, "ACM Counter")
     field(INP , "@$(DEV) offset=5")
     field(SCAN, "1 second")
 }
 
 record(calc, "$(P)Rate:GtmoI") {
+    field(DESC, "Whole-stream receive timeout rate")
     field(INPA, "$(P)Cnt:GtmoI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
@@ -93,14 +81,236 @@ record(calc, "$(P)Rate:GtmoI") {
     field(HSV , "MAJOR")
 }
 
-record(longin, "$(P)Cnt:ErrI") {
+# Packets received, counted once per UDP datagram accepted from a configured
+# peer, before any sequence reconstruction.  Each datagram counted here had a
+# recognized ID field in its 8 byte ACM header, so it is attributed to that
+# packet type even if the rest of the datagram turns out to be malformed and is
+# later counted as an error.  Datagrams from an unconfigured address are not
+# counted here at all; they are only counted as ignored.
+#
+# The Unknown variant counts datagrams that arrived from a configured peer but
+# could not be attributed to a packet type: those shorter than the 8 byte
+# header, and those whose ID field is not one of the five defined values.
+record(longin, "$(P)HealthData:Cnt:RxI") {
+    field(DESC, "Health data packets received")
     field(DTYP, "ACM Counter")
-    field(INP , "@$(DEV) offset=2")
+    field(INP , "@$(DEV) cmd=0xae offset=0")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:ErrI") {
-    field(INPA, "$(P)Cnt:ErrI NPP MSI")
+record(calc, "$(P)HealthData:Rate:RxI") {
+    field(DESC, "Health data packet receive rate")
+    field(INPA, "$(P)HealthData:Cnt:RxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "pkt/s")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)RegData:Cnt:RxI") {
+    field(DESC, "Register data packets received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x51 offset=0")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)RegData:Rate:RxI") {
+    field(DESC, "Register data packet receive rate")
+    field(INPA, "$(P)RegData:Cnt:RxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "pkt/s")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampFault:Cnt:RxI") {
+    field(DESC, "Fault sample packets received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xe7 offset=0")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampFault:Rate:RxI") {
+    field(DESC, "Fault sample packet receive rate")
+    field(INPA, "$(P)SampFault:Cnt:RxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "pkt/s")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampInt:Cnt:RxI") {
+    field(DESC, "Int trig sample packets received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x33 offset=0")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampInt:Rate:RxI") {
+    field(DESC, "Int trig sample packet receive rate")
+    field(INPA, "$(P)SampInt:Cnt:RxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "pkt/s")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampExt:Cnt:RxI") {
+    field(DESC, "Ext trig sample packets received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x28 offset=0")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampExt:Rate:RxI") {
+    field(DESC, "Ext trig sample packet receive rate")
+    field(INPA, "$(P)SampExt:Cnt:RxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "pkt/s")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)Unknown:Cnt:RxI") {
+    field(DESC, "Unknown type packets received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x00 offset=0")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)Unknown:Rate:RxI") {
+    field(DESC, "Unknown type packet receive rate")
+    field(INPA, "$(P)Unknown:Cnt:RxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "pkt/s")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+# Bytes received, accumulated over the same datagrams counted by :Cnt:RxI.
+# Each datagram contributes its UDP payload length (the 8 byte ACM header plus
+# body) plus a fixed 42 bytes, which is the assumed size of the Ethernet, IP
+# and UDP headers that carried it.  The total is therefore an estimate of
+# wire bandwidth consumed by this packet type, not of payload delivered.
+#
+# The counter is a 32 bit signed integer and will wrap after 2 GiB; the
+# :Rate:BrxI records are differential, so a single wrap distorts one sample.
+record(longin, "$(P)HealthData:Cnt:BrxI") {
+    field(DESC, "Health data bytes received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xae offset=6")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)HealthData:Rate:BrxI") {
+    field(DESC, "Health data receive bit rate")
+    field(INPA, "$(P)HealthData:Cnt:BrxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C/2**20*8")
+    field(EGU , "Mbps")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)RegData:Cnt:BrxI") {
+    field(DESC, "Register data bytes received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x51 offset=6")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)RegData:Rate:BrxI") {
+    field(DESC, "Register data receive bit rate")
+    field(INPA, "$(P)RegData:Cnt:BrxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C/2**20*8")
+    field(EGU , "Mbps")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampFault:Cnt:BrxI") {
+    field(DESC, "Fault sample bytes received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xe7 offset=6")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampFault:Rate:BrxI") {
+    field(DESC, "Fault sample receive bit rate")
+    field(INPA, "$(P)SampFault:Cnt:BrxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C/2**20*8")
+    field(EGU , "Mbps")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampInt:Cnt:BrxI") {
+    field(DESC, "Int trig sample bytes received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x33 offset=6")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampInt:Rate:BrxI") {
+    field(DESC, "Int trig sample receive bit rate")
+    field(INPA, "$(P)SampInt:Cnt:BrxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C/2**20*8")
+    field(EGU , "Mbps")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampExt:Cnt:BrxI") {
+    field(DESC, "Ext trig sample bytes received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x28 offset=6")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampExt:Rate:BrxI") {
+    field(DESC, "Ext trig sample receive bit rate")
+    field(INPA, "$(P)SampExt:Cnt:BrxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C/2**20*8")
+    field(EGU , "Mbps")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)Unknown:Cnt:BrxI") {
+    field(DESC, "Unknown type bytes received")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x00 offset=6")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)Unknown:Rate:BrxI") {
+    field(DESC, "Unknown type receive bit rate")
+    field(INPA, "$(P)Unknown:Cnt:BrxI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C/2**20*8")
+    field(EGU , "Mbps")
+    field(PREC, "3")
+    field(SCAN, "1 second")
+}
+
+# Incomplete sequences discarded, counted once per sequence that was still
+# missing packets when it aged out.  A sequence is the set of packets sharing an
+# ID and Timebase value, running from sequence number 0 to the packet with the
+# "last" flag set.  A partial sequence is discarded once acmReconstructTimeoutMS
+# has elapsed since its first packet arrived, and is counted here.
+#
+# This is the main indicator of packet loss for a packet type: a nonzero rate
+# means data is being dropped somewhere between the ACM and this IOC.  A
+# sequence that completed normally is never counted here, so this counter and
+# :Cnt:CplI together account for every sequence that was started.
+record(longin, "$(P)HealthData:Cnt:TmoI") {
+    field(DESC, "Health data seq reassembly timeouts")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xae offset=1")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)HealthData:Rate:TmoI") {
+    field(DESC, "Health data seq timeout rate")
+    field(INPA, "$(P)HealthData:Cnt:TmoI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")
@@ -109,29 +319,437 @@ record(calc, "$(P)Rate:ErrI") {
     field(HSV , "MAJOR")
 }
 
-record(longin, "$(P)Cnt:IgnI") {
+record(longin, "$(P)RegData:Cnt:TmoI") {
+    field(DESC, "Register data seq reassembly timeouts")
     field(DTYP, "ACM Counter")
-    field(INP , "@$(DEV) offset=3")
+    field(INP , "@$(DEV) cmd=0x51 offset=1")
     field(SCAN, "1 second")
 }
 
-record(calc, "$(P)Rate:IgnI") {
-    field(INPA, "$(P)Cnt:IgnI NPP MSI")
+record(calc, "$(P)RegData:Rate:TmoI") {
+    field(DESC, "Register data seq timeout rate")
+    field(INPA, "$(P)RegData:Cnt:TmoI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)SampFault:Cnt:TmoI") {
+    field(DESC, "Fault sample seq reassembly timeouts")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xe7 offset=1")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampFault:Rate:TmoI") {
+    field(DESC, "Fault sample seq timeout rate")
+    field(INPA, "$(P)SampFault:Cnt:TmoI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)SampInt:Cnt:TmoI") {
+    field(DESC, "Int trig sample seq reassembly timeouts")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x33 offset=1")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampInt:Rate:TmoI") {
+    field(DESC, "Int trig sample seq timeout rate")
+    field(INPA, "$(P)SampInt:Cnt:TmoI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)SampExt:Cnt:TmoI") {
+    field(DESC, "Ext trig sample seq reassembly timeouts")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x28 offset=1")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampExt:Rate:TmoI") {
+    field(DESC, "Ext trig sample seq timeout rate")
+    field(INPA, "$(P)SampExt:Cnt:TmoI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)Unknown:Cnt:TmoI") {
+    field(DESC, "Unknown type seq reassembly timeouts")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x00 offset=1")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)Unknown:Rate:TmoI") {
+    field(DESC, "Unknown type seq timeout rate")
+    field(INPA, "$(P)Unknown:Cnt:TmoI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+# Malformed data and internal errors.  Counted for a datagram that was
+# truncated because it exceeded the receive buffer, for one too short to hold
+# the 8 byte ACM header, and for a failure of the sequence reconstruction logic
+# itself (a completed sequence whose packet numbers are not contiguous, which
+# should not be reachable).
+#
+# The Unknown variant additionally counts errors that happened outside the
+# processing of any one packet: a socket level recvmsg() failure, where no
+# datagram was received, and any unexpected exception escaping the receive
+# loop.  Both of these throttle the receive thread for 5 seconds to limit log
+# spam, so a sustained Unknown error rate also means data is being missed.
+record(longin, "$(P)HealthData:Cnt:ErrI") {
+    field(DESC, "Health data protocol errors")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xae offset=2")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)HealthData:Rate:ErrI") {
+    field(DESC, "Health data error rate")
+    field(INPA, "$(P)HealthData:Cnt:ErrI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)RegData:Cnt:ErrI") {
+    field(DESC, "Register data protocol errors")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x51 offset=2")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)RegData:Rate:ErrI") {
+    field(DESC, "Register data error rate")
+    field(INPA, "$(P)RegData:Cnt:ErrI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)SampFault:Cnt:ErrI") {
+    field(DESC, "Fault sample protocol errors")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xe7 offset=2")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampFault:Rate:ErrI") {
+    field(DESC, "Fault sample error rate")
+    field(INPA, "$(P)SampFault:Cnt:ErrI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)SampInt:Cnt:ErrI") {
+    field(DESC, "Int trig sample protocol errors")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x33 offset=2")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampInt:Rate:ErrI") {
+    field(DESC, "Int trig sample error rate")
+    field(INPA, "$(P)SampInt:Cnt:ErrI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)SampExt:Cnt:ErrI") {
+    field(DESC, "Ext trig sample protocol errors")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x28 offset=2")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampExt:Rate:ErrI") {
+    field(DESC, "Ext trig sample error rate")
+    field(INPA, "$(P)SampExt:Cnt:ErrI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+record(longin, "$(P)Unknown:Cnt:ErrI") {
+    field(DESC, "Unknown type protocol errors")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x00 offset=2")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)Unknown:Rate:ErrI") {
+    field(DESC, "Unknown type error rate")
+    field(INPA, "$(P)Unknown:Cnt:ErrI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+    field(HIGH, "0.001")
+    field(HSV , "MAJOR")
+}
+
+# Well formed packets deliberately discarded, counted once per datagram.  A
+# packet is ignored when it belongs to a sequence that has already been
+# completed or timed out (a late duplicate or retransmission), when its
+# sequence number duplicates one already held in the partial sequence being
+# assembled, and when its sequence number is beyond the packet that carried the
+# "last" flag.
+#
+# Also counted, against the Unknown variant, is any datagram received from a
+# source address or port that is not one of the configured peers.  Those are
+# rejected before the ID field is examined, so they are not attributed to a
+# packet type and are not included in :Cnt:RxI.
+#
+# A steady nonzero rate here is normal for a link that retransmits, but a
+# growing rate alongside :Cnt:TmoI suggests sequences are arriving reordered
+# badly enough that reassembly is giving up before the stragglers land.
+#
+# HealthData is exempt from the completed-sequence check above.  The device
+# sends it as a single packet with a fixed header (seqNum and timebase both
+# always 0), so consecutive updates are indistinguishable by timebase and the
+# completed sequence is dropped immediately rather than retained.  Health
+# updates therefore never count as duplicates of each other, and this counter
+# should stay at zero for HealthData.
+record(longin, "$(P)HealthData:Cnt:IgnI") {
+    field(DESC, "Health data packets ignored")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xae offset=3")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)HealthData:Rate:IgnI") {
+    field(DESC, "Health data ignored packet rate")
+    field(INPA, "$(P)HealthData:Cnt:IgnI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")
     field(SCAN, "1 second")
 }
 
-record(longin, "$(P)Cnt:CplI") {
+record(longin, "$(P)RegData:Cnt:IgnI") {
+    field(DESC, "Register data packets ignored")
     field(DTYP, "ACM Counter")
-    field(INP , "@$(DEV) offset=4")
+    field(INP , "@$(DEV) cmd=0x51 offset=3")
     field(SCAN, "1 second")
-    field(FLNK, "")
 }
 
-record(calc, "$(P)Rate:CplI") {
-    field(INPA, "$(P)Cnt:CplI NPP MSI")
+record(calc, "$(P)RegData:Rate:IgnI") {
+    field(DESC, "Register data ignored packet rate")
+    field(INPA, "$(P)RegData:Cnt:IgnI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampFault:Cnt:IgnI") {
+    field(DESC, "Fault sample packets ignored")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xe7 offset=3")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampFault:Rate:IgnI") {
+    field(DESC, "Fault sample ignored packet rate")
+    field(INPA, "$(P)SampFault:Cnt:IgnI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampInt:Cnt:IgnI") {
+    field(DESC, "Int trig sample packets ignored")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x33 offset=3")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampInt:Rate:IgnI") {
+    field(DESC, "Int trig sample ignored packet rate")
+    field(INPA, "$(P)SampInt:Cnt:IgnI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampExt:Cnt:IgnI") {
+    field(DESC, "Ext trig sample packets ignored")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x28 offset=3")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampExt:Rate:IgnI") {
+    field(DESC, "Ext trig sample ignored packet rate")
+    field(INPA, "$(P)SampExt:Cnt:IgnI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)Unknown:Cnt:IgnI") {
+    field(DESC, "Unknown type packets ignored")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x00 offset=3")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)Unknown:Rate:IgnI") {
+    field(DESC, "Unknown type ignored packet rate")
+    field(INPA, "$(P)Unknown:Cnt:IgnI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+# Sequences fully reassembled, counted once per sequence for which packets 0
+# through the one flagged "last" were all received before the reconstruction
+# timeout.  Completing a sequence is what publishes new data: it replaces the
+# retained sequence for that packet type and triggers the I/O Intr scan of the
+# records reading it.  So this counter is the update rate of the register and
+# waveform PVs fed by this packet type.
+#
+# The Unknown variant can be nonzero.  Sequence reconstruction keys off the ID
+# field without first checking it against the five defined values, so a packet
+# carrying an unrecognized ID is still reassembled into a sequence of its own
+# and counted as complete here, even though proto.md says such packets must be
+# ignored.  No record reads those sequences, so the data goes nowhere; a
+# nonzero count means some sender is emitting packets this IOC does not
+# understand.
+record(longin, "$(P)HealthData:Cnt:CplI") {
+    field(DESC, "Health data sequences completed")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xae offset=4")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)HealthData:Rate:CplI") {
+    field(DESC, "Health data seq completion rate")
+    field(INPA, "$(P)HealthData:Cnt:CplI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)RegData:Cnt:CplI") {
+    field(DESC, "Register data sequences completed")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x51 offset=4")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)RegData:Rate:CplI") {
+    field(DESC, "Register data seq completion rate")
+    field(INPA, "$(P)RegData:Cnt:CplI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampFault:Cnt:CplI") {
+    field(DESC, "Fault sample sequences completed")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0xe7 offset=4")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampFault:Rate:CplI") {
+    field(DESC, "Fault sample seq completion rate")
+    field(INPA, "$(P)SampFault:Cnt:CplI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampInt:Cnt:CplI") {
+    field(DESC, "Int trig sample sequences completed")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x33 offset=4")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampInt:Rate:CplI") {
+    field(DESC, "Int trig sample seq completion rate")
+    field(INPA, "$(P)SampInt:Cnt:CplI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)SampExt:Cnt:CplI") {
+    field(DESC, "Ext trig sample sequences completed")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x28 offset=4")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)SampExt:Rate:CplI") {
+    field(DESC, "Ext trig sample seq completion rate")
+    field(INPA, "$(P)SampExt:Cnt:CplI NPP MSI")
+    field(CALC, "C:=A-B;B:=A;C")
+    field(EGU , "Hz")
+    field(PREC, "0")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P)Unknown:Cnt:CplI") {
+    field(DESC, "Unknown type sequences completed")
+    field(DTYP, "ACM Counter")
+    field(INP , "@$(DEV) cmd=0x00 offset=4")
+    field(SCAN, "1 second")
+}
+
+record(calc, "$(P)Unknown:Rate:CplI") {
+    field(DESC, "Unknown type seq completion rate")
+    field(INPA, "$(P)Unknown:Cnt:CplI NPP MSI")
     field(CALC, "C:=A-B;B:=A;C")
     field(EGU , "Hz")
     field(PREC, "0")

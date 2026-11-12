@@ -19,6 +19,12 @@
 
 struct ACMType {
     enum type {
+        /* 0x00 is not a valid packet ID.  It is used to bucket counts which
+         * can not be attributed to one of the packet types below, either
+         * because the ID field was unrecognized/absent, or because the event
+         * counted happened outside the context of a single packet type.
+         */
+        Unknown = 0x00,
         HealthData = 0xae,
         RegData = 0x51,
         SampFault = 0xe7,
@@ -144,8 +150,42 @@ struct Driver : public epicsThreadRunable
     typedef std::vector<DriverEndpoint> endpoints_t;
     endpoints_t endpoints; // only vector is const.  individual DriverSock are guarded by our lock
 
-    // (atomic) stat counters
-    int nRX, nBytesRx, nTimeout, nTimeoutGbl, nError, nIgnore, nComplete;
+    //! (atomic) The stat counters belonging to a single packet type.
+    struct StatSet {
+        int nRx, nBytesRx, nTimeout, nError, nIgnore, nComplete;
+        StatSet();
+    };
+
+    /** (atomic) stat counters, one set per packet type.
+     *
+     * Every counter is kept separately for each packet type, so that eg. a
+     * burst of dropped waveform packets can be told apart from a problem
+     * with the register stream.  The Unknown set collects events which can
+     * not be attributed to one of the packet types in ACMType: socket level
+     * errors, packets too short to contain the ID field, and packets whose
+     * ID field is not one of the known types.
+     *
+     * Indexed by StatIndex, not by ID field value.  Use statsFor() to map an
+     * ID to its set rather than subscripting this directly.
+     */
+    enum StatIndex {
+        StatHealthData, StatRegData, StatSampFault,
+        StatSampInt, StatSampExt, StatUnknown,
+        StatTypeCount,
+    };
+    StatSet stats[StatTypeCount];
+
+    /* (atomic) Not split by packet type.  A global RX timeout is the absence
+     * of traffic of every type, so there is no packet being processed to
+     * attribute it to.
+     */
+    int nTimeoutGbl;
+
+    /** Counters for the packet type identified by an ID field value.
+     *  Any value which is not one of the ACMType::type packet types
+     *  (ACMType::Unknown included) selects the Unknown counters.
+     */
+    StatSet& statsFor(unsigned cmd);
 
     // by packet type
     typedef  std::map<uint8_t, CompleteSequence> sequences_t;
