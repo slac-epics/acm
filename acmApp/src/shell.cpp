@@ -1,4 +1,5 @@
 
+#include <dbDefs.h>
 #include <epicsExit.h>
 #include <iocsh.h>
 #include <drvSup.h>
@@ -92,17 +93,30 @@ long acmReport(int lvl)
     for(Driver::drivers_t::iterator it = Driver::drivers.begin(), end = Driver::drivers.end();
         it!=end; ++it)
     {
+        static const ACMType::type types[] = {
+            ACMType::HealthData, ACMType::RegData, ACMType::SampFault,
+            ACMType::SampInt, ACMType::SampExt, ACMType::Unknown,
+        };
+
         Driver* drv = it->second;
         printf("ACM: \"%s\" peers: \"%s\"\n"
-               "  #pkt RX=%u #bytes RX=%u #complete=%u #sock timeout=%u #global timeout=%u #error=%u #ignore=%u\n",
+               "  #global timeout=%u\n"
+               "  %-12s %10s %12s %10s %10s %10s %10s\n",
                drv->name.c_str(), drv->peers.c_str(),
-               ::epics::atomic::get(drv->nRX),
-               ::epics::atomic::get(drv->nBytesRx),
-               ::epics::atomic::get(drv->nComplete),
-               ::epics::atomic::get(drv->nTimeout),
                ::epics::atomic::get(drv->nTimeoutGbl),
-               ::epics::atomic::get(drv->nError),
-               ::epics::atomic::get(drv->nIgnore));
+               "type", "#pkt RX", "#bytes RX", "#complete", "#seq tmo", "#error", "#ignore");
+
+        for(size_t i=0; i<NELEMENTS(types); i++) {
+            Driver::StatSet& stats = drv->statsFor(types[i]);
+            printf("  %-12s %10u %12u %10u %10u %10u %10u\n",
+                   ACMType::name(types[i]),
+                   ::epics::atomic::get(stats.nRx),
+                   ::epics::atomic::get(stats.nBytesRx),
+                   ::epics::atomic::get(stats.nComplete),
+                   ::epics::atomic::get(stats.nTimeout),
+                   ::epics::atomic::get(stats.nError),
+                   ::epics::atomic::get(stats.nIgnore));
+        }
         if(lvl<=0)
             continue;
 

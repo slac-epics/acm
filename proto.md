@@ -28,11 +28,21 @@ All messages begin with a common 8 byte header.
 Depending on the value of the ID field one of two body formats is used.
 
 * ID=0x51 - Register Data
+* ID=0xae - Health Data
 * ID=0xe7 - Sample data from fault trip
 * ID=0x33 - Sample data from internal trigger
 * ID=0x28 - Sample data from external trigger
 
 Packets with other ID numbers are considered invalid and must be ignored.
+
+Health Data (ID=0xae) is a special case of the Register Data body format.
+It is always sent as a single packet sequence with a fixed 8 byte header,
+"ae01000000000000": flags[0] (last) set, Sequence# 0, and Timebase 0.
+Unlike the other IDs, its Timebase is not a counter and does not advance
+between updates, so consecutive Health Data packets are indistinguishable
+by header alone.  A Receiver must therefore not use the Timebase to reject
+a Health Data packet as a duplicate of the previous one.  Its body is not
+byte swapped.
 
 The flags field include several sub-fields
 

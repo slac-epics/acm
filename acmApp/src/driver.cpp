@@ -14,6 +14,19 @@ int acmRxTimeoutMS = 5000;
 int acmReconstructTimeoutMS = 1000;
 }
 
+const char* ACMType::name(type c)
+{
+    switch(c) {
+    case HealthData: return "HealthData";
+    case RegData:    return "RegData";
+    case SampFault:  return "SampFault";
+    case SampInt:    return "SampInt";
+    case SampExt:    return "SampExt";
+    case Unknown:    break;
+    }
+    return "Unknown";
+}
+
 PartialSequence::PartialSequence()
     :lastSeq(-1)
     ,pushed(false)
@@ -52,6 +65,32 @@ epicsUInt32 CompleteSequence::at(size_t i) const
     return it->second.values.at(off);
 }
 
+Driver::StatSet::StatSet()
+    :nRx(0u)
+    ,nBytesRx(0u)
+    ,nTimeout(0u)
+    ,nError(0u)
+    ,nIgnore(0u)
+    ,nComplete(0u)
+{}
+
+Driver::StatSet& Driver::statsFor(unsigned cmd)
+{
+    StatIndex idx;
+
+    switch(cmd) {
+    case ACMType::HealthData: idx = StatHealthData; break;
+    case ACMType::RegData:    idx = StatRegData; break;
+    case ACMType::SampFault:  idx = StatSampFault; break;
+    case ACMType::SampInt:    idx = StatSampInt; break;
+    case ACMType::SampExt:    idx = StatSampExt; break;
+    // includes ACMType::Unknown and any unrecognized ID
+    default:                  idx = StatUnknown; break;
+    }
+
+    return stats[idx];
+}
+
 void Driver::run()
 {
     LOGDRV(2, this, "Worker starting\n");
@@ -63,7 +102,7 @@ void Driver::run()
     epicsTimeGetCurrent(&now);
 
     while(running) {
-        try {
+        try { // Check for timed out endpoints, and send registration packets if they
             for(endpoints_t::iterator it=endpoints.begin(), end=endpoints.end();
                 it!=end; ++it)
             {
@@ -111,7 +150,7 @@ void Driver::run()
                     if(expired) {
                         if(!cur->second.pushed) {
                             LOGDRV(8, this, "Timeout %02x:%08x age=%f\n", it_seq->first, cur->first, age);
-                            ::epics::atomic::increment(nTimeout);
+                            ::epics::atomic::increment(statsFor(it_seq->first).nTimeout);
                         }
                         it_seq->second.partials.erase(cur);
                     }
@@ -129,6 +168,9 @@ void Driver::run()
             epicsTimeStamp rxTime;
             unsigned rxTimeSrc=0;
             DriverEndpoint *ep = 0;
+            // counters of the packet type being processed.  Re-seated below,
+            // once enough of the packet has been received to identify it.
+            StatSet *stats = &statsFor(ACMType::Unknown);
             bool bUpdateXAxisFlag = false; // If the header indicates timescale change, flag to update once its IOSCANPVT is in scope
             {
                 UnGuard U(G); // unlock for I/O
@@ -172,7 +214,8 @@ void Driver::run()
                         LOGDRV(1, this, "RX Timeout\n");
 
                     } else {
-                        ::epics::atomic::increment(nError);
+                        // no packet was received, so no packet type to blame
+                        ::epics::atomic::increment(statsFor(ACMType::Unknown).nError);
                         LOGDRV(1, this, "Error Rx : (%d, %d) %s\n", unsigned(ret), err, strerror(err));
                         epicsThreadSleep(5.0); // slow down error spam
                     }
@@ -192,21 +235,32 @@ void Driver::run()
                 }
                 if(!ep)
                 {
-                    // ignore traffic from unknown peer
+                    /* ignore traffic from unknown peer.  Counted as Unknown
+                     * rather than by ID: the sender isn't one we're configured
+                     * to talk to, so its header isn't worth trusting.
+                     */
                     LOGDRV(0x20, this, "RX Ignore: address:port = %08x:%d", (unsigned)ntohl(peer.ia.sin_addr.s_addr), ntohs(peer.ia.sin_port));
-                    ::epics::atomic::increment(nIgnore);
+                    ::epics::atomic::increment(statsFor(ACMType::Unknown).nIgnore);
                     continue;
                 }
+
+                /* Attribute everything counted for this packet from here on to
+                 * its type.  A packet too short to hold the header has no
+                 * readable ID field, and an ID which is not one of the known
+                 * types can not be attributed either; both fall to Unknown.
+                 */
+                stats = &statsFor(size_t(ret)>=sizeof(header) ? header.cmd : ACMType::Unknown);
+
                 // assume 42 bytes of transport headers (Ethernet+IP+UDP headers)
-                ::epics::atomic::add(nBytesRx, ret + 42u);
-                ::epics::atomic::increment(nRX);
+                ::epics::atomic::add(stats->nBytesRx, ret + 42u);
+                ::epics::atomic::increment(stats->nRx);
 
                 if(msg.msg_flags&MSG_TRUNC) {
-                    ::epics::atomic::increment(nError);
+                    ::epics::atomic::increment(stats->nError);
                     LOGDRV(1, this, "Error: truncated msg, port:%u\n", ntohs(peer.ia.sin_port));
                     continue;
                 } else if(ret<8) {
-                    ::epics::atomic::increment(nError);
+                    ::epics::atomic::increment(stats->nError);
                     LOGDRV(1, this, "Error: runt msg, port:%u\n", ntohs(peer.ia.sin_port));
                     continue;
                 }
@@ -293,7 +347,7 @@ void Driver::run()
             if(partial.pushed) {
                 // sequence already pushed.
                 // late, duplicate, or otherwise invalid
-                epics::atomic::increment(nIgnore);
+                epics::atomic::increment(stats->nIgnore);
                 LOGDRV(0x28, this, "Ignore dup/late/invalid, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
 
             } else if(partial.lastSeq<0 || int(header.seqNum)<partial.lastSeq) {
@@ -351,7 +405,7 @@ void Driver::run()
                                 scanIoRequest(seq.totalUpdate);
                             }
 
-                            epics::atomic::increment(nComplete);
+                            epics::atomic::increment(stats->nComplete);
                             scanIoRequest(seq.scanUpdate);
                             LOGDRV(8, this, "Sequence completion, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
 
@@ -361,26 +415,47 @@ void Driver::run()
                             }
                         } else {
                             // not sure if this can actually happen, but it wouldn't be good.
-                            epics::atomic::increment(nError);
+                            epics::atomic::increment(stats->nError);
                             LOGDRV(1, this, "Sequence completion logic error? %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
                         }
                         partial.pushed = true;
                         seq.nComplete++;
+
+                        /* HealthData is a single packet sequence with a fixed
+                         * header: the device always sends seqNum==0 and
+                         * timebase==0 (ie. "ae01000000000000"), with the last
+                         * flag already set.  The timebase therefore can not
+                         * tell one health update apart from the next, so the
+                         * completed partial must not be kept around for
+                         * duplicate detection -- every later update would
+                         * collide with it and be ignored until the
+                         * reconstruction timeout expired, throttling ~100Hz of
+                         * health data down to ~1Hz.  Drop it instead, so the
+                         * next update starts a new sequence.
+                         *
+                         * NB. this invalidates the partial reference above.
+                         */
+                        if(header.cmd == ACMType::HealthData)
+                            seq.partials.erase(header.timebase);
                     }
 
                 } else {
                     // duplicate packet?
-                    epics::atomic::increment(nIgnore);
+                    epics::atomic::increment(stats->nIgnore);
                     LOGDRV(0x28, this, "Ignore dup, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
                 }
 
             } else {
-                epics::atomic::increment(nIgnore);
+                epics::atomic::increment(stats->nIgnore);
                 LOGDRV(0x28, this, "Warning seq data after last, cmd:timebase:seqNum = %02x:%08x:%04x\n", header.cmd, header.timebase, header.seqNum);
             }
 
         }catch(std::exception& e){
-            epics::atomic::increment(nError);
+            /* stats is scoped to the try block, so the type of the packet in
+             * flight isn't available here.  These are unexpected errors which
+             * are not tied to any one packet type anyway.
+             */
+            epics::atomic::increment(statsFor(ACMType::Unknown).nError);
             LOGDRV(1, this, "Unexpected error in run() : %s\n", e.what());
             onTimeout();
             epicsThreadSleep(5.0); // slow down error spam
@@ -397,13 +472,8 @@ Driver::Driver(const char *name, const char *peers)
     ,running(true)
     ,sock(AF_INET, SOCK_DGRAM)
     ,intimeout(true)
-    ,nRX(0u)
-    ,nBytesRx(0u)
-    ,nTimeout(0u)
+    // stats[] zeroed by StatSet::StatSet()
     ,nTimeoutGbl(0u)
-    ,nError(0u)
-    ,nIgnore(0u)
-    ,nComplete(0u)
 {
     lastRx.secPastEpoch = 0;
     lastRx.nsec = 0;
