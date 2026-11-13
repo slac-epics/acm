@@ -1,7 +1,10 @@
 # acm RELEASE_NOTES
 ====================================
 
-R1.1.0  G. Brown - 2064-07-20
+R1.1.1  G. Brown - 2026-11-11
+        Split counters by source, so that we can tell health problems from scalar register or waveform problems. Also fixes health data counted as unknown.
+
+R1.1.0  G. Brown - 2026-07-20
         Update register interface for LCLS-HE. Some registers changed scale or bit fields. Use time stamp fields to scale x-axis.
 
 R1.0.7  G. Brown - 2024-04-02
